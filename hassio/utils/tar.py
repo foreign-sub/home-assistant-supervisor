@@ -29,9 +29,11 @@ MOD_WRITE = "w"
 class SecureTarFile:
     """Handle encrypted files for tarfile library."""
 
-    def __init__(
-        self, name: Path, mode: str, key: Optional[bytes] = None, gzip: bool = True
-    ) -> None:
+    def __init__(self,
+                 name: Path,
+                 mode: str,
+                 key: Optional[bytes] = None,
+                 gzip: bool = True) -> None:
         """Initialize encryption handler."""
         self._file: Optional[IO[bytes]] = None
         self._mode: str = mode
@@ -118,7 +120,8 @@ def _generate_iv(key: bytes, salt: bytes) -> bytes:
     return temp_iv[:16]
 
 
-def secure_path(tar: tarfile.TarFile) -> Generator[tarfile.TarInfo, None, None]:
+def secure_path(tar: tarfile.TarFile
+                ) -> Generator[tarfile.TarInfo, None, None]:
     """Security safe check of path.
 
     Prevent ../ or absolut paths
@@ -135,9 +138,8 @@ def secure_path(tar: tarfile.TarFile) -> Generator[tarfile.TarInfo, None, None]:
             yield member
 
 
-def exclude_filter(
-    exclude_list: List[str]
-) -> Callable[[tarfile.TarInfo], Optional[tarfile.TarInfo]]:
+def exclude_filter(exclude_list: List[str]
+                   ) -> Callable[[tarfile.TarInfo], Optional[tarfile.TarInfo]]:
     """Create callable filter function to check TarInfo for add."""
 
     def my_filter(tar: tarfile.TarInfo) -> Optional[tarfile.TarInfo]:
