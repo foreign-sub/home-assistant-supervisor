@@ -1,9 +1,9 @@
 """Test Tarfile functions."""
-
 import attr
 import pytest
 
-from hassio.utils.tar import secure_path, exclude_filter
+from hassio.utils.tar import exclude_filter
+from hassio.utils.tar import secure_path
 
 
 @attr.s

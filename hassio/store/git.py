@@ -1,16 +1,18 @@
 """Init file for Hass.io add-on Git."""
 import asyncio
-import logging
 import functools as ft
-from pathlib import Path
+import logging
 import shutil
+from pathlib import Path
 
 import git
 
-from .utils import get_hash_from_repository
-from ..const import URL_HASSIO_ADDONS, ATTR_URL, ATTR_BRANCH
+from ..const import ATTR_BRANCH
+from ..const import ATTR_URL
+from ..const import URL_HASSIO_ADDONS
 from ..coresys import CoreSysAttributes
 from ..validate import RE_REPOSITORY
+from .utils import get_hash_from_repository
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
