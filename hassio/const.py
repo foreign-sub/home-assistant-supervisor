@@ -4,15 +4,12 @@ from pathlib import Path
 
 HASSIO_VERSION = "193"
 
-
 URL_HASSIO_ADDONS = "https://github.com/home-assistant/hassio-addons"
 URL_HASSIO_VERSION = "https://version.home-assistant.io/{channel}.json"
 URL_HASSIO_APPARMOR = "https://version.home-assistant.io/apparmor.txt"
 
-URL_HASSOS_OTA = (
-    "https://github.com/home-assistant/hassos/releases/download/"
-    "{version}/hassos_{board}-{version}.raucb"
-)
+URL_HASSOS_OTA = ("https://github.com/home-assistant/hassos/releases/download/"
+                  "{version}/hassos_{board}-{version}.raucb")
 
 HASSIO_DATA = Path("/data")
 
@@ -319,7 +316,9 @@ ROLE_BACKUP = "backup"
 ROLE_MANAGER = "manager"
 ROLE_ADMIN = "admin"
 
-ROLE_ALL = [ROLE_DEFAULT, ROLE_HOMEASSISTANT, ROLE_BACKUP, ROLE_MANAGER, ROLE_ADMIN]
+ROLE_ALL = [
+    ROLE_DEFAULT, ROLE_HOMEASSISTANT, ROLE_BACKUP, ROLE_MANAGER, ROLE_ADMIN
+]
 
 CHAN_ID = "chan_id"
 CHAN_TYPE = "chan_type"
