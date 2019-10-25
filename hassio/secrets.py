@@ -1,12 +1,15 @@
 """Handle Home Assistant secrets to add-ons."""
-from datetime import timedelta
 import logging
+from datetime import timedelta
 from pathlib import Path
-from typing import Dict, Union
+from typing import Dict
+from typing import Union
 
-from ruamel.yaml import YAML, YAMLError
+from ruamel.yaml import YAML
+from ruamel.yaml import YAMLError
 
-from .coresys import CoreSys, CoreSysAttributes
+from .coresys import CoreSys
+from .coresys import CoreSysAttributes
 from .utils import AsyncThrottle
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
