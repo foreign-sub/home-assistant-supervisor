@@ -41,7 +41,8 @@ class Rauc(DBusInterface):
         except DBusError:
             _LOGGER.warning("Can't connect to rauc")
         except DBusInterfaceError:
-            _LOGGER.warning("Host has no rauc support. OTA updates have been disabled.")
+            _LOGGER.warning(
+                "Host has no rauc support. OTA updates have been disabled.")
 
     @property
     def operation(self) -> Optional[str]:

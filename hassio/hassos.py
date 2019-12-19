@@ -130,9 +130,8 @@ class HassOS(CoreSysAttributes):
 
         await self.sys_dbus.rauc.update()
 
-        _LOGGER.info(
-            "Detect HassOS %s / BootSlot %s", self.version, self.sys_dbus.rauc.boot_slot
-        )
+        _LOGGER.info("Detect HassOS %s / BootSlot %s", self.version,
+                     self.sys_dbus.rauc.boot_slot)
         with suppress(DockerAPIError):
             await self.instance.attach(tag="latest")
 
@@ -179,7 +178,8 @@ class HassOS(CoreSysAttributes):
 
         # Update fails
         await self.sys_dbus.rauc.update()
-        _LOGGER.error("HassOS update fails with: %s", self.sys_dbus.rauc.last_error)
+        _LOGGER.error("HassOS update fails with: %s",
+                      self.sys_dbus.rauc.last_error)
         raise HassOSUpdateError()
 
     async def update_cli(self, version: Optional[str] = None) -> None:
@@ -218,4 +218,5 @@ class HassOS(CoreSysAttributes):
         except DBusError:
             _LOGGER.error("Can't mark booted partition as healty!")
         else:
-            _LOGGER.info("Rauc: %s - %s", self.sys_dbus.rauc.boot_slot, response[1])
+            _LOGGER.info("Rauc: %s - %s", self.sys_dbus.rauc.boot_slot,
+                         response[1])
