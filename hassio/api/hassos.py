@@ -1,21 +1,22 @@
 """Init file for Hass.io HassOS RESTful API."""
 import asyncio
 import logging
-from typing import Any, Awaitable, Dict
+from typing import Any
+from typing import Awaitable
+from typing import Dict
 
-from aiohttp import web
 import voluptuous as vol
+from aiohttp import web
 
-from ..const import (
-    ATTR_BOARD,
-    ATTR_BOOT,
-    ATTR_VERSION,
-    ATTR_VERSION_CLI,
-    ATTR_VERSION_CLI_LATEST,
-    ATTR_VERSION_LATEST,
-)
+from ..const import ATTR_BOARD
+from ..const import ATTR_BOOT
+from ..const import ATTR_VERSION
+from ..const import ATTR_VERSION_CLI
+from ..const import ATTR_VERSION_CLI_LATEST
+from ..const import ATTR_VERSION_LATEST
 from ..coresys import CoreSysAttributes
-from .utils import api_process, api_validate
+from .utils import api_process
+from .utils import api_validate
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
