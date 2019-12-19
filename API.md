@@ -22,7 +22,8 @@ On success / Code 200:
 }
 ```
 
-For access to API you need set the `X-HASSIO-KEY` they will be available for Add-ons/HomeAssistant with environment `HASSIO_TOKEN`.
+For access to API you need set the `X-HASSIO-KEY` they will be available for
+Add-ons/HomeAssistant with environment `HASSIO_TOKEN`.
 
 ### Hass.io
 
@@ -650,8 +651,8 @@ Return a list of enabled panels.
 
 - VIEW `/ingress/{token}`
 
-Ingress WebUI for this Add-on. The addon need support HASS Auth!
-Need ingress session as cookie.
+Ingress WebUI for this Add-on. The addon need support HASS Auth! Need ingress
+session as cookie.
 
 ### discovery
 
