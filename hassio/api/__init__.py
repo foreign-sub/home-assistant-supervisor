@@ -5,7 +5,8 @@ from typing import Optional
 
 from aiohttp import web
 
-from ..coresys import CoreSys, CoreSysAttributes
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 from .addons import APIAddons
 from .auth import APIAuth
 from .discovery import APIDiscovery
