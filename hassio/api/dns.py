@@ -1,31 +1,33 @@
 """Init file for Hass.io DNS RESTful API."""
 import asyncio
 import logging
-from typing import Any, Awaitable, Dict
+from typing import Any
+from typing import Awaitable
+from typing import Dict
 
-from aiohttp import web
 import voluptuous as vol
+from aiohttp import web
 
-from ..const import (
-    ATTR_BLK_READ,
-    ATTR_BLK_WRITE,
-    ATTR_CPU_PERCENT,
-    ATTR_HOST,
-    ATTR_LATEST_VERSION,
-    ATTR_LOCALS,
-    ATTR_MEMORY_LIMIT,
-    ATTR_MEMORY_PERCENT,
-    ATTR_MEMORY_USAGE,
-    ATTR_NETWORK_RX,
-    ATTR_NETWORK_TX,
-    ATTR_SERVERS,
-    ATTR_VERSION,
-    CONTENT_TYPE_BINARY,
-)
+from ..const import ATTR_BLK_READ
+from ..const import ATTR_BLK_WRITE
+from ..const import ATTR_CPU_PERCENT
+from ..const import ATTR_HOST
+from ..const import ATTR_LATEST_VERSION
+from ..const import ATTR_LOCALS
+from ..const import ATTR_MEMORY_LIMIT
+from ..const import ATTR_MEMORY_PERCENT
+from ..const import ATTR_MEMORY_USAGE
+from ..const import ATTR_NETWORK_RX
+from ..const import ATTR_NETWORK_TX
+from ..const import ATTR_SERVERS
+from ..const import ATTR_VERSION
+from ..const import CONTENT_TYPE_BINARY
 from ..coresys import CoreSysAttributes
 from ..exceptions import APIError
 from ..validate import dns_server_list
-from .utils import api_process, api_process_raw, api_validate
+from .utils import api_process
+from .utils import api_process_raw
+from .utils import api_validate
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
