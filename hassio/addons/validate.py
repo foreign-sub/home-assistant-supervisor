@@ -97,7 +97,6 @@ from ..validate import uuid_match
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
-
 RE_VOLUME = re.compile(r"^(config|ssl|addons|backup|share)(?::(rw|ro))?$")
 RE_SERVICE = re.compile(r"^(?P<service>mqtt):(?P<rights>provide|want|need)$")
 
@@ -119,18 +118,16 @@ RE_SCHEMA_ELEMENT = re.compile(
     r"|float(?:\((?P<f_min>[\d\.]+)?,(?P<f_max>[\d\.]+)?\))?"
     r"|match\((?P<match>.*)\)"
     r"|list\((?P<list>.+)\)"
-    r")\??$"
-)
+    r")\??$")
 
 _SCHEMA_LENGTH_PARTS = ("i_min", "i_max", "f_min", "f_max", "s_min", "s_max")
 
-RE_DOCKER_IMAGE = re.compile(r"^([a-zA-Z\-\.:\d{}]+/)*?([\-\w{}]+)/([\-\w{}]+)$")
+RE_DOCKER_IMAGE = re.compile(
+    r"^([a-zA-Z\-\.:\d{}]+/)*?([\-\w{}]+)/([\-\w{}]+)$")
 RE_DOCKER_IMAGE_BUILD = re.compile(
-    r"^([a-zA-Z\-\.:\d{}]+/)*?([\-\w{}]+)/([\-\w{}]+)(:[\.\-\w{}]+)?$"
-)
+    r"^([a-zA-Z\-\.:\d{}]+/)*?([\-\w{}]+)/([\-\w{}]+)(:[\.\-\w{}]+)?$")
 
 SCHEMA_ELEMENT = vol.Match(RE_SCHEMA_ELEMENT)
-
 
 MACHINE_ALL = [
     "intel-nuc",
@@ -163,142 +160,185 @@ def _simple_startup(value):
 # pylint: disable=no-value-for-parameter
 SCHEMA_ADDON_CONFIG = vol.Schema(
     {
-        vol.Required(ATTR_NAME): vol.Coerce(str),
-        vol.Required(ATTR_VERSION): vol.Coerce(str),
-        vol.Required(ATTR_SLUG): vol.Coerce(str),
-        vol.Required(ATTR_DESCRIPTON): vol.Coerce(str),
+        vol.Required(ATTR_NAME):
+        vol.Coerce(str),
+        vol.Required(ATTR_VERSION):
+        vol.Coerce(str),
+        vol.Required(ATTR_SLUG):
+        vol.Coerce(str),
+        vol.Required(ATTR_DESCRIPTON):
+        vol.Coerce(str),
         vol.Required(ATTR_ARCH): [vol.In(ARCH_ALL)],
         vol.Optional(ATTR_MACHINE): [vol.In(MACHINE_ALL)],
-        vol.Optional(ATTR_URL): vol.Url(),
-        vol.Required(ATTR_STARTUP): vol.All(_simple_startup, vol.In(STARTUP_ALL)),
-        vol.Required(ATTR_BOOT): vol.In([BOOT_AUTO, BOOT_MANUAL]),
-        vol.Optional(ATTR_PORTS): DOCKER_PORTS,
-        vol.Optional(ATTR_PORTS_DESCRIPTION): DOCKER_PORTS_DESCRIPTION,
-        vol.Optional(ATTR_WEBUI): vol.Match(
-            r"^(?:https?|\[PROTO:\w+\]):\/\/\[HOST\]:\[PORT:\d+\].*$"
-        ),
-        vol.Optional(ATTR_INGRESS, default=False): vol.Boolean(),
-        vol.Optional(ATTR_INGRESS_PORT, default=8099): vol.Any(
-            network_port, vol.Equal(0)
-        ),
-        vol.Optional(ATTR_INGRESS_ENTRY): vol.Coerce(str),
-        vol.Optional(ATTR_PANEL_ICON, default="mdi:puzzle"): vol.Coerce(str),
-        vol.Optional(ATTR_PANEL_TITLE): vol.Coerce(str),
-        vol.Optional(ATTR_PANEL_ADMIN, default=True): vol.Boolean(),
-        vol.Optional(ATTR_HOMEASSISTANT): vol.Maybe(vol.Coerce(str)),
-        vol.Optional(ATTR_HOST_NETWORK, default=False): vol.Boolean(),
-        vol.Optional(ATTR_HOST_PID, default=False): vol.Boolean(),
-        vol.Optional(ATTR_HOST_IPC, default=False): vol.Boolean(),
-        vol.Optional(ATTR_HOST_DBUS, default=False): vol.Boolean(),
+        vol.Optional(ATTR_URL):
+        vol.Url(),
+        vol.Required(ATTR_STARTUP):
+        vol.All(_simple_startup, vol.In(STARTUP_ALL)),
+        vol.Required(ATTR_BOOT):
+        vol.In([BOOT_AUTO, BOOT_MANUAL]),
+        vol.Optional(ATTR_PORTS):
+        DOCKER_PORTS,
+        vol.Optional(ATTR_PORTS_DESCRIPTION):
+        DOCKER_PORTS_DESCRIPTION,
+        vol.Optional(ATTR_WEBUI):
+        vol.Match(r"^(?:https?|\[PROTO:\w+\]):\/\/\[HOST\]:\[PORT:\d+\].*$"),
+        vol.Optional(ATTR_INGRESS, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_INGRESS_PORT, default=8099):
+        vol.Any(network_port, vol.Equal(0)),
+        vol.Optional(ATTR_INGRESS_ENTRY):
+        vol.Coerce(str),
+        vol.Optional(ATTR_PANEL_ICON, default="mdi:puzzle"):
+        vol.Coerce(str),
+        vol.Optional(ATTR_PANEL_TITLE):
+        vol.Coerce(str),
+        vol.Optional(ATTR_PANEL_ADMIN, default=True):
+        vol.Boolean(),
+        vol.Optional(ATTR_HOMEASSISTANT):
+        vol.Maybe(vol.Coerce(str)),
+        vol.Optional(ATTR_HOST_NETWORK, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_HOST_PID, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_HOST_IPC, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_HOST_DBUS, default=False):
+        vol.Boolean(),
         vol.Optional(ATTR_DEVICES): [vol.Match(r"^(.*):(.*):([rwm]{1,3})$")],
-        vol.Optional(ATTR_AUTO_UART, default=False): vol.Boolean(),
-        vol.Optional(ATTR_UDEV, default=False): vol.Boolean(),
-        vol.Optional(ATTR_TMPFS): vol.Match(r"^size=(\d)*[kmg](,uid=\d{1,4})?(,rw)?$"),
+        vol.Optional(ATTR_AUTO_UART, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_UDEV, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_TMPFS):
+        vol.Match(r"^size=(\d)*[kmg](,uid=\d{1,4})?(,rw)?$"),
         vol.Optional(ATTR_MAP, default=list): [vol.Match(RE_VOLUME)],
-        vol.Optional(ATTR_ENVIRONMENT): {vol.Match(r"\w*"): vol.Coerce(str)},
+        vol.Optional(ATTR_ENVIRONMENT): {
+            vol.Match(r"\w*"): vol.Coerce(str)
+        },
         vol.Optional(ATTR_PRIVILEGED): [vol.In(PRIVILEGED_ALL)],
-        vol.Optional(ATTR_APPARMOR, default=True): vol.Boolean(),
-        vol.Optional(ATTR_FULL_ACCESS, default=False): vol.Boolean(),
-        vol.Optional(ATTR_AUDIO, default=False): vol.Boolean(),
-        vol.Optional(ATTR_GPIO, default=False): vol.Boolean(),
-        vol.Optional(ATTR_DEVICETREE, default=False): vol.Boolean(),
-        vol.Optional(ATTR_KERNEL_MODULES, default=False): vol.Boolean(),
-        vol.Optional(ATTR_HASSIO_API, default=False): vol.Boolean(),
-        vol.Optional(ATTR_HASSIO_ROLE, default=ROLE_DEFAULT): vol.In(ROLE_ALL),
-        vol.Optional(ATTR_HOMEASSISTANT_API, default=False): vol.Boolean(),
-        vol.Optional(ATTR_STDIN, default=False): vol.Boolean(),
-        vol.Optional(ATTR_LEGACY, default=False): vol.Boolean(),
-        vol.Optional(ATTR_DOCKER_API, default=False): vol.Boolean(),
-        vol.Optional(ATTR_AUTH_API, default=False): vol.Boolean(),
+        vol.Optional(ATTR_APPARMOR, default=True):
+        vol.Boolean(),
+        vol.Optional(ATTR_FULL_ACCESS, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_AUDIO, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_GPIO, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_DEVICETREE, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_KERNEL_MODULES, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_HASSIO_API, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_HASSIO_ROLE, default=ROLE_DEFAULT):
+        vol.In(ROLE_ALL),
+        vol.Optional(ATTR_HOMEASSISTANT_API, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_STDIN, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_LEGACY, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_DOCKER_API, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_AUTH_API, default=False):
+        vol.Boolean(),
         vol.Optional(ATTR_SERVICES): [vol.Match(RE_SERVICE)],
         vol.Optional(ATTR_DISCOVERY): [valid_discovery_service],
         vol.Optional(ATTR_SNAPSHOT_EXCLUDE): [vol.Coerce(str)],
-        vol.Required(ATTR_OPTIONS): dict,
-        vol.Required(ATTR_SCHEMA): vol.Any(
-            vol.Schema(
-                {
-                    vol.Coerce(str): vol.Any(
-                        SCHEMA_ELEMENT,
-                        [
-                            vol.Any(
-                                SCHEMA_ELEMENT,
-                                {
-                                    vol.Coerce(str): vol.Any(
-                                        SCHEMA_ELEMENT, [SCHEMA_ELEMENT]
-                                    )
-                                },
-                            )
-                        ],
-                        vol.Schema(
-                            {vol.Coerce(str): vol.Any(SCHEMA_ELEMENT, [SCHEMA_ELEMENT])}
-                        ),
-                    )
-                }
-            ),
+        vol.Required(ATTR_OPTIONS):
+        dict,
+        vol.Required(ATTR_SCHEMA):
+        vol.Any(
+            vol.Schema({
+                vol.Coerce(str):
+                vol.Any(
+                    SCHEMA_ELEMENT,
+                    [
+                        vol.Any(
+                            SCHEMA_ELEMENT,
+                            {
+                                vol.Coerce(str):
+                                vol.Any(SCHEMA_ELEMENT, [SCHEMA_ELEMENT])
+                            },
+                        )
+                    ],
+                    vol.Schema({
+                        vol.Coerce(str):
+                        vol.Any(SCHEMA_ELEMENT, [SCHEMA_ELEMENT])
+                    }),
+                )
+            }),
             False,
         ),
-        vol.Optional(ATTR_IMAGE): vol.Match(RE_DOCKER_IMAGE),
-        vol.Optional(ATTR_TIMEOUT, default=10): vol.All(
-            vol.Coerce(int), vol.Range(min=10, max=120)
-        ),
+        vol.Optional(ATTR_IMAGE):
+        vol.Match(RE_DOCKER_IMAGE),
+        vol.Optional(ATTR_TIMEOUT, default=10):
+        vol.All(vol.Coerce(int), vol.Range(min=10, max=120)),
     },
     extra=vol.REMOVE_EXTRA,
 )
-
 
 # pylint: disable=no-value-for-parameter
 SCHEMA_BUILD_CONFIG = vol.Schema(
     {
-        vol.Optional(ATTR_BUILD_FROM, default=dict): vol.Schema(
-            {vol.In(ARCH_ALL): vol.Match(RE_DOCKER_IMAGE_BUILD)}
-        ),
-        vol.Optional(ATTR_SQUASH, default=False): vol.Boolean(),
-        vol.Optional(ATTR_ARGS, default=dict): vol.Schema(
-            {vol.Coerce(str): vol.Coerce(str)}
-        ),
+        vol.Optional(ATTR_BUILD_FROM, default=dict):
+        vol.Schema({vol.In(ARCH_ALL): vol.Match(RE_DOCKER_IMAGE_BUILD)}),
+        vol.Optional(ATTR_SQUASH, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_ARGS, default=dict):
+        vol.Schema({vol.Coerce(str): vol.Coerce(str)}),
     },
     extra=vol.REMOVE_EXTRA,
 )
-
 
 # pylint: disable=no-value-for-parameter
 SCHEMA_ADDON_USER = vol.Schema(
     {
-        vol.Required(ATTR_VERSION): vol.Coerce(str),
-        vol.Optional(ATTR_IMAGE): vol.Coerce(str),
-        vol.Optional(ATTR_UUID, default=lambda: uuid.uuid4().hex): uuid_match,
-        vol.Optional(ATTR_ACCESS_TOKEN): token,
-        vol.Optional(ATTR_INGRESS_TOKEN, default=secrets.token_urlsafe): vol.Coerce(
-            str
-        ),
-        vol.Optional(ATTR_OPTIONS, default=dict): dict,
-        vol.Optional(ATTR_AUTO_UPDATE, default=False): vol.Boolean(),
-        vol.Optional(ATTR_BOOT): vol.In([BOOT_AUTO, BOOT_MANUAL]),
-        vol.Optional(ATTR_NETWORK): DOCKER_PORTS,
-        vol.Optional(ATTR_AUDIO_OUTPUT): alsa_device,
-        vol.Optional(ATTR_AUDIO_INPUT): alsa_device,
-        vol.Optional(ATTR_PROTECTED, default=True): vol.Boolean(),
-        vol.Optional(ATTR_INGRESS_PANEL, default=False): vol.Boolean(),
+        vol.Required(ATTR_VERSION):
+        vol.Coerce(str),
+        vol.Optional(ATTR_IMAGE):
+        vol.Coerce(str),
+        vol.Optional(ATTR_UUID, default=lambda: uuid.uuid4().hex):
+        uuid_match,
+        vol.Optional(ATTR_ACCESS_TOKEN):
+        token,
+        vol.Optional(ATTR_INGRESS_TOKEN, default=secrets.token_urlsafe):
+        vol.Coerce(str),
+        vol.Optional(ATTR_OPTIONS, default=dict):
+        dict,
+        vol.Optional(ATTR_AUTO_UPDATE, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_BOOT):
+        vol.In([BOOT_AUTO, BOOT_MANUAL]),
+        vol.Optional(ATTR_NETWORK):
+        DOCKER_PORTS,
+        vol.Optional(ATTR_AUDIO_OUTPUT):
+        alsa_device,
+        vol.Optional(ATTR_AUDIO_INPUT):
+        alsa_device,
+        vol.Optional(ATTR_PROTECTED, default=True):
+        vol.Boolean(),
+        vol.Optional(ATTR_INGRESS_PANEL, default=False):
+        vol.Boolean(),
     },
     extra=vol.REMOVE_EXTRA,
 )
 
+SCHEMA_ADDON_SYSTEM = SCHEMA_ADDON_CONFIG.extend({
+    vol.Required(ATTR_LOCATON):
+    vol.Coerce(str),
+    vol.Required(ATTR_REPOSITORY):
+    vol.Coerce(str),
+})
 
-SCHEMA_ADDON_SYSTEM = SCHEMA_ADDON_CONFIG.extend(
-    {
-        vol.Required(ATTR_LOCATON): vol.Coerce(str),
-        vol.Required(ATTR_REPOSITORY): vol.Coerce(str),
-    }
-)
-
-
-SCHEMA_ADDONS_FILE = vol.Schema(
-    {
-        vol.Optional(ATTR_USER, default=dict): {vol.Coerce(str): SCHEMA_ADDON_USER},
-        vol.Optional(ATTR_SYSTEM, default=dict): {vol.Coerce(str): SCHEMA_ADDON_SYSTEM},
-    }
-)
-
+SCHEMA_ADDONS_FILE = vol.Schema({
+    vol.Optional(ATTR_USER, default=dict): {
+        vol.Coerce(str): SCHEMA_ADDON_USER
+    },
+    vol.Optional(ATTR_SYSTEM, default=dict): {
+        vol.Coerce(str): SCHEMA_ADDON_SYSTEM
+    },
+})
 
 SCHEMA_ADDON_SNAPSHOT = vol.Schema(
     {
@@ -329,10 +369,12 @@ def validate_options(coresys: CoreSys, raw_schema: Dict[str, Any]):
             try:
                 if isinstance(typ, list):
                     # nested value list
-                    options[key] = _nested_validate_list(coresys, typ[0], value, key)
+                    options[key] = _nested_validate_list(
+                        coresys, typ[0], value, key)
                 elif isinstance(typ, dict):
                     # nested value dict
-                    options[key] = _nested_validate_dict(coresys, typ, value, key)
+                    options[key] = _nested_validate_dict(
+                        coresys, typ, value, key)
                 else:
                     # normal value
                     options[key] = _single_validate(coresys, typ, value, key)
@@ -419,11 +461,11 @@ def _nested_validate_dict(coresys, typ, data_dict, key):
 
         # Nested?
         if isinstance(typ[c_key], list):
-            options[c_key] = _nested_validate_list(
-                coresys, typ[c_key][0], c_value, c_key
-            )
+            options[c_key] = _nested_validate_list(coresys, typ[c_key][0],
+                                                   c_value, c_key)
         else:
-            options[c_key] = _single_validate(coresys, typ[c_key], c_value, c_key)
+            options[c_key] = _single_validate(coresys, typ[c_key], c_value,
+                                              c_key)
 
     _check_missing_options(typ, options, key)
     return options
@@ -433,6 +475,7 @@ def _check_missing_options(origin, exists, root):
     """Check if all options are exists."""
     missing = set(origin) - set(exists)
     for miss_opt in missing:
-        if isinstance(origin[miss_opt], str) and origin[miss_opt].endswith("?"):
+        if isinstance(origin[miss_opt],
+                      str) and origin[miss_opt].endswith("?"):
             continue
         raise vol.Invalid(f"Missing option {miss_opt} in {root}")
