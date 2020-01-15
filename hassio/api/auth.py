@@ -24,12 +24,12 @@ from .utils import api_validate
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
-SCHEMA_PASSWORD_RESET = vol.Schema(
-    {
-        vol.Required(ATTR_USERNAME): vol.Coerce(str),
-        vol.Required(ATTR_PASSWORD): vol.Coerce(str),
-    }
-)
+SCHEMA_PASSWORD_RESET = vol.Schema({
+    vol.Required(ATTR_USERNAME):
+    vol.Coerce(str),
+    vol.Required(ATTR_PASSWORD):
+    vol.Coerce(str),
+})
 
 
 class APIAuth(CoreSysAttributes):
@@ -43,9 +43,8 @@ class APIAuth(CoreSysAttributes):
         auth = BasicAuth.decode(request.headers[AUTHORIZATION])
         return self.sys_auth.check_login(addon, auth.login, auth.password)
 
-    def _process_dict(
-        self, request: web.Request, addon: Addon, data: Dict[str, str]
-    ) -> bool:
+    def _process_dict(self, request: web.Request, addon: Addon,
+                      data: Dict[str, str]) -> bool:
         """Process login with dict data.
 
         Return a coroutine.
@@ -78,13 +77,13 @@ class APIAuth(CoreSysAttributes):
             return await self._process_dict(request, addon, data)
 
         raise HTTPUnauthorized(
-            headers={WWW_AUTHENTICATE: 'Basic realm="Hass.io Authentication"'}
-        )
+            headers={WWW_AUTHENTICATE: 'Basic realm="Hass.io Authentication"'})
 
     @api_process
     async def reset(self, request: web.Request) -> None:
         """Process reset password request."""
-        body: Dict[str, str] = await api_validate(SCHEMA_PASSWORD_RESET, request)
+        body: Dict[str, str] = await api_validate(SCHEMA_PASSWORD_RESET,
+                                                  request)
         await asyncio.shield(
-            self.sys_auth.change_password(body[ATTR_USERNAME], body[ATTR_PASSWORD])
-        )
+            self.sys_auth.change_password(body[ATTR_USERNAME],
+                                          body[ATTR_PASSWORD]))
