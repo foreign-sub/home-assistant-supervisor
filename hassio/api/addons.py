@@ -104,16 +104,20 @@ _LOGGER: logging.Logger = logging.getLogger(__name__)
 SCHEMA_VERSION = vol.Schema({vol.Optional(ATTR_VERSION): vol.Coerce(str)})
 
 # pylint: disable=no-value-for-parameter
-SCHEMA_OPTIONS = vol.Schema(
-    {
-        vol.Optional(ATTR_BOOT): vol.In([BOOT_AUTO, BOOT_MANUAL]),
-        vol.Optional(ATTR_NETWORK): vol.Any(None, DOCKER_PORTS),
-        vol.Optional(ATTR_AUTO_UPDATE): vol.Boolean(),
-        vol.Optional(ATTR_AUDIO_OUTPUT): alsa_device,
-        vol.Optional(ATTR_AUDIO_INPUT): alsa_device,
-        vol.Optional(ATTR_INGRESS_PANEL): vol.Boolean(),
-    }
-)
+SCHEMA_OPTIONS = vol.Schema({
+    vol.Optional(ATTR_BOOT):
+    vol.In([BOOT_AUTO, BOOT_MANUAL]),
+    vol.Optional(ATTR_NETWORK):
+    vol.Any(None, DOCKER_PORTS),
+    vol.Optional(ATTR_AUTO_UPDATE):
+    vol.Boolean(),
+    vol.Optional(ATTR_AUDIO_OUTPUT):
+    alsa_device,
+    vol.Optional(ATTR_AUDIO_INPUT):
+    alsa_device,
+    vol.Optional(ATTR_INGRESS_PANEL):
+    vol.Boolean(),
+})
 
 # pylint: disable=no-value-for-parameter
 SCHEMA_SECURITY = vol.Schema({vol.Optional(ATTR_PROTECTED): vol.Boolean()})
@@ -122,9 +126,9 @@ SCHEMA_SECURITY = vol.Schema({vol.Optional(ATTR_PROTECTED): vol.Boolean()})
 class APIAddons(CoreSysAttributes):
     """Handle RESTful API for add-on functions."""
 
-    def _extract_addon(
-        self, request: web.Request, check_installed: bool = True
-    ) -> AnyAddon:
+    def _extract_addon(self,
+                       request: web.Request,
+                       check_installed: bool = True) -> AnyAddon:
         """Return addon, throw an exception it it doesn't exist."""
         addon_slug: str = request.match_info.get("addon")
 
@@ -146,35 +150,44 @@ class APIAddons(CoreSysAttributes):
         """Return all add-ons or repositories."""
         data_addons = []
         for addon in self.sys_addons.all:
-            data_addons.append(
-                {
-                    ATTR_NAME: addon.name,
-                    ATTR_SLUG: addon.slug,
-                    ATTR_DESCRIPTON: addon.description,
-                    ATTR_ADVANCED: addon.advanced,
-                    ATTR_VERSION: addon.latest_version,
-                    ATTR_INSTALLED: addon.version if addon.is_installed else None,
-                    ATTR_AVAILABLE: addon.available,
-                    ATTR_DETACHED: addon.is_detached,
-                    ATTR_REPOSITORY: addon.repository,
-                    ATTR_BUILD: addon.need_build,
-                    ATTR_URL: addon.url,
-                    ATTR_ICON: addon.with_icon,
-                    ATTR_LOGO: addon.with_logo,
-                }
-            )
+            data_addons.append({
+                ATTR_NAME:
+                addon.name,
+                ATTR_SLUG:
+                addon.slug,
+                ATTR_DESCRIPTON:
+                addon.description,
+                ATTR_ADVANCED:
+                addon.advanced,
+                ATTR_VERSION:
+                addon.latest_version,
+                ATTR_INSTALLED:
+                addon.version if addon.is_installed else None,
+                ATTR_AVAILABLE:
+                addon.available,
+                ATTR_DETACHED:
+                addon.is_detached,
+                ATTR_REPOSITORY:
+                addon.repository,
+                ATTR_BUILD:
+                addon.need_build,
+                ATTR_URL:
+                addon.url,
+                ATTR_ICON:
+                addon.with_icon,
+                ATTR_LOGO:
+                addon.with_logo,
+            })
 
         data_repositories = []
         for repository in self.sys_store.all:
-            data_repositories.append(
-                {
-                    ATTR_SLUG: repository.slug,
-                    ATTR_NAME: repository.name,
-                    ATTR_SOURCE: repository.source,
-                    ATTR_URL: repository.url,
-                    ATTR_MAINTAINER: repository.maintainer,
-                }
-            )
+            data_repositories.append({
+                ATTR_SLUG: repository.slug,
+                ATTR_NAME: repository.name,
+                ATTR_SOURCE: repository.source,
+                ATTR_URL: repository.url,
+                ATTR_MAINTAINER: repository.maintainer,
+            })
 
         return {ATTR_ADDONS: data_addons, ATTR_REPOSITORIES: data_repositories}
 
@@ -251,21 +264,19 @@ class APIAddons(CoreSysAttributes):
         }
 
         if addon.is_installed:
-            data.update(
-                {
-                    ATTR_STATE: await addon.state(),
-                    ATTR_WEBUI: addon.webui,
-                    ATTR_INGRESS_ENTRY: addon.ingress_entry,
-                    ATTR_INGRESS_URL: addon.ingress_url,
-                    ATTR_INGRESS_PORT: addon.ingress_port,
-                    ATTR_INGRESS_PANEL: addon.ingress_panel,
-                    ATTR_AUDIO_INPUT: addon.audio_input,
-                    ATTR_AUDIO_OUTPUT: addon.audio_output,
-                    ATTR_AUTO_UPDATE: addon.auto_update,
-                    ATTR_IP_ADDRESS: str(addon.ip_address),
-                    ATTR_VERSION: addon.version,
-                }
-            )
+            data.update({
+                ATTR_STATE: await addon.state(),
+                ATTR_WEBUI: addon.webui,
+                ATTR_INGRESS_ENTRY: addon.ingress_entry,
+                ATTR_INGRESS_URL: addon.ingress_url,
+                ATTR_INGRESS_PORT: addon.ingress_port,
+                ATTR_INGRESS_PANEL: addon.ingress_panel,
+                ATTR_AUDIO_INPUT: addon.audio_input,
+                ATTR_AUDIO_OUTPUT: addon.audio_output,
+                ATTR_AUTO_UPDATE: addon.auto_update,
+                ATTR_IP_ADDRESS: str(addon.ip_address),
+                ATTR_VERSION: addon.version,
+            })
 
         return data
 
@@ -279,8 +290,7 @@ class APIAddons(CoreSysAttributes):
 
         # Extend schema with add-on specific validation
         addon_schema = SCHEMA_OPTIONS.extend(
-            {vol.Optional(ATTR_OPTIONS): vol.Any(None, addon.schema)}
-        )
+            {vol.Optional(ATTR_OPTIONS): vol.Any(None, addon.schema)})
 
         # Validate/Process Body
         body = await api_validate(addon_schema, request, origin=[ATTR_OPTIONS])
