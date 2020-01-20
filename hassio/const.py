@@ -1,6 +1,6 @@
 """Constants file for Hass.io."""
-from pathlib import Path
 from ipaddress import ip_network
+from pathlib import Path
 
 HASSIO_VERSION = "196"
 
