@@ -1,5 +1,4 @@
 """Test add-ons schema to UI schema convertion."""
-
 from hassio.addons.validate import schema_ui_options
 
 
