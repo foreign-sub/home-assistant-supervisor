@@ -1,9 +1,9 @@
 """Discovery service for UniFi."""
 import voluptuous as vol
 
+from ..const import ATTR_HOST
+from ..const import ATTR_PORT
 from hassio.validate import network_port
-
-from ..const import ATTR_HOST, ATTR_PORT
 
 
 SCHEMA = vol.Schema(
