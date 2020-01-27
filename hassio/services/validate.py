@@ -2,7 +2,8 @@
 import voluptuous as vol
 
 from ..utils.validate import schema_or
-from .const import SERVICE_MQTT, SERVICE_MYSQL
+from .const import SERVICE_MQTT
+from .const import SERVICE_MYSQL
 from .modules.mqtt import SCHEMA_CONFIG_MQTT
 from .modules.mysql import SCHEMA_CONFIG_MYSQL
 

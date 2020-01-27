@@ -1,7 +1,6 @@
 """Test unifi discovery."""
-
-import voluptuous as vol
 import pytest
+import voluptuous as vol
 
 from hassio.discovery.validate import valid_discovery_config
 
