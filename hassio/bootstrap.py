@@ -85,9 +85,8 @@ def initialize_system_data(coresys: CoreSys):
 
     # Home Assistant configuration folder
     if not config.path_homeassistant.is_dir():
-        _LOGGER.info(
-            "Create Home Assistant configuration folder %s", config.path_homeassistant
-        )
+        _LOGGER.info("Create Home Assistant configuration folder %s",
+                     config.path_homeassistant)
         config.path_homeassistant.mkdir()
 
     # hassio ssl folder
@@ -97,19 +96,18 @@ def initialize_system_data(coresys: CoreSys):
 
     # hassio addon data folder
     if not config.path_addons_data.is_dir():
-        _LOGGER.info("Create Hass.io Add-on data folder %s", config.path_addons_data)
+        _LOGGER.info("Create Hass.io Add-on data folder %s",
+                     config.path_addons_data)
         config.path_addons_data.mkdir(parents=True)
 
     if not config.path_addons_local.is_dir():
-        _LOGGER.info(
-            "Create Hass.io Add-on local repository folder %s", config.path_addons_local
-        )
+        _LOGGER.info("Create Hass.io Add-on local repository folder %s",
+                     config.path_addons_local)
         config.path_addons_local.mkdir(parents=True)
 
     if not config.path_addons_git.is_dir():
-        _LOGGER.info(
-            "Create Hass.io Add-on git repositories folder %s", config.path_addons_git
-        )
+        _LOGGER.info("Create Hass.io Add-on git repositories folder %s",
+                     config.path_addons_git)
         config.path_addons_git.mkdir(parents=True)
 
     # hassio tmp folder
@@ -183,8 +181,7 @@ def initialize_logging():
                 "ERROR": "red",
                 "CRITICAL": "red",
             },
-        )
-    )
+        ))
 
 
 def check_environment():
@@ -218,17 +215,20 @@ def check_environment():
 def reg_signal(loop):
     """Register SIGTERM and SIGKILL to stop system."""
     try:
-        loop.add_signal_handler(signal.SIGTERM, lambda: loop.call_soon(loop.stop))
+        loop.add_signal_handler(
+            signal.SIGTERM, lambda: loop.call_soon(loop.stop))
     except (ValueError, RuntimeError):
         _LOGGER.warning("Could not bind to SIGTERM")
 
     try:
-        loop.add_signal_handler(signal.SIGHUP, lambda: loop.call_soon(loop.stop))
+        loop.add_signal_handler(
+            signal.SIGHUP, lambda: loop.call_soon(loop.stop))
     except (ValueError, RuntimeError):
         _LOGGER.warning("Could not bind to SIGHUP")
 
     try:
-        loop.add_signal_handler(signal.SIGINT, lambda: loop.call_soon(loop.stop))
+        loop.add_signal_handler(
+            signal.SIGINT, lambda: loop.call_soon(loop.stop))
     except (ValueError, RuntimeError):
         _LOGGER.warning("Could not bind to SIGINT")
 
