@@ -105,9 +105,11 @@ def api_process_raw(content):
 
 def api_return_error(message: Optional[str] = None) -> web.Response:
     """Return an API error message."""
-    return web.json_response(
-        {JSON_RESULT: RESULT_ERROR, JSON_MESSAGE: message}, status=400
-    )
+    return web.json_response({
+        JSON_RESULT: RESULT_ERROR,
+        JSON_MESSAGE: message
+    },
+                             status=400)
 
 
 def api_return_ok(data: Optional[Dict[str, Any]] = None) -> web.Response:
@@ -115,9 +117,9 @@ def api_return_ok(data: Optional[Dict[str, Any]] = None) -> web.Response:
     return web.json_response({JSON_RESULT: RESULT_OK, JSON_DATA: data or {}})
 
 
-async def api_validate(
-    schema: vol.Schema, request: web.Request, origin: Optional[List[str]] = None
-) -> Dict[str, Any]:
+async def api_validate(schema: vol.Schema,
+                       request: web.Request,
+                       origin: Optional[List[str]] = None) -> Dict[str, Any]:
     """Validate request data with schema."""
     data: Dict[str, Any] = await request.json(loads=json_loads)
     try:
