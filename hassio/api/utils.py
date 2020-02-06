@@ -1,24 +1,27 @@
 """Init file for Hass.io util for RESTful API."""
 import json
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
 
+import voluptuous as vol
 from aiohttp import web
 from aiohttp.hdrs import AUTHORIZATION
-import voluptuous as vol
 from voluptuous.humanize import humanize_error
 
-from ..const import (
-    CONTENT_TYPE_BINARY,
-    HEADER_TOKEN,
-    HEADER_TOKEN_OLD,
-    JSON_DATA,
-    JSON_MESSAGE,
-    JSON_RESULT,
-    RESULT_ERROR,
-    RESULT_OK,
-)
-from ..exceptions import APIError, APIForbidden, HassioError
+from ..const import CONTENT_TYPE_BINARY
+from ..const import HEADER_TOKEN
+from ..const import HEADER_TOKEN_OLD
+from ..const import JSON_DATA
+from ..const import JSON_MESSAGE
+from ..const import JSON_RESULT
+from ..const import RESULT_ERROR
+from ..const import RESULT_OK
+from ..exceptions import APIError
+from ..exceptions import APIForbidden
+from ..exceptions import HassioError
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
