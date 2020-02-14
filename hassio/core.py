@@ -1,18 +1,18 @@
 """Main file for Hass.io."""
-from contextlib import suppress
 import asyncio
 import logging
+from contextlib import suppress
 
 import async_timeout
 
+from .const import STARTUP_APPLICATION
+from .const import STARTUP_INITIALIZE
+from .const import STARTUP_SERVICES
+from .const import STARTUP_SYSTEM
 from .coresys import CoreSysAttributes
-from .const import (
-    STARTUP_SYSTEM,
-    STARTUP_SERVICES,
-    STARTUP_APPLICATION,
-    STARTUP_INITIALIZE,
-)
-from .exceptions import HassioError, HomeAssistantError, SupervisorUpdateError
+from .exceptions import HassioError
+from .exceptions import HomeAssistantError
+from .exceptions import SupervisorUpdateError
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
