@@ -1,8 +1,10 @@
 """Test hardware utils."""
-from unittest.mock import patch, PropertyMock
 from pathlib import Path
+from unittest.mock import patch
+from unittest.mock import PropertyMock
 
-from hassio.misc.hardware import Hardware, Device
+from hassio.misc.hardware import Device
+from hassio.misc.hardware import Hardware
 
 
 def test_read_all_devices():
