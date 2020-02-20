@@ -24,9 +24,8 @@ def test_video_devices():
         Device("video1", Path("/dev/video1"), []),
     ]
 
-    with patch(
-        "hassio.misc.hardware.Hardware.devices", new_callable=PropertyMock
-    ) as mock_device:
+    with patch("hassio.misc.hardware.Hardware.devices",
+               new_callable=PropertyMock) as mock_device:
         mock_device.return_value = device_list
 
         assert system.video_devices == [
