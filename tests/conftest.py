@@ -1,10 +1,11 @@
 """Common test functions."""
-from unittest.mock import patch, PropertyMock, MagicMock
+from unittest.mock import MagicMock
+from unittest.mock import patch
+from unittest.mock import PropertyMock
 
 import pytest
 
 from supervisor.bootstrap import initialize_coresys
-
 from tests.common import mock_coro
 
 # pylint: disable=redefined-outer-name

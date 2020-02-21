@@ -1,12 +1,13 @@
 """D-Bus interface objects."""
 import logging
 
-from .systemd import Systemd
-from .hostname import Hostname
-from .rauc import Rauc
-from .nmi_dns import NMIDnsManager
-from ..coresys import CoreSysAttributes, CoreSys
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 from ..exceptions import DBusNotConnectedError
+from .hostname import Hostname
+from .nmi_dns import NMIDnsManager
+from .rauc import Rauc
+from .systemd import Systemd
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

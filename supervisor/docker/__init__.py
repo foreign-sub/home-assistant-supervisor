@@ -1,13 +1,16 @@
 """Init file for Supervisor Docker object."""
+import logging
 from contextlib import suppress
 from ipaddress import IPv4Address
-import logging
-from typing import Any, Dict, Optional
+from typing import Any
+from typing import Dict
+from typing import Optional
 
 import attr
 import docker
 
-from ..const import SOCKET_DOCKER, DNS_SUFFIX
+from ..const import DNS_SUFFIX
+from ..const import SOCKET_DOCKER
 from ..exceptions import DockerAPIError
 from .network import DockerNetwork
 

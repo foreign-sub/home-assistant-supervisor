@@ -6,18 +6,16 @@ import logging
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from ..const import (
-    PRIVILEGED_DAC_READ_SEARCH,
-    PRIVILEGED_NET_ADMIN,
-    PRIVILEGED_SYS_ADMIN,
-    PRIVILEGED_SYS_MODULE,
-    PRIVILEGED_SYS_PTRACE,
-    PRIVILEGED_SYS_RAWIO,
-    ROLE_ADMIN,
-    ROLE_MANAGER,
-    SECURITY_DISABLE,
-    SECURITY_PROFILE,
-)
+from ..const import PRIVILEGED_DAC_READ_SEARCH
+from ..const import PRIVILEGED_NET_ADMIN
+from ..const import PRIVILEGED_SYS_ADMIN
+from ..const import PRIVILEGED_SYS_MODULE
+from ..const import PRIVILEGED_SYS_PTRACE
+from ..const import PRIVILEGED_SYS_RAWIO
+from ..const import ROLE_ADMIN
+from ..const import ROLE_MANAGER
+from ..const import SECURITY_DISABLE
+from ..const import SECURITY_PROFILE
 
 if TYPE_CHECKING:
     from .model import AddonModel

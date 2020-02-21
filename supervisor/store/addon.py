@@ -1,8 +1,9 @@
 """Init file for Supervisor add-ons."""
 import logging
 
+from ..addons.model import AddonModel
+from ..addons.model import Data
 from ..coresys import CoreSys
-from ..addons.model import AddonModel, Data
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

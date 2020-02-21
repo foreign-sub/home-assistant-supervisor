@@ -2,7 +2,8 @@
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
+from typing import Dict
 
 import voluptuous as vol
 from voluptuous.humanize import humanize_error

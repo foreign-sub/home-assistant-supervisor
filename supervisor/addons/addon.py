@@ -1,60 +1,65 @@
 """Init file for Supervisor add-ons."""
-from contextlib import suppress
-from copy import deepcopy
-from ipaddress import IPv4Address
 import logging
-from pathlib import Path, PurePath
 import re
 import secrets
 import shutil
 import tarfile
+from contextlib import suppress
+from copy import deepcopy
+from ipaddress import IPv4Address
+from pathlib import Path
+from pathlib import PurePath
 from tempfile import TemporaryDirectory
-from typing import Any, Awaitable, Dict, List, Optional
+from typing import Any
+from typing import Awaitable
+from typing import Dict
+from typing import List
+from typing import Optional
 
 import voluptuous as vol
 from voluptuous.humanize import humanize_error
 
-from ..const import (
-    ATTR_ACCESS_TOKEN,
-    ATTR_AUDIO_INPUT,
-    ATTR_AUDIO_OUTPUT,
-    ATTR_AUTO_UPDATE,
-    ATTR_BOOT,
-    ATTR_IMAGE,
-    ATTR_INGRESS_ENTRY,
-    ATTR_INGRESS_PANEL,
-    ATTR_INGRESS_PORT,
-    ATTR_INGRESS_TOKEN,
-    ATTR_NETWORK,
-    ATTR_OPTIONS,
-    ATTR_PORTS,
-    ATTR_PROTECTED,
-    ATTR_SCHEMA,
-    ATTR_STATE,
-    ATTR_SYSTEM,
-    ATTR_USER,
-    ATTR_UUID,
-    ATTR_VERSION,
-    DNS_SUFFIX,
-    STATE_STARTED,
-    STATE_STOPPED,
-)
+from ..const import ATTR_ACCESS_TOKEN
+from ..const import ATTR_AUDIO_INPUT
+from ..const import ATTR_AUDIO_OUTPUT
+from ..const import ATTR_AUTO_UPDATE
+from ..const import ATTR_BOOT
+from ..const import ATTR_IMAGE
+from ..const import ATTR_INGRESS_ENTRY
+from ..const import ATTR_INGRESS_PANEL
+from ..const import ATTR_INGRESS_PORT
+from ..const import ATTR_INGRESS_TOKEN
+from ..const import ATTR_NETWORK
+from ..const import ATTR_OPTIONS
+from ..const import ATTR_PORTS
+from ..const import ATTR_PROTECTED
+from ..const import ATTR_SCHEMA
+from ..const import ATTR_STATE
+from ..const import ATTR_SYSTEM
+from ..const import ATTR_USER
+from ..const import ATTR_UUID
+from ..const import ATTR_VERSION
+from ..const import DNS_SUFFIX
+from ..const import STATE_STARTED
+from ..const import STATE_STOPPED
 from ..coresys import CoreSys
 from ..docker.addon import DockerAddon
 from ..docker.stats import DockerStats
-from ..exceptions import (
-    AddonsError,
-    AddonsNotSupportedError,
-    DockerAPIError,
-    HostAppArmorError,
-    JsonFileError,
-)
+from ..exceptions import AddonsError
+from ..exceptions import AddonsNotSupportedError
+from ..exceptions import DockerAPIError
+from ..exceptions import HostAppArmorError
+from ..exceptions import JsonFileError
 from ..utils.apparmor import adjust_profile
-from ..utils.json import read_json_file, write_json_file
-from ..utils.tar import exclude_filter, secure_path
-from .model import AddonModel, Data
+from ..utils.json import read_json_file
+from ..utils.json import write_json_file
+from ..utils.tar import exclude_filter
+from ..utils.tar import secure_path
+from .model import AddonModel
+from .model import Data
 from .utils import remove_data
-from .validate import SCHEMA_ADDON_SNAPSHOT, validate_options
+from .validate import SCHEMA_ADDON_SNAPSHOT
+from .validate import validate_options
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

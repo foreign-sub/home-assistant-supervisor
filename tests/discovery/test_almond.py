@@ -1,7 +1,6 @@
 """Test adguard discovery."""
-
-import voluptuous as vol
 import pytest
+import voluptuous as vol
 
 from supervisor.discovery.validate import valid_discovery_config
 

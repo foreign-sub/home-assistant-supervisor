@@ -1,5 +1,4 @@
 """Validate utils."""
-
 import pytz
 import voluptuous as vol
 

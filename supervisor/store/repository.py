@@ -1,15 +1,14 @@
 """Represent a Supervisor repository."""
-from .git import GitRepoHassIO, GitRepoCustom
-from .utils import get_hash_from_repository
-from ..const import (
-    REPOSITORY_CORE,
-    REPOSITORY_LOCAL,
-    ATTR_NAME,
-    ATTR_URL,
-    ATTR_MAINTAINER,
-)
+from ..const import ATTR_MAINTAINER
+from ..const import ATTR_NAME
+from ..const import ATTR_URL
+from ..const import REPOSITORY_CORE
+from ..const import REPOSITORY_LOCAL
 from ..coresys import CoreSysAttributes
 from ..exceptions import APIError
+from .git import GitRepoCustom
+from .git import GitRepoHassIO
+from .utils import get_hash_from_repository
 
 UNKNOWN = "unknown"
 

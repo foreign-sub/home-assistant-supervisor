@@ -1,23 +1,23 @@
 """HassOS support on supervisor."""
 import asyncio
-from contextlib import suppress
 import logging
+from contextlib import suppress
 from pathlib import Path
-from typing import Awaitable, Optional
+from typing import Awaitable
+from typing import Optional
 
 import aiohttp
 from cpe import CPE
 
 from .const import URL_HASSOS_OTA
-from .coresys import CoreSysAttributes, CoreSys
-from .docker.hassos_cli import DockerHassOSCli
-from .exceptions import (
-    DBusError,
-    HassOSNotSupportedError,
-    HassOSUpdateError,
-    DockerAPIError,
-)
+from .coresys import CoreSys
+from .coresys import CoreSysAttributes
 from .dbus.rauc import RaucState
+from .docker.hassos_cli import DockerHassOSCli
+from .exceptions import DBusError
+from .exceptions import DockerAPIError
+from .exceptions import HassOSNotSupportedError
+from .exceptions import HassOSUpdateError
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

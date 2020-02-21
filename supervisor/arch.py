@@ -1,11 +1,13 @@
 """Handle Arch for underlay maschine/platforms."""
 import logging
-from pathlib import Path
 import platform
+from pathlib import Path
 from typing import List
 
-from .coresys import CoreSys, CoreSysAttributes
-from .exceptions import HassioArchNotFound, JsonFileError
+from .coresys import CoreSys
+from .coresys import CoreSysAttributes
+from .exceptions import HassioArchNotFound
+from .exceptions import JsonFileError
 from .utils.json import read_json_file
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)

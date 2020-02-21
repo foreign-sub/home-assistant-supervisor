@@ -1,16 +1,13 @@
 """Discovery service for MQTT."""
 import voluptuous as vol
 
+from ..const import ATTR_HOST
+from ..const import ATTR_PASSWORD
+from ..const import ATTR_PORT
+from ..const import ATTR_PROTOCOL
+from ..const import ATTR_SSL
+from ..const import ATTR_USERNAME
 from supervisor.validate import network_port
-
-from ..const import (
-    ATTR_HOST,
-    ATTR_PASSWORD,
-    ATTR_PORT,
-    ATTR_PROTOCOL,
-    ATTR_SSL,
-    ATTR_USERNAME,
-)
 
 # pylint: disable=no-value-for-parameter
 SCHEMA = vol.Schema(

@@ -3,9 +3,15 @@ import hashlib
 import logging
 
 from .addons.addon import Addon
-from .const import ATTR_ADDON, ATTR_PASSWORD, ATTR_USERNAME, FILE_HASSIO_AUTH
-from .coresys import CoreSys, CoreSysAttributes
-from .exceptions import AuthError, AuthPasswordResetError, HomeAssistantAPIError
+from .const import ATTR_ADDON
+from .const import ATTR_PASSWORD
+from .const import ATTR_USERNAME
+from .const import FILE_HASSIO_AUTH
+from .coresys import CoreSys
+from .coresys import CoreSysAttributes
+from .exceptions import AuthError
+from .exceptions import AuthPasswordResetError
+from .exceptions import HomeAssistantAPIError
 from .utils.json import JsonConfig
 from .validate import SCHEMA_AUTH_CONFIG
 

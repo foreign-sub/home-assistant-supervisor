@@ -2,20 +2,22 @@
 from __future__ import annotations
 
 import asyncio
-import logging
 import json
-import shlex
+import logging
 import re
-from signal import SIGINT
-from typing import Any, Dict, List, Optional, Set
+import shlex
 import xml.etree.ElementTree as ET
+from signal import SIGINT
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Set
 
-from ..exceptions import (
-    DBusFatalError,
-    DBusParseError,
-    DBusInterfaceError,
-    DBusNotConnectedError,
-)
+from ..exceptions import DBusFatalError
+from ..exceptions import DBusInterfaceError
+from ..exceptions import DBusNotConnectedError
+from ..exceptions import DBusParseError
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

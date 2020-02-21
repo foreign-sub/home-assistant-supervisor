@@ -1,11 +1,9 @@
 """Validate Add-on configs."""
-
-import voluptuous as vol
 import pytest
-
-from supervisor.addons import validate as vd
+import voluptuous as vol
 
 from ..common import load_json_fixture
+from supervisor.addons import validate as vd
 
 
 def test_basic_config():

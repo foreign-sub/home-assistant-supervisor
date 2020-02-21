@@ -1,9 +1,9 @@
 """Test Tarfile functions."""
-
 import attr
 import pytest
 
-from supervisor.utils.tar import secure_path, exclude_filter
+from supervisor.utils.tar import exclude_filter
+from supervisor.utils.tar import secure_path
 
 
 @attr.s

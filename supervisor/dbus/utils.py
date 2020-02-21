@@ -1,5 +1,4 @@
 """Utils for D-Bus."""
-
 from ..exceptions import DBusNotConnectedError
 
 

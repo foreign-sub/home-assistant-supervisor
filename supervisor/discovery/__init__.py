@@ -1,20 +1,30 @@
 """Handle discover message for Home Assistant."""
 from __future__ import annotations
 
-from contextlib import suppress
 import logging
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
-from uuid import uuid4, UUID
+from contextlib import suppress
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import TYPE_CHECKING
+from uuid import UUID
+from uuid import uuid4
 
 import attr
 import voluptuous as vol
 from voluptuous.humanize import humanize_error
 
-from ..const import ATTR_CONFIG, ATTR_DISCOVERY, FILE_HASSIO_DISCOVERY
-from ..coresys import CoreSys, CoreSysAttributes
-from ..exceptions import DiscoveryError, HomeAssistantAPIError
+from ..const import ATTR_CONFIG
+from ..const import ATTR_DISCOVERY
+from ..const import FILE_HASSIO_DISCOVERY
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
+from ..exceptions import DiscoveryError
+from ..exceptions import HomeAssistantAPIError
 from ..utils.json import JsonConfig
-from .validate import SCHEMA_DISCOVERY_CONFIG, valid_discovery_config
+from .validate import SCHEMA_DISCOVERY_CONFIG
+from .validate import valid_discovery_config
 
 if TYPE_CHECKING:
     from ..addons.addon import Addon

@@ -1,8 +1,11 @@
 """Handle internal services discovery."""
-from typing import Dict, List
+from typing import Dict
+from typing import List
 
-from ..coresys import CoreSys, CoreSysAttributes
-from .const import SERVICE_MQTT, SERVICE_MYSQL
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
+from .const import SERVICE_MQTT
+from .const import SERVICE_MYSQL
 from .data import ServicesData
 from .interface import ServiceInterface
 from .modules.mqtt import MQTTService

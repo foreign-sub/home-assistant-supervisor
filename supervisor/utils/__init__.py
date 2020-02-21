@@ -1,9 +1,9 @@
 """Tools file for Supervisor."""
-from datetime import datetime
-from ipaddress import IPv4Address
 import logging
 import re
 import socket
+from datetime import datetime
+from ipaddress import IPv4Address
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 RE_STRING = re.compile(r"\x1b(\[.*?[@-~]|\].*?(\x07|\x1b\\))")

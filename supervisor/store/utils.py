@@ -1,8 +1,8 @@
 """Util add-ons functions."""
 import hashlib
 import logging
-from pathlib import Path
 import re
+from pathlib import Path
 
 RE_SHA1 = re.compile(r"[a-f0-9]{8}")
 _LOGGER: logging.Logger = logging.getLogger(__name__)

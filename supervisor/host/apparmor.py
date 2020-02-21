@@ -4,7 +4,8 @@ import shutil
 from pathlib import Path
 
 from ..coresys import CoreSysAttributes
-from ..exceptions import DBusError, HostAppArmorError
+from ..exceptions import DBusError
+from ..exceptions import HostAppArmorError
 from ..utils.apparmor import validate_profile
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)

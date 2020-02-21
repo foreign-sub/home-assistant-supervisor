@@ -1,12 +1,17 @@
 """Interface for single service."""
-from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
+from abc import ABC
+from abc import abstractmethod
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
 
 import voluptuous as vol
 
 from ..addons.addon import Addon
 from ..const import PROVIDE_SERVICE
-from ..coresys import CoreSys, CoreSysAttributes
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 
 
 class ServiceInterface(CoreSysAttributes, ABC):

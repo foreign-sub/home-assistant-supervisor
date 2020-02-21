@@ -4,21 +4,20 @@ import logging
 
 import voluptuous as vol
 
-from .utils import api_process, api_validate
-from ..const import (
-    ATTR_HOSTNAME,
-    ATTR_FEATURES,
-    ATTR_KERNEL,
-    ATTR_OPERATING_SYSTEM,
-    ATTR_CHASSIS,
-    ATTR_DEPLOYMENT,
-    ATTR_STATE,
-    ATTR_NAME,
-    ATTR_DESCRIPTON,
-    ATTR_SERVICES,
-    ATTR_CPE,
-)
+from ..const import ATTR_CHASSIS
+from ..const import ATTR_CPE
+from ..const import ATTR_DEPLOYMENT
+from ..const import ATTR_DESCRIPTON
+from ..const import ATTR_FEATURES
+from ..const import ATTR_HOSTNAME
+from ..const import ATTR_KERNEL
+from ..const import ATTR_NAME
+from ..const import ATTR_OPERATING_SYSTEM
+from ..const import ATTR_SERVICES
+from ..const import ATTR_STATE
 from ..coresys import CoreSysAttributes
+from .utils import api_process
+from .utils import api_validate
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

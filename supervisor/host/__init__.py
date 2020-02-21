@@ -1,22 +1,21 @@
 """Host function like audio, D-Bus or systemd."""
-from contextlib import suppress
 import logging
+from contextlib import suppress
 
+from ..const import FEATURES_HASSOS
+from ..const import FEATURES_HOSTNAME
+from ..const import FEATURES_REBOOT
+from ..const import FEATURES_SERVICES
+from ..const import FEATURES_SHUTDOWN
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
+from ..exceptions import HassioError
 from .alsa import AlsaAudio
 from .apparmor import AppArmorControl
 from .control import SystemControl
 from .info import InfoCenter
-from .services import ServiceManager
 from .network import NetworkManager
-from ..const import (
-    FEATURES_REBOOT,
-    FEATURES_SHUTDOWN,
-    FEATURES_HOSTNAME,
-    FEATURES_SERVICES,
-    FEATURES_HASSOS,
-)
-from ..coresys import CoreSysAttributes, CoreSys
-from ..exceptions import HassioError
+from .services import ServiceManager
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

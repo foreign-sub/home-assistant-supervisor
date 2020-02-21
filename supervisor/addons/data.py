@@ -1,19 +1,19 @@
 """Init file for Supervisor add-on data."""
-from copy import deepcopy
 import logging
-from typing import Any, Dict
+from copy import deepcopy
+from typing import Any
+from typing import Dict
 
-from ..const import (
-    ATTR_IMAGE,
-    ATTR_OPTIONS,
-    ATTR_SYSTEM,
-    ATTR_USER,
-    ATTR_VERSION,
-    FILE_HASSIO_ADDONS,
-)
-from ..coresys import CoreSys, CoreSysAttributes
-from ..utils.json import JsonConfig
+from ..const import ATTR_IMAGE
+from ..const import ATTR_OPTIONS
+from ..const import ATTR_SYSTEM
+from ..const import ATTR_USER
+from ..const import ATTR_VERSION
+from ..const import FILE_HASSIO_ADDONS
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 from ..store.addon import AddonStore
+from ..utils.json import JsonConfig
 from .addon import Addon
 from .validate import SCHEMA_ADDONS_FILE
 

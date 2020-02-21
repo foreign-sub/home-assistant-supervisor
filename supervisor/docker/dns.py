@@ -1,6 +1,6 @@
 """HassOS Cli docker object."""
-from contextlib import suppress
 import logging
+from contextlib import suppress
 
 from ..const import ENV_TIME
 from ..coresys import CoreSysAttributes

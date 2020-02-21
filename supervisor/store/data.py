@@ -1,20 +1,20 @@
 """Init file for Supervisor add-on data."""
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
+from typing import Dict
 
 import voluptuous as vol
 from voluptuous.humanize import humanize_error
 
 from ..addons.validate import SCHEMA_ADDON_CONFIG
-from ..const import (
-    ATTR_LOCATON,
-    ATTR_REPOSITORY,
-    ATTR_SLUG,
-    REPOSITORY_CORE,
-    REPOSITORY_LOCAL,
-)
-from ..coresys import CoreSys, CoreSysAttributes
+from ..const import ATTR_LOCATON
+from ..const import ATTR_REPOSITORY
+from ..const import ATTR_SLUG
+from ..const import REPOSITORY_CORE
+from ..const import REPOSITORY_LOCAL
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 from ..exceptions import JsonFileError
 from ..utils.json import read_json_file
 from .utils import extract_hash_from_path

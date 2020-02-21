@@ -4,7 +4,9 @@ import logging
 import attr
 
 from ..coresys import CoreSysAttributes
-from ..exceptions import HassioError, HostNotSupportedError, HostServiceError
+from ..exceptions import HassioError
+from ..exceptions import HostNotSupportedError
+from ..exceptions import HostServiceError
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

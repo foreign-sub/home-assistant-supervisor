@@ -1,8 +1,9 @@
 """Validate add-ons options schema."""
-
 import voluptuous as vol
 
-from ..const import ATTR_NAME, ATTR_URL, ATTR_MAINTAINER
+from ..const import ATTR_MAINTAINER
+from ..const import ATTR_NAME
+from ..const import ATTR_URL
 
 
 # pylint: disable=no-value-for-parameter

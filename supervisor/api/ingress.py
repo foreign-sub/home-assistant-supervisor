@@ -1,31 +1,31 @@
 """Supervisor Add-on ingress service."""
 import asyncio
-from ipaddress import ip_address
 import logging
-from typing import Any, Dict, Union
+from ipaddress import ip_address
+from typing import Any
+from typing import Dict
+from typing import Union
 
 import aiohttp
-from aiohttp import hdrs, web
-from aiohttp.web_exceptions import (
-    HTTPBadGateway,
-    HTTPServiceUnavailable,
-    HTTPUnauthorized,
-)
-from multidict import CIMultiDict, istr
+from aiohttp import hdrs
+from aiohttp import web
+from aiohttp.web_exceptions import HTTPBadGateway
+from aiohttp.web_exceptions import HTTPServiceUnavailable
+from aiohttp.web_exceptions import HTTPUnauthorized
+from multidict import CIMultiDict
+from multidict import istr
 
 from ..addons.addon import Addon
-from ..const import (
-    ATTR_ADMIN,
-    ATTR_ICON,
-    ATTR_SESSION,
-    ATTR_TITLE,
-    ATTR_PANELS,
-    ATTR_ENABLE,
-    COOKIE_INGRESS,
-    HEADER_TOKEN,
-    HEADER_TOKEN_OLD,
-    REQUEST_FROM,
-)
+from ..const import ATTR_ADMIN
+from ..const import ATTR_ENABLE
+from ..const import ATTR_ICON
+from ..const import ATTR_PANELS
+from ..const import ATTR_SESSION
+from ..const import ATTR_TITLE
+from ..const import COOKIE_INGRESS
+from ..const import HEADER_TOKEN
+from ..const import HEADER_TOKEN_OLD
+from ..const import REQUEST_FROM
 from ..coresys import CoreSysAttributes
 from .utils import api_process
 

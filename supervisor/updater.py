@@ -1,24 +1,22 @@
 """Fetch last versions from webserver."""
 import asyncio
-from contextlib import suppress
-from datetime import timedelta
 import json
 import logging
+from contextlib import suppress
+from datetime import timedelta
 from typing import Optional
 
 import aiohttp
 
-from .const import (
-    ATTR_CHANNEL,
-    ATTR_DNS,
-    ATTR_HASSIO,
-    ATTR_HASSOS,
-    ATTR_HASSOS_CLI,
-    ATTR_HOMEASSISTANT,
-    FILE_HASSIO_UPDATER,
-    URL_HASSIO_VERSION,
-    UpdateChannels,
-)
+from .const import ATTR_CHANNEL
+from .const import ATTR_DNS
+from .const import ATTR_HASSIO
+from .const import ATTR_HASSOS
+from .const import ATTR_HASSOS_CLI
+from .const import ATTR_HOMEASSISTANT
+from .const import FILE_HASSIO_UPDATER
+from .const import UpdateChannels
+from .const import URL_HASSIO_VERSION
 from .coresys import CoreSysAttributes
 from .exceptions import HassioUpdaterError
 from .utils import AsyncThrottle

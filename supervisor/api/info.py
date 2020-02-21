@@ -1,21 +1,20 @@
 """Init file for Supervisor info RESTful API."""
 import logging
-from typing import Any, Dict
+from typing import Any
+from typing import Dict
 
 from aiohttp import web
 
-from ..const import (
-    ATTR_ARCH,
-    ATTR_CHANNEL,
-    ATTR_HASSOS,
-    ATTR_HOMEASSISTANT,
-    ATTR_HOSTNAME,
-    ATTR_LOGGING,
-    ATTR_MACHINE,
-    ATTR_SUPERVISOR,
-    ATTR_SUPPORTED_ARCH,
-    ATTR_TIMEZONE,
-)
+from ..const import ATTR_ARCH
+from ..const import ATTR_CHANNEL
+from ..const import ATTR_HASSOS
+from ..const import ATTR_HOMEASSISTANT
+from ..const import ATTR_HOSTNAME
+from ..const import ATTR_LOGGING
+from ..const import ATTR_MACHINE
+from ..const import ATTR_SUPERVISOR
+from ..const import ATTR_SUPPORTED_ARCH
+from ..const import ATTR_TIMEZONE
 from ..coresys import CoreSysAttributes
 from .utils import api_process
 

@@ -2,7 +2,8 @@
 import logging
 import re
 
-from ..exceptions import AppArmorFileError, AppArmorInvalidError
+from ..exceptions import AppArmorFileError
+from ..exceptions import AppArmorInvalidError
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

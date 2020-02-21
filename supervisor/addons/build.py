@@ -1,10 +1,16 @@
 """Supervisor add-on build environment."""
 from __future__ import annotations
-from pathlib import Path
-from typing import TYPE_CHECKING, Dict
 
-from ..const import ATTR_ARGS, ATTR_BUILD_FROM, ATTR_SQUASH, META_ADDON
-from ..coresys import CoreSys, CoreSysAttributes
+from pathlib import Path
+from typing import Dict
+from typing import TYPE_CHECKING
+
+from ..const import ATTR_ARGS
+from ..const import ATTR_BUILD_FROM
+from ..const import ATTR_SQUASH
+from ..const import META_ADDON
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 from ..utils.json import JsonConfig
 from .validate import SCHEMA_BUILD_CONFIG
 

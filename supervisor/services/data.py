@@ -1,9 +1,11 @@
 """Handle service data for persistent supervisor reboot."""
-from typing import Any, Dict
+from typing import Any
+from typing import Dict
 
 from ..const import FILE_HASSIO_SERVICES
 from ..utils.json import JsonConfig
-from .const import SERVICE_MQTT, SERVICE_MYSQL
+from .const import SERVICE_MQTT
+from .const import SERVICE_MYSQL
 from .validate import SCHEMA_SERVICES_CONFIG
 
 
