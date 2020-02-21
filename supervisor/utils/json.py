@@ -47,9 +47,8 @@ class JsonConfig:
         try:
             self._data = self._schema({})
         except vol.Invalid as ex:
-            _LOGGER.error(
-                "Can't reset %s: %s", self._file, humanize_error(self._data, ex)
-            )
+            _LOGGER.error("Can't reset %s: %s", self._file,
+                          humanize_error(self._data, ex))
 
     def read_data(self) -> None:
         """Read JSON file & validate."""
@@ -63,9 +62,8 @@ class JsonConfig:
         try:
             self._data = self._schema(self._data)
         except vol.Invalid as ex:
-            _LOGGER.error(
-                "Can't parse %s: %s", self._file, humanize_error(self._data, ex)
-            )
+            _LOGGER.error("Can't parse %s: %s", self._file,
+                          humanize_error(self._data, ex))
 
             # Reset data to default
             _LOGGER.warning("Reset %s to default", self._file)
@@ -77,7 +75,8 @@ class JsonConfig:
         try:
             self._data = self._schema(self._data)
         except vol.Invalid as ex:
-            _LOGGER.error("Can't parse data: %s", humanize_error(self._data, ex))
+            _LOGGER.error("Can't parse data: %s",
+                          humanize_error(self._data, ex))
 
             # Load last valid data
             _LOGGER.warning("Reset %s to last version", self._file)

@@ -60,7 +60,8 @@ class Auth(JsonConfig, CoreSysAttributes):
         self._data.pop(username_h, None)
         self.save_data()
 
-    async def check_login(self, addon: Addon, username: str, password: str) -> bool:
+    async def check_login(self, addon: Addon, username: str,
+                          password: str) -> bool:
         """Check username login."""
         if password is None:
             _LOGGER.error("None as password is not supported!")
@@ -74,13 +75,13 @@ class Auth(JsonConfig, CoreSysAttributes):
 
         try:
             async with self.sys_homeassistant.make_request(
-                "post",
-                "api/hassio_auth",
-                json={
-                    ATTR_USERNAME: username,
-                    ATTR_PASSWORD: password,
-                    ATTR_ADDON: addon.slug,
-                },
+                    "post",
+                    "api/hassio_auth",
+                    json={
+                        ATTR_USERNAME: username,
+                        ATTR_PASSWORD: password,
+                        ATTR_ADDON: addon.slug,
+                    },
             ) as req:
 
                 if req.status == 200:
@@ -100,9 +101,12 @@ class Auth(JsonConfig, CoreSysAttributes):
         """Change user password login."""
         try:
             async with self.sys_homeassistant.make_request(
-                "post",
-                "api/hassio_auth/password_reset",
-                json={ATTR_USERNAME: username, ATTR_PASSWORD: password},
+                    "post",
+                    "api/hassio_auth/password_reset",
+                    json={
+                        ATTR_USERNAME: username,
+                        ATTR_PASSWORD: password
+                    },
             ) as req:
                 if req.status == 200:
                     _LOGGER.info("Success password reset %s", username)

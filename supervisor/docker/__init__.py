@@ -34,8 +34,9 @@ class DockerAPI:
     def __init__(self):
         """Initialize Docker base wrapper."""
         self.docker: docker.DockerClient = docker.DockerClient(
-            base_url="unix:/{}".format(str(SOCKET_DOCKER)), version="auto", timeout=900
-        )
+            base_url="unix:/{}".format(str(SOCKET_DOCKER)),
+            version="auto",
+            timeout=900)
         self.network: DockerNetwork = DockerNetwork(self.docker)
 
     @property
@@ -54,12 +55,12 @@ class DockerAPI:
         return self.docker.api
 
     def run(
-        self,
-        image: str,
-        version: str = "latest",
-        dns: bool = True,
-        ipv4: Optional[IPv4Address] = None,
-        **kwargs: Dict[str, Any],
+            self,
+            image: str,
+            version: str = "latest",
+            dns: bool = True,
+            ipv4: Optional[IPv4Address] = None,
+            **kwargs: Dict[str, Any],
     ) -> docker.models.containers.Container:
         """"Create a Docker container and run it.
 
@@ -81,9 +82,9 @@ class DockerAPI:
 
         # Create container
         try:
-            container = self.docker.containers.create(
-                f"{image}:{version}", use_config_proxy=False, **kwargs
-            )
+            container = self.docker.containers.create(f"{image}:{version}",
+                                                      use_config_proxy=False,
+                                                      **kwargs)
         except docker.errors.DockerException as err:
             _LOGGER.error("Can't create container from %s: %s", name, err)
             raise DockerAPIError() from None
@@ -92,7 +93,9 @@ class DockerAPI:
         if not network_mode:
             alias = [hostname] if hostname else None
             try:
-                self.network.attach_container(container, alias=alias, ipv4=ipv4)
+                self.network.attach_container(container,
+                                              alias=alias,
+                                              ipv4=ipv4)
             except DockerAPIError:
                 _LOGGER.warning("Can't attach %s to hassio-net!", name)
             else:
@@ -113,11 +116,11 @@ class DockerAPI:
         return container
 
     def run_command(
-        self,
-        image: str,
-        version: str = "latest",
-        command: Optional[str] = None,
-        **kwargs: Dict[str, Any],
+            self,
+            image: str,
+            version: str = "latest",
+            command: Optional[str] = None,
+            **kwargs: Dict[str, Any],
     ) -> CommandReturn:
         """Create a temporary container and run command.
 

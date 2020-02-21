@@ -28,13 +28,11 @@ class APIServices(CoreSysAttributes):
         """Show register services."""
         services = []
         for service in self.sys_services.list_services:
-            services.append(
-                {
-                    ATTR_SLUG: service.slug,
-                    ATTR_AVAILABLE: service.enabled,
-                    ATTR_PROVIDERS: service.providers,
-                }
-            )
+            services.append({
+                ATTR_SLUG: service.slug,
+                ATTR_AVAILABLE: service.enabled,
+                ATTR_PROVIDERS: service.providers,
+            })
 
         return {ATTR_SERVICES: services}
 

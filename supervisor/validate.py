@@ -34,7 +34,6 @@ from .const import ATTR_WATCHDOG
 from .const import UpdateChannels
 from .utils.validate import validate_timezone
 
-
 RE_REPOSITORY = re.compile(r"^(?P<url>[^#]+)(?:#(?P<branch>[\w\-]+))?$")
 
 # pylint: disable=no-value-for-parameter
@@ -80,89 +79,98 @@ def validate_repository(repository: str) -> str:
 # pylint: disable=no-value-for-parameter
 repositories = vol.All([validate_repository], vol.Unique())
 
+DOCKER_PORTS = vol.Schema({
+    vol.All(vol.Coerce(str), vol.Match(r"^\d+(?:/tcp|/udp)?$")):
+    vol.Maybe(network_port)
+})
 
-DOCKER_PORTS = vol.Schema(
-    {
-        vol.All(vol.Coerce(str), vol.Match(r"^\d+(?:/tcp|/udp)?$")): vol.Maybe(
-            network_port
-        )
-    }
-)
-
-DOCKER_PORTS_DESCRIPTION = vol.Schema(
-    {vol.All(vol.Coerce(str), vol.Match(r"^\d+(?:/tcp|/udp)?$")): vol.Coerce(str)}
-)
-
+DOCKER_PORTS_DESCRIPTION = vol.Schema({
+    vol.All(vol.Coerce(str), vol.Match(r"^\d+(?:/tcp|/udp)?$")):
+    vol.Coerce(str)
+})
 
 # pylint: disable=no-value-for-parameter
 SCHEMA_HASS_CONFIG = vol.Schema(
     {
-        vol.Optional(ATTR_UUID, default=lambda: uuid.uuid4().hex): uuid_match,
-        vol.Optional(ATTR_VERSION): vol.Maybe(vol.Coerce(str)),
-        vol.Optional(ATTR_ACCESS_TOKEN): token,
-        vol.Optional(ATTR_BOOT, default=True): vol.Boolean(),
-        vol.Inclusive(ATTR_IMAGE, "custom_hass"): docker_image,
-        vol.Inclusive(ATTR_LAST_VERSION, "custom_hass"): vol.Coerce(str),
-        vol.Optional(ATTR_PORT, default=8123): network_port,
-        vol.Optional(ATTR_REFRESH_TOKEN): vol.Maybe(vol.Coerce(str)),
-        vol.Optional(ATTR_SSL, default=False): vol.Boolean(),
-        vol.Optional(ATTR_WATCHDOG, default=True): vol.Boolean(),
-        vol.Optional(ATTR_WAIT_BOOT, default=600): vol.All(
-            vol.Coerce(int), vol.Range(min=60)
-        ),
+        vol.Optional(ATTR_UUID, default=lambda: uuid.uuid4().hex):
+        uuid_match,
+        vol.Optional(ATTR_VERSION):
+        vol.Maybe(vol.Coerce(str)),
+        vol.Optional(ATTR_ACCESS_TOKEN):
+        token,
+        vol.Optional(ATTR_BOOT, default=True):
+        vol.Boolean(),
+        vol.Inclusive(ATTR_IMAGE, "custom_hass"):
+        docker_image,
+        vol.Inclusive(ATTR_LAST_VERSION, "custom_hass"):
+        vol.Coerce(str),
+        vol.Optional(ATTR_PORT, default=8123):
+        network_port,
+        vol.Optional(ATTR_REFRESH_TOKEN):
+        vol.Maybe(vol.Coerce(str)),
+        vol.Optional(ATTR_SSL, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_WATCHDOG, default=True):
+        vol.Boolean(),
+        vol.Optional(ATTR_WAIT_BOOT, default=600):
+        vol.All(vol.Coerce(int), vol.Range(min=60)),
     },
     extra=vol.REMOVE_EXTRA,
 )
-
 
 SCHEMA_UPDATER_CONFIG = vol.Schema(
     {
-        vol.Optional(ATTR_CHANNEL, default=UpdateChannels.STABLE): vol.Coerce(
-            UpdateChannels
-        ),
-        vol.Optional(ATTR_HOMEASSISTANT): vol.Coerce(str),
-        vol.Optional(ATTR_HASSIO): vol.Coerce(str),
-        vol.Optional(ATTR_HASSOS): vol.Coerce(str),
-        vol.Optional(ATTR_HASSOS_CLI): vol.Coerce(str),
-        vol.Optional(ATTR_DNS): vol.Coerce(str),
+        vol.Optional(ATTR_CHANNEL, default=UpdateChannels.STABLE):
+        vol.Coerce(UpdateChannels),
+        vol.Optional(ATTR_HOMEASSISTANT):
+        vol.Coerce(str),
+        vol.Optional(ATTR_HASSIO):
+        vol.Coerce(str),
+        vol.Optional(ATTR_HASSOS):
+        vol.Coerce(str),
+        vol.Optional(ATTR_HASSOS_CLI):
+        vol.Coerce(str),
+        vol.Optional(ATTR_DNS):
+        vol.Coerce(str),
     },
     extra=vol.REMOVE_EXTRA,
 )
-
 
 # pylint: disable=no-value-for-parameter
 SCHEMA_HASSIO_CONFIG = vol.Schema(
     {
-        vol.Optional(ATTR_TIMEZONE, default="UTC"): validate_timezone,
-        vol.Optional(ATTR_LAST_BOOT): vol.Coerce(str),
+        vol.Optional(ATTR_TIMEZONE, default="UTC"):
+        validate_timezone,
+        vol.Optional(ATTR_LAST_BOOT):
+        vol.Coerce(str),
         vol.Optional(
             ATTR_ADDONS_CUSTOM_LIST,
             default=["https://github.com/hassio-addons/repository"],
-        ): repositories,
-        vol.Optional(ATTR_WAIT_BOOT, default=5): wait_boot,
-        vol.Optional(ATTR_LOGGING, default="info"): log_level,
-        vol.Optional(ATTR_DEBUG, default=False): vol.Boolean(),
-        vol.Optional(ATTR_DEBUG_BLOCK, default=False): vol.Boolean(),
+        ):
+        repositories,
+        vol.Optional(ATTR_WAIT_BOOT, default=5):
+        wait_boot,
+        vol.Optional(ATTR_LOGGING, default="info"):
+        log_level,
+        vol.Optional(ATTR_DEBUG, default=False):
+        vol.Boolean(),
+        vol.Optional(ATTR_DEBUG_BLOCK, default=False):
+        vol.Boolean(),
     },
     extra=vol.REMOVE_EXTRA,
 )
-
 
 SCHEMA_AUTH_CONFIG = vol.Schema({sha256: sha256})
 
-
 SCHEMA_INGRESS_CONFIG = vol.Schema(
     {
-        vol.Required(ATTR_SESSION, default=dict): vol.Schema(
-            {token: vol.Coerce(float)}
-        ),
-        vol.Required(ATTR_PORTS, default=dict): vol.Schema(
-            {vol.Coerce(str): network_port}
-        ),
+        vol.Required(ATTR_SESSION, default=dict):
+        vol.Schema({token: vol.Coerce(float)}),
+        vol.Required(ATTR_PORTS, default=dict):
+        vol.Schema({vol.Coerce(str): network_port}),
     },
     extra=vol.REMOVE_EXTRA,
 )
-
 
 SCHEMA_DNS_CONFIG = vol.Schema(
     {

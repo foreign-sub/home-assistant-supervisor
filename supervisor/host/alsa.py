@@ -85,11 +85,10 @@ class AlsaAudio(CoreSysAttributes):
                     continue
 
                 # Use name from DB or a generic name
-                self._data[key][alsa_id] = (
-                    database.get(self.sys_machine, {})
-                    .get(dev_name, {})
-                    .get(alsa_id, f"{dev_name}: {chan_id}")
-                )
+                self._data[key][alsa_id] = (database.get(
+                    self.sys_machine,
+                    {}).get(dev_name, {}).get(alsa_id,
+                                              f"{dev_name}: {chan_id}"))
 
         self._cache = current_id
 
@@ -140,4 +139,5 @@ class AlsaAudio(CoreSysAttributes):
 
         # Process Template
         asound_template = Template(asound_data)
-        return asound_template.safe_substitute(input=alsa_input, output=alsa_output)
+        return asound_template.safe_substitute(input=alsa_input,
+                                               output=alsa_output)

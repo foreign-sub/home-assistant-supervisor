@@ -79,7 +79,7 @@ class APIIngress(CoreSysAttributes):
         return {ATTR_SESSION: session}
 
     async def handler(
-        self, request: web.Request
+            self, request: web.Request
     ) -> Union[web.Response, web.StreamResponse, web.WebSocketResponse]:
         """Route data to Supervisor ingress service."""
         self._check_ha_access(request)
@@ -106,21 +106,20 @@ class APIIngress(CoreSysAttributes):
 
         raise HTTPBadGateway() from None
 
-    async def _handle_websocket(
-        self, request: web.Request, addon: Addon, path: str
-    ) -> web.WebSocketResponse:
+    async def _handle_websocket(self, request: web.Request, addon: Addon,
+                                path: str) -> web.WebSocketResponse:
         """Ingress route for websocket."""
         if hdrs.SEC_WEBSOCKET_PROTOCOL in request.headers:
             req_protocols = [
-                str(proto.strip())
-                for proto in request.headers[hdrs.SEC_WEBSOCKET_PROTOCOL].split(",")
+                str(proto.strip()) for proto in request.headers[
+                    hdrs.SEC_WEBSOCKET_PROTOCOL].split(",")
             ]
         else:
             req_protocols = ()
 
-        ws_server = web.WebSocketResponse(
-            protocols=req_protocols, autoclose=False, autoping=False
-        )
+        ws_server = web.WebSocketResponse(protocols=req_protocols,
+                                          autoclose=False,
+                                          autoping=False)
         await ws_server.prepare(request)
 
         # Preparing
@@ -133,11 +132,11 @@ class APIIngress(CoreSysAttributes):
 
         # Start proxy
         async with self.sys_websession.ws_connect(
-            url,
-            headers=source_header,
-            protocols=req_protocols,
-            autoclose=False,
-            autoping=False,
+                url,
+                headers=source_header,
+                protocols=req_protocols,
+                autoclose=False,
+                autoping=False,
         ) as ws_client:
             # Proxy requests
             await asyncio.wait(
@@ -150,29 +149,27 @@ class APIIngress(CoreSysAttributes):
 
         return ws_server
 
-    async def _handle_request(
-        self, request: web.Request, addon: Addon, path: str
-    ) -> Union[web.Response, web.StreamResponse]:
+    async def _handle_request(self, request: web.Request, addon: Addon,
+                              path: str
+                              ) -> Union[web.Response, web.StreamResponse]:
         """Ingress route for request."""
         url = self._create_url(addon, path)
         data = await request.read()
         source_header = _init_header(request, addon)
 
         async with self.sys_websession.request(
-            request.method,
-            url,
-            headers=source_header,
-            params=request.query,
-            allow_redirects=False,
-            data=data,
+                request.method,
+                url,
+                headers=source_header,
+                params=request.query,
+                allow_redirects=False,
+                data=data,
         ) as result:
             headers = _response_header(result)
 
             # Simple request
-            if (
-                hdrs.CONTENT_LENGTH in result.headers
-                and int(result.headers.get(hdrs.CONTENT_LENGTH, 0)) < 4_194_000
-            ):
+            if (hdrs.CONTENT_LENGTH in result.headers and int(
+                    result.headers.get(hdrs.CONTENT_LENGTH, 0)) < 4_194_000):
                 # Return Response
                 body = await result.read()
                 return web.Response(
@@ -183,7 +180,8 @@ class APIIngress(CoreSysAttributes):
                 )
 
             # Stream response
-            response = web.StreamResponse(status=result.status, headers=headers)
+            response = web.StreamResponse(status=result.status,
+                                          headers=headers)
             response.content_type = result.content_type
 
             try:
@@ -197,23 +195,22 @@ class APIIngress(CoreSysAttributes):
             return response
 
 
-def _init_header(
-    request: web.Request, addon: str
-) -> Union[CIMultiDict, Dict[str, str]]:
+def _init_header(request: web.Request,
+                 addon: str) -> Union[CIMultiDict, Dict[str, str]]:
     """Create initial header."""
     headers = {}
 
     # filter flags
     for name, value in request.headers.items():
         if name in (
-            hdrs.CONTENT_LENGTH,
-            hdrs.CONTENT_ENCODING,
-            hdrs.SEC_WEBSOCKET_EXTENSIONS,
-            hdrs.SEC_WEBSOCKET_PROTOCOL,
-            hdrs.SEC_WEBSOCKET_VERSION,
-            hdrs.SEC_WEBSOCKET_KEY,
-            istr(HEADER_TOKEN),
-            istr(HEADER_TOKEN_OLD),
+                hdrs.CONTENT_LENGTH,
+                hdrs.CONTENT_ENCODING,
+                hdrs.SEC_WEBSOCKET_EXTENSIONS,
+                hdrs.SEC_WEBSOCKET_PROTOCOL,
+                hdrs.SEC_WEBSOCKET_VERSION,
+                hdrs.SEC_WEBSOCKET_KEY,
+                istr(HEADER_TOKEN),
+                istr(HEADER_TOKEN_OLD),
         ):
             continue
         headers[name] = value
@@ -232,10 +229,10 @@ def _response_header(response: aiohttp.ClientResponse) -> Dict[str, str]:
 
     for name, value in response.headers.items():
         if name in (
-            hdrs.TRANSFER_ENCODING,
-            hdrs.CONTENT_LENGTH,
-            hdrs.CONTENT_TYPE,
-            hdrs.CONTENT_ENCODING,
+                hdrs.TRANSFER_ENCODING,
+                hdrs.CONTENT_LENGTH,
+                hdrs.CONTENT_TYPE,
+                hdrs.CONTENT_ENCODING,
         ):
             continue
         headers[name] = value
@@ -247,10 +244,8 @@ def _is_websocket(request: web.Request) -> bool:
     """Return True if request is a websocket."""
     headers = request.headers
 
-    if (
-        "upgrade" in headers.get(hdrs.CONNECTION, "").lower()
-        and headers.get(hdrs.UPGRADE, "").lower() == "websocket"
-    ):
+    if ("upgrade" in headers.get(hdrs.CONNECTION, "").lower()
+            and headers.get(hdrs.UPGRADE, "").lower() == "websocket"):
         return True
     return False
 

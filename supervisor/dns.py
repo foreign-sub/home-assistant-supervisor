@@ -112,9 +112,8 @@ class CoreDNS(JsonConfig, CoreSysAttributes):
 
             await self.instance.attach(tag=self.version)
         except DockerAPIError:
-            _LOGGER.info(
-                "No CoreDNS plugin Docker image %s found.", self.instance.image
-            )
+            _LOGGER.info("No CoreDNS plugin Docker image %s found.",
+                         self.instance.image)
 
             # Install CoreDNS
             with suppress(CoreDNSError):
@@ -164,7 +163,8 @@ class CoreDNS(JsonConfig, CoreSysAttributes):
         version = version or self.latest_version
 
         if version == self.version:
-            _LOGGER.warning("Version %s is already installed for CoreDNS", version)
+            _LOGGER.warning("Version %s is already installed for CoreDNS",
+                            version)
             return
 
         try:
@@ -226,7 +226,9 @@ class CoreDNS(JsonConfig, CoreSysAttributes):
             raise CoreDNSError() from None
 
         # Prepare DNS serverlist: Prio 1 Manual, Prio 2 Local, Prio 3 Fallback
-        local_dns: List[str] = self.sys_host.network.dns_servers or ["dns://127.0.0.11"]
+        local_dns: List[str] = self.sys_host.network.dns_servers or [
+            "dns://127.0.0.11"
+        ]
         servers: List[str] = self.servers + local_dns + DNS_SERVERS
 
         _LOGGER.debug(
@@ -257,9 +259,9 @@ class CoreDNS(JsonConfig, CoreSysAttributes):
         """Import hosts entry."""
         # Generate Default
         self.add_host(IPv4Address("127.0.0.1"), ["localhost"], write=False)
-        self.add_host(
-            self.sys_docker.network.supervisor, ["hassio", "supervisor"], write=False
-        )
+        self.add_host(self.sys_docker.network.supervisor,
+                      ["hassio", "supervisor"],
+                      write=False)
         self.add_host(
             self.sys_docker.network.gateway,
             ["homeassistant", "home-assistant"],
@@ -272,12 +274,14 @@ class CoreDNS(JsonConfig, CoreSysAttributes):
         try:
             with self.hosts.open("w") as hosts:
                 for entry in self._hosts:
-                    hosts.write(f"{entry.ip_address!s} {' '.join(entry.names)}\n")
+                    hosts.write(
+                        f"{entry.ip_address!s} {' '.join(entry.names)}\n")
         except OSError as err:
             _LOGGER.error("Can't write hosts file: %s", err)
             raise CoreDNSError() from None
 
-    def add_host(self, ipv4: IPv4Address, names: List[str], write: bool = True) -> None:
+    def add_host(self, ipv4: IPv4Address, names: List[str],
+                 write: bool = True) -> None:
         """Add a new host entry."""
         if not ipv4 or ipv4 == IPv4Address("0.0.0.0"):
             return
@@ -311,7 +315,8 @@ class CoreDNS(JsonConfig, CoreSysAttributes):
             _LOGGER.debug("Can't remove Host entry: %s", host)
             return
 
-        _LOGGER.debug("Remove Host entry %s - %s", entry.ip_address, entry.names)
+        _LOGGER.debug("Remove Host entry %s - %s", entry.ip_address,
+                      entry.names)
         self._hosts.remove(entry)
 
         # Update hosts file

@@ -39,8 +39,7 @@ def test_invalid_repository():
         vd.SCHEMA_ADDON_CONFIG(config)
 
     config[
-        "image"
-    ] = "registry.gitlab.com/company/add-ons/test-example/text-example:no-tag-allow"
+        "image"] = "registry.gitlab.com/company/add-ons/test-example/text-example:no-tag-allow"
     with pytest.raises(vol.Invalid):
         vd.SCHEMA_ADDON_CONFIG(config)
 

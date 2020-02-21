@@ -54,14 +54,18 @@ class SecretsManager(CoreSysAttributes):
         try:
             yaml = YAML()
             yaml.allow_duplicate_keys = True
-            data = await self.sys_run_in_executor(yaml.load, self.path_secrets) or {}
+            data = await self.sys_run_in_executor(yaml.load,
+                                                  self.path_secrets) or {}
 
             # Filter to only get supported values
             self.secrets = {
-                k: v for k, v in data.items() if isinstance(v, (bool, float, int, str))
+                k: v
+                for k, v in data.items()
+                if isinstance(v, (bool, float, int, str))
             }
 
         except YAMLError as err:
             _LOGGER.error("Can't process Home Assistant secrets: %s", err)
         else:
-            _LOGGER.debug("Reload Home Assistant secrets: %s", len(self.secrets))
+            _LOGGER.debug("Reload Home Assistant secrets: %s",
+                          len(self.secrets))

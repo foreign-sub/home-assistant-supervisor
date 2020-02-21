@@ -135,11 +135,9 @@ class Ingress(JsonConfig, CoreSysAttributes):
         """Return True if Home Assistant up and running."""
         method = "post" if addon.ingress_panel else "delete"
         async with self.sys_homeassistant.make_request(
-            method, f"api/hassio_push/panel/{addon.slug}"
-        ) as resp:
+                method, f"api/hassio_push/panel/{addon.slug}") as resp:
             if resp.status in (200, 201):
                 _LOGGER.info("Update Ingress as panel for %s", addon.slug)
             else:
-                _LOGGER.warning(
-                    "Fails Ingress panel for %s with %i", addon.slug, resp.status
-                )
+                _LOGGER.warning("Fails Ingress panel for %s with %i",
+                                addon.slug, resp.status)

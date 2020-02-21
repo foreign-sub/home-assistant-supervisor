@@ -99,7 +99,8 @@ class AppArmorControl(CoreSysAttributes):
             return
 
         # Marks als remove and start host process
-        remove_profile = Path(self.sys_config.path_apparmor, "remove", profile_name)
+        remove_profile = Path(self.sys_config.path_apparmor, "remove",
+                              profile_name)
         try:
             profile_file.rename(remove_profile)
         except OSError as err:

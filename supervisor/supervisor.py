@@ -100,8 +100,7 @@ class Supervisor(CoreSysAttributes):
 
             try:
                 await self.sys_host.apparmor.load_profile(
-                    "hassio-supervisor", profile_file
-                )
+                    "hassio-supervisor", profile_file)
             except HostAppArmorError:
                 _LOGGER.error("Can't update AppArmor profile!")
                 raise SupervisorError() from None

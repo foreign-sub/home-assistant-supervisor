@@ -40,61 +40,45 @@ class Tasks(CoreSysAttributes):
         """Add Tasks to scheduler."""
         # Update
         self.jobs.add(
-            self.sys_scheduler.register_task(self._update_addons, RUN_UPDATE_ADDONS)
-        )
+            self.sys_scheduler.register_task(self._update_addons,
+                                             RUN_UPDATE_ADDONS))
         self.jobs.add(
-            self.sys_scheduler.register_task(
-                self._update_supervisor, RUN_UPDATE_SUPERVISOR
-            )
-        )
+            self.sys_scheduler.register_task(self._update_supervisor,
+                                             RUN_UPDATE_SUPERVISOR))
         self.jobs.add(
-            self.sys_scheduler.register_task(
-                self._update_hassos_cli, RUN_UPDATE_HASSOSCLI
-            )
-        )
+            self.sys_scheduler.register_task(self._update_hassos_cli,
+                                             RUN_UPDATE_HASSOSCLI))
         self.jobs.add(
-            self.sys_scheduler.register_task(self._update_dns, RUN_UPDATE_DNS)
-        )
+            self.sys_scheduler.register_task(self._update_dns, RUN_UPDATE_DNS))
 
         # Reload
         self.jobs.add(
-            self.sys_scheduler.register_task(self.sys_store.reload, RUN_RELOAD_ADDONS)
-        )
+            self.sys_scheduler.register_task(self.sys_store.reload,
+                                             RUN_RELOAD_ADDONS))
         self.jobs.add(
-            self.sys_scheduler.register_task(
-                self.sys_updater.reload, RUN_RELOAD_UPDATER
-            )
-        )
+            self.sys_scheduler.register_task(self.sys_updater.reload,
+                                             RUN_RELOAD_UPDATER))
         self.jobs.add(
-            self.sys_scheduler.register_task(
-                self.sys_snapshots.reload, RUN_RELOAD_SNAPSHOTS
-            )
-        )
+            self.sys_scheduler.register_task(self.sys_snapshots.reload,
+                                             RUN_RELOAD_SNAPSHOTS))
         self.jobs.add(
-            self.sys_scheduler.register_task(self.sys_host.reload, RUN_RELOAD_HOST)
-        )
+            self.sys_scheduler.register_task(self.sys_host.reload,
+                                             RUN_RELOAD_HOST))
         self.jobs.add(
-            self.sys_scheduler.register_task(
-                self.sys_ingress.reload, RUN_RELOAD_INGRESS
-            )
-        )
+            self.sys_scheduler.register_task(self.sys_ingress.reload,
+                                             RUN_RELOAD_INGRESS))
 
         # Watchdog
         self.jobs.add(
             self.sys_scheduler.register_task(
-                self._watchdog_homeassistant_docker, RUN_WATCHDOG_HOMEASSISTANT_DOCKER
-            )
-        )
+                self._watchdog_homeassistant_docker,
+                RUN_WATCHDOG_HOMEASSISTANT_DOCKER))
         self.jobs.add(
-            self.sys_scheduler.register_task(
-                self._watchdog_homeassistant_api, RUN_WATCHDOG_HOMEASSISTANT_API
-            )
-        )
+            self.sys_scheduler.register_task(self._watchdog_homeassistant_api,
+                                             RUN_WATCHDOG_HOMEASSISTANT_API))
         self.jobs.add(
-            self.sys_scheduler.register_task(
-                self._watchdog_dns_docker, RUN_WATCHDOG_DNS_DOCKER
-            )
-        )
+            self.sys_scheduler.register_task(self._watchdog_dns_docker,
+                                             RUN_WATCHDOG_DNS_DOCKER))
 
         _LOGGER.info("All core tasks are scheduled")
 
@@ -112,8 +96,8 @@ class Tasks(CoreSysAttributes):
                 tasks.append(addon.update())
             else:
                 _LOGGER.warning(
-                    "Add-on %s will be ignored, schema tests fails", addon.slug
-                )
+                    "Add-on %s will be ignored, schema tests fails",
+                    addon.slug)
 
         if tasks:
             _LOGGER.info("Add-on auto update process %d tasks", len(tasks))
@@ -135,18 +119,14 @@ class Tasks(CoreSysAttributes):
     async def _watchdog_homeassistant_docker(self):
         """Check running state of Docker and start if they is close."""
         # if Home Assistant is active
-        if (
-            not await self.sys_homeassistant.is_fails()
-            or not self.sys_homeassistant.watchdog
-            or self.sys_homeassistant.error_state
-        ):
+        if (not await self.sys_homeassistant.is_fails()
+                or not self.sys_homeassistant.watchdog
+                or self.sys_homeassistant.error_state):
             return
 
         # if Home Assistant is running
-        if (
-            self.sys_homeassistant.in_progress
-            or await self.sys_homeassistant.is_running()
-        ):
+        if (self.sys_homeassistant.in_progress
+                or await self.sys_homeassistant.is_running()):
             return
 
         _LOGGER.warning("Watchdog found a problem with Home Assistant Docker!")
@@ -162,21 +142,17 @@ class Tasks(CoreSysAttributes):
         a delay in our system.
         """
         # If Home-Assistant is active
-        if (
-            not await self.sys_homeassistant.is_fails()
-            or not self.sys_homeassistant.watchdog
-            or self.sys_homeassistant.error_state
-        ):
+        if (not await self.sys_homeassistant.is_fails()
+                or not self.sys_homeassistant.watchdog
+                or self.sys_homeassistant.error_state):
             return
 
         # Init cache data
         retry_scan = self._cache.get(HASS_WATCHDOG_API, 0)
 
         # If Home-Assistant API is up
-        if (
-            self.sys_homeassistant.in_progress
-            or await self.sys_homeassistant.check_api_state()
-        ):
+        if (self.sys_homeassistant.in_progress
+                or await self.sys_homeassistant.check_api_state()):
             return
 
         # Look like we run into a problem

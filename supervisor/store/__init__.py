@@ -36,14 +36,17 @@ class StoreManager(CoreSysAttributes):
         self.data.update()
 
         # Init Supervisor built-in repositories
-        repositories = set(self.sys_config.addons_repositories) | BUILTIN_REPOSITORIES
+        repositories = set(
+            self.sys_config.addons_repositories) | BUILTIN_REPOSITORIES
 
         # Init custom repositories and load add-ons
         await self.update_repositories(repositories)
 
     async def reload(self) -> None:
         """Update add-ons from repository and reload list."""
-        tasks = [repository.update() for repository in self.repositories.values()]
+        tasks = [
+            repository.update() for repository in self.repositories.values()
+        ]
         if tasks:
             await asyncio.wait(tasks)
 

@@ -47,12 +47,13 @@ class GitRepo(CoreSysAttributes):
         async with self.lock:
             try:
                 _LOGGER.info("Load add-on %s repository", self.path)
-                self.repo = await self.sys_run_in_executor(git.Repo, str(self.path))
+                self.repo = await self.sys_run_in_executor(
+                    git.Repo, str(self.path))
 
             except (
-                git.InvalidGitRepositoryError,
-                git.NoSuchPathError,
-                git.GitCommandError,
+                    git.InvalidGitRepositoryError,
+                    git.NoSuchPathError,
+                    git.GitCommandError,
             ) as err:
                 _LOGGER.error("Can't load %s repo: %s.", self.path, err)
                 self._remove()
@@ -70,22 +71,19 @@ class GitRepo(CoreSysAttributes):
                     ("branch", self.branch),
                     ("depth", 1),
                     ("shallow-submodules", True),
-                )
-                if value is not None
+                ) if value is not None
             }
 
             try:
                 _LOGGER.info("Clone add-on %s repository", self.url)
                 self.repo = await self.sys_run_in_executor(
-                    ft.partial(
-                        git.Repo.clone_from, self.url, str(self.path), **git_args
-                    )
-                )
+                    ft.partial(git.Repo.clone_from, self.url, str(self.path),
+                               **git_args))
 
             except (
-                git.InvalidGitRepositoryError,
-                git.NoSuchPathError,
-                git.GitCommandError,
+                    git.InvalidGitRepositoryError,
+                    git.NoSuchPathError,
+                    git.GitCommandError,
             ) as err:
                 _LOGGER.error("Can't clone %s repository: %s.", self.url, err)
                 self._remove()
@@ -108,22 +106,26 @@ class GitRepo(CoreSysAttributes):
                 await self.sys_run_in_executor(
                     ft.partial(
                         self.repo.remotes.origin.fetch,
-                        **{"update-shallow": True, "depth": 1},
-                    )
-                )
+                        **{
+                            "update-shallow": True,
+                            "depth": 1
+                        },
+                    ))
 
                 # Jump on top of that
                 await self.sys_run_in_executor(
-                    ft.partial(self.repo.git.reset, f"origin/{branch}", hard=True)
-                )
+                    ft.partial(self.repo.git.reset,
+                               f"origin/{branch}",
+                               hard=True))
 
                 # Cleanup old data
-                await self.sys_run_in_executor(ft.partial(self.repo.git.clean, "-xdf"))
+                await self.sys_run_in_executor(
+                    ft.partial(self.repo.git.clean, "-xdf"))
 
             except (
-                git.InvalidGitRepositoryError,
-                git.NoSuchPathError,
-                git.GitCommandError,
+                    git.InvalidGitRepositoryError,
+                    git.NoSuchPathError,
+                    git.GitCommandError,
             ) as err:
                 _LOGGER.error("Can't update %s repo: %s.", self.url, err)
                 return False
@@ -147,7 +149,8 @@ class GitRepoHassIO(GitRepo):
 
     def __init__(self, coresys):
         """Initialize Git Supervisor add-on repository."""
-        super().__init__(coresys, coresys.config.path_addons_core, URL_HASSIO_ADDONS)
+        super().__init__(coresys, coresys.config.path_addons_core,
+                         URL_HASSIO_ADDONS)
 
 
 class GitRepoCustom(GitRepo):
@@ -155,7 +158,8 @@ class GitRepoCustom(GitRepo):
 
     def __init__(self, coresys, url):
         """Initialize custom Git Supervisor addo-n repository."""
-        path = Path(coresys.config.path_addons_git, get_hash_from_repository(url))
+        path = Path(coresys.config.path_addons_git,
+                    get_hash_from_repository(url))
 
         super().__init__(coresys, path, url)
 

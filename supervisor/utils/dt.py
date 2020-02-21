@@ -19,7 +19,6 @@ GEOIP_URL = "http://ip-api.com/json/"
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
-
 # Copyright (c) Django Software Foundation and individual contributors.
 # All rights reserved.
 # https://github.com/django/django/blob/master/LICENSE
@@ -27,8 +26,7 @@ DATETIME_RE = re.compile(
     r"(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})"
     r"[T ](?P<hour>\d{1,2}):(?P<minute>\d{1,2})"
     r"(?::(?P<second>\d{1,2})(?:\.(?P<microsecond>\d{1,6})\d{0,6})?)?"
-    r"(?P<tzinfo>Z|[+-]\d{2}(?::?\d{2})?)?$"
-)
+    r"(?P<tzinfo>Z|[+-]\d{2}(?::?\d{2})?)?$")
 
 
 async def fetch_timezone(websession):

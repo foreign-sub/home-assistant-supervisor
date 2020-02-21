@@ -33,6 +33,5 @@ class DockerHassOSCli(DockerInterface, CoreSysAttributes):
 
         else:
             self._meta = image.attrs
-            _LOGGER.info(
-                "Found HassOS CLI %s with version %s", self.image, self.version
-            )
+            _LOGGER.info("Found HassOS CLI %s with version %s", self.image,
+                         self.version)

@@ -37,14 +37,10 @@ class DockerStats:
 
     def _calc_cpu_percent(self, stats):
         """Calculate CPU percent."""
-        cpu_delta = (
-            stats["cpu_stats"]["cpu_usage"]["total_usage"]
-            - stats["precpu_stats"]["cpu_usage"]["total_usage"]
-        )
-        system_delta = (
-            stats["cpu_stats"]["system_cpu_usage"]
-            - stats["precpu_stats"]["system_cpu_usage"]
-        )
+        cpu_delta = (stats["cpu_stats"]["cpu_usage"]["total_usage"] -
+                     stats["precpu_stats"]["cpu_usage"]["total_usage"])
+        system_delta = (stats["cpu_stats"]["system_cpu_usage"] -
+                        stats["precpu_stats"]["system_cpu_usage"])
         online_cpu = stats["cpu_stats"]["online_cpus"]
 
         if online_cpu == 0.0:

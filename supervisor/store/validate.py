@@ -5,7 +5,6 @@ from ..const import ATTR_MAINTAINER
 from ..const import ATTR_NAME
 from ..const import ATTR_URL
 
-
 # pylint: disable=no-value-for-parameter
 SCHEMA_REPOSITORY_CONFIG = vol.Schema(
     {

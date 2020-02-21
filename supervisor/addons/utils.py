@@ -44,17 +44,14 @@ def rating_security(addon: AddonModel) -> int:
         rating += 1
 
     # Privileged options
-    if any(
-        privilege in addon.privileged
-        for privilege in (
+    if any(privilege in addon.privileged for privilege in (
             PRIVILEGED_NET_ADMIN,
             PRIVILEGED_SYS_ADMIN,
             PRIVILEGED_SYS_RAWIO,
             PRIVILEGED_SYS_PTRACE,
             PRIVILEGED_SYS_MODULE,
             PRIVILEGED_DAC_READ_SEARCH,
-        )
-    ):
+    )):
         rating += -1
 
     # API Supervisor role
@@ -86,8 +83,7 @@ async def remove_data(folder: Path) -> None:
     """Remove folder and reset privileged."""
     try:
         proc = await asyncio.create_subprocess_exec(
-            "rm", "-rf", str(folder), stdout=asyncio.subprocess.DEVNULL
-        )
+            "rm", "-rf", str(folder), stdout=asyncio.subprocess.DEVNULL)
 
         _, error_msg = await proc.communicate()
     except OSError as err:

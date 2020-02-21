@@ -38,10 +38,12 @@ class StoreData(CoreSysAttributes):
         self.addons.clear()
 
         # read core repository
-        self._read_addons_folder(self.sys_config.path_addons_core, REPOSITORY_CORE)
+        self._read_addons_folder(self.sys_config.path_addons_core,
+                                 REPOSITORY_CORE)
 
         # read local repository
-        self._read_addons_folder(self.sys_config.path_addons_local, REPOSITORY_LOCAL)
+        self._read_addons_folder(self.sys_config.path_addons_local,
+                                 REPOSITORY_LOCAL)
 
         # add built-in repositories information
         self._set_builtin_repositories()
@@ -58,11 +60,11 @@ class StoreData(CoreSysAttributes):
         # exists repository json
         repository_file = Path(path, "repository.json")
         try:
-            repository_info = SCHEMA_REPOSITORY_CONFIG(read_json_file(repository_file))
+            repository_info = SCHEMA_REPOSITORY_CONFIG(
+                read_json_file(repository_file))
         except JsonFileError:
-            _LOGGER.warning(
-                "Can't read repository information from %s", repository_file
-            )
+            _LOGGER.warning("Can't read repository information from %s",
+                            repository_file)
             return
         except vol.Invalid:
             _LOGGER.warning("Repository parse error %s", repository_file)
@@ -78,16 +80,16 @@ class StoreData(CoreSysAttributes):
             try:
                 addon_config = read_json_file(addon)
             except JsonFileError:
-                _LOGGER.warning("Can't read %s from repository %s", addon, repository)
+                _LOGGER.warning("Can't read %s from repository %s", addon,
+                                repository)
                 continue
 
             # validate
             try:
                 addon_config = SCHEMA_ADDON_CONFIG(addon_config)
             except vol.Invalid as ex:
-                _LOGGER.warning(
-                    "Can't read %s: %s", addon, humanize_error(addon_config, ex)
-                )
+                _LOGGER.warning("Can't read %s: %s", addon,
+                                humanize_error(addon_config, ex))
                 continue
 
             # Generate slug

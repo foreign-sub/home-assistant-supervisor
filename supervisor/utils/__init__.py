@@ -20,9 +20,8 @@ def process_lock(method):
     async def wrap_api(api, *args, **kwargs):
         """Return api wrapper."""
         if api.lock.locked():
-            _LOGGER.error(
-                "Can't execute %s while a task is in progress", method.__name__
-            )
+            _LOGGER.error("Can't execute %s while a task is in progress",
+                          method.__name__)
             return False
 
         async with api.lock:

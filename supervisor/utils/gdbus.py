@@ -24,32 +24,32 @@ _LOGGER: logging.Logger = logging.getLogger(__name__)
 # Use to convert GVariant into json
 RE_GVARIANT_TYPE: re.Match = re.compile(
     r"\"[^\"\\]*(?:\\.[^\"\\]*)*\"|(boolean|byte|int16|uint16|int32|uint32|handle|int64|uint64|double|"
-    r"string|objectpath|signature|@[asviumodf\{\}]+) "
-)
-RE_GVARIANT_VARIANT: re.Match = re.compile(r"\"[^\"\\]*(?:\\.[^\"\\]*)*\"|(<|>)")
+    r"string|objectpath|signature|@[asviumodf\{\}]+) ")
+RE_GVARIANT_VARIANT: re.Match = re.compile(
+    r"\"[^\"\\]*(?:\\.[^\"\\]*)*\"|(<|>)")
 RE_GVARIANT_STRING_ESC: re.Match = re.compile(
-    r"(?<=(?: |{|\[|\(|<))'[^']*?\"[^']*?'(?=(?:|]|}|,|\)|>))"
-)
+    r"(?<=(?: |{|\[|\(|<))'[^']*?\"[^']*?'(?=(?:|]|}|,|\)|>))")
 RE_GVARIANT_STRING: re.Match = re.compile(
-    r"(?<=(?: |{|\[|\(|<))'(.*?)'(?=(?:|]|}|,|\)|>))"
-)
-RE_GVARIANT_TUPLE_O: re.Match = re.compile(r"\"[^\"\\]*(?:\\.[^\"\\]*)*\"|(\()")
-RE_GVARIANT_TUPLE_C: re.Match = re.compile(r"\"[^\"\\]*(?:\\.[^\"\\]*)*\"|(,?\))")
+    r"(?<=(?: |{|\[|\(|<))'(.*?)'(?=(?:|]|}|,|\)|>))")
+RE_GVARIANT_TUPLE_O: re.Match = re.compile(
+    r"\"[^\"\\]*(?:\\.[^\"\\]*)*\"|(\()")
+RE_GVARIANT_TUPLE_C: re.Match = re.compile(
+    r"\"[^\"\\]*(?:\\.[^\"\\]*)*\"|(,?\))")
 
-RE_MONITOR_OUTPUT: re.Match = re.compile(r".+?: (?P<signal>[^ ].+) (?P<data>.*)")
+RE_MONITOR_OUTPUT: re.Match = re.compile(
+    r".+?: (?P<signal>[^ ].+) (?P<data>.*)")
 
 # Map GDBus to errors
 MAP_GDBUS_ERROR: Dict[str, Any] = {
-    "GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown": DBusInterfaceError,
+    "GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown":
+    DBusInterfaceError,
     "No such file or directory": DBusNotConnectedError,
 }
 
 # Commands for dbus
 INTROSPECT: str = "gdbus introspect --system --dest {bus} " "--object-path {object} --xml"
-CALL: str = (
-    "gdbus call --system --dest {bus} --object-path {object} "
-    "--method {method} {args}"
-)
+CALL: str = ("gdbus call --system --dest {bus} --object-path {object} "
+             "--method {method} {args}")
 MONITOR: str = "gdbus monitor --system --dest {bus}"
 
 DBUS_METHOD_GETALL: str = "org.freedesktop.DBus.Properties.GetAll"
@@ -79,8 +79,7 @@ class DBus:
     async def _init_proxy(self) -> None:
         """Read interface data."""
         command = shlex.split(
-            INTROSPECT.format(bus=self.bus_name, object=self.object_path)
-        )
+            INTROSPECT.format(bus=self.bus_name, object=self.object_path))
 
         # Parse XML
         data = await self._send(command)
@@ -88,7 +87,8 @@ class DBus:
             xml = ET.fromstring(data)
         except ET.ParseError as err:
             _LOGGER.error("Can't parse introspect data: %s", err)
-            _LOGGER.debug("Introspect %s on %s", self.bus_name, self.object_path)
+            _LOGGER.debug("Introspect %s on %s", self.bus_name,
+                          self.object_path)
             raise DBusParseError() from None
 
         # Read available methods
@@ -110,23 +110,18 @@ class DBus:
         """Parse GVariant input to python."""
         # Process first string
         json_raw = RE_GVARIANT_STRING_ESC.sub(
-            lambda x: x.group(0).replace('"', '\\"'), raw
-        )
+            lambda x: x.group(0).replace('"', '\\"'), raw)
         json_raw = RE_GVARIANT_STRING.sub(r'"\1"', json_raw)
 
         # Remove complex type handling
         json_raw: str = RE_GVARIANT_TYPE.sub(
-            lambda x: x.group(0) if not x.group(1) else "", json_raw
-        )
+            lambda x: x.group(0) if not x.group(1) else "", json_raw)
         json_raw = RE_GVARIANT_VARIANT.sub(
-            lambda x: x.group(0) if not x.group(1) else "", json_raw
-        )
+            lambda x: x.group(0) if not x.group(1) else "", json_raw)
         json_raw = RE_GVARIANT_TUPLE_O.sub(
-            lambda x: x.group(0) if not x.group(1) else "[", json_raw
-        )
+            lambda x: x.group(0) if not x.group(1) else "[", json_raw)
         json_raw = RE_GVARIANT_TUPLE_C.sub(
-            lambda x: x.group(0) if not x.group(1) else "]", json_raw
-        )
+            lambda x: x.group(0) if not x.group(1) else "]", json_raw)
 
         # No data
         if json_raw.startswith("[]"):
@@ -163,8 +158,7 @@ class DBus:
                 object=self.object_path,
                 method=method,
                 args=self.gvariant_args(args),
-            )
-        )
+            ))
 
         # Run command
         _LOGGER.info("Call %s on %s", method, self.object_path)

@@ -10,7 +10,12 @@ def test_good_config():
 
     valid_discovery_config(
         "deconz",
-        {"host": "test", "port": 3812, "api_key": "MY_api_KEY99", "serial": "xyz"},
+        {
+            "host": "test",
+            "port": 3812,
+            "api_key": "MY_api_KEY99",
+            "serial": "xyz"
+        },
     )
 
 

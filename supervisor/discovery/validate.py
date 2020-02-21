@@ -24,26 +24,25 @@ def valid_discovery_service(service):
 def valid_discovery_config(service, config):
     """Validate service name."""
     try:
-        service_mod = import_module(f".services.{service}", "supervisor.discovery")
+        service_mod = import_module(f".services.{service}",
+                                    "supervisor.discovery")
     except ImportError:
         raise vol.Invalid(f"Service {service} not found")
 
     return service_mod.SCHEMA(config)
 
 
-SCHEMA_DISCOVERY = vol.Schema(
-    [
-        vol.Schema(
-            {
-                vol.Required(ATTR_UUID): uuid_match,
-                vol.Required(ATTR_ADDON): vol.Coerce(str),
-                vol.Required(ATTR_SERVICE): valid_discovery_service,
-                vol.Required(ATTR_CONFIG): vol.Maybe(dict),
-            },
-            extra=vol.REMOVE_EXTRA,
-        )
-    ]
-)
+SCHEMA_DISCOVERY = vol.Schema([
+    vol.Schema(
+        {
+            vol.Required(ATTR_UUID): uuid_match,
+            vol.Required(ATTR_ADDON): vol.Coerce(str),
+            vol.Required(ATTR_SERVICE): valid_discovery_service,
+            vol.Required(ATTR_CONFIG): vol.Maybe(dict),
+        },
+        extra=vol.REMOVE_EXTRA,
+    )
+])
 
 SCHEMA_DISCOVERY_CONFIG = vol.Schema(
     {vol.Optional(ATTR_DISCOVERY, default=list): schema_or(SCHEMA_DISCOVERY)},

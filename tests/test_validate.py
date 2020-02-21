@@ -48,7 +48,8 @@ async def test_dns_server_list_combined():
     assert supervisor.validate.dns_server_list(combined)
     # test that it fails when the list is too long
     with pytest.raises(voluptuous.error.Invalid):
-        supervisor.validate.dns_server_list(combined + combined + combined + combined)
+        supervisor.validate.dns_server_list(combined + combined + combined +
+                                            combined)
 
 
 async def test_dns_server_list_bad():

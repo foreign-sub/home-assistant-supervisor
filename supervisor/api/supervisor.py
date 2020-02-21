@@ -52,17 +52,22 @@ from .utils import api_validate
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 # pylint: disable=no-value-for-parameter
-SCHEMA_OPTIONS = vol.Schema(
-    {
-        vol.Optional(ATTR_CHANNEL): vol.Coerce(UpdateChannels),
-        vol.Optional(ATTR_ADDONS_REPOSITORIES): repositories,
-        vol.Optional(ATTR_TIMEZONE): validate_timezone,
-        vol.Optional(ATTR_WAIT_BOOT): wait_boot,
-        vol.Optional(ATTR_LOGGING): log_level,
-        vol.Optional(ATTR_DEBUG): vol.Boolean(),
-        vol.Optional(ATTR_DEBUG_BLOCK): vol.Boolean(),
-    }
-)
+SCHEMA_OPTIONS = vol.Schema({
+    vol.Optional(ATTR_CHANNEL):
+    vol.Coerce(UpdateChannels),
+    vol.Optional(ATTR_ADDONS_REPOSITORIES):
+    repositories,
+    vol.Optional(ATTR_TIMEZONE):
+    validate_timezone,
+    vol.Optional(ATTR_WAIT_BOOT):
+    wait_boot,
+    vol.Optional(ATTR_LOGGING):
+    log_level,
+    vol.Optional(ATTR_DEBUG):
+    vol.Boolean(),
+    vol.Optional(ATTR_DEBUG_BLOCK):
+    vol.Boolean(),
+})
 
 SCHEMA_VERSION = vol.Schema({vol.Optional(ATTR_VERSION): vol.Coerce(str)})
 
@@ -80,19 +85,17 @@ class APISupervisor(CoreSysAttributes):
         """Return host information."""
         list_addons = []
         for addon in self.sys_addons.installed:
-            list_addons.append(
-                {
-                    ATTR_NAME: addon.name,
-                    ATTR_SLUG: addon.slug,
-                    ATTR_DESCRIPTON: addon.description,
-                    ATTR_STATE: await addon.state(),
-                    ATTR_VERSION: addon.latest_version,
-                    ATTR_INSTALLED: addon.version,
-                    ATTR_REPOSITORY: addon.repository,
-                    ATTR_ICON: addon.with_icon,
-                    ATTR_LOGO: addon.with_logo,
-                }
-            )
+            list_addons.append({
+                ATTR_NAME: addon.name,
+                ATTR_SLUG: addon.slug,
+                ATTR_DESCRIPTON: addon.description,
+                ATTR_STATE: await addon.state(),
+                ATTR_VERSION: addon.latest_version,
+                ATTR_INSTALLED: addon.version,
+                ATTR_REPOSITORY: addon.repository,
+                ATTR_ICON: addon.with_icon,
+                ATTR_LOGO: addon.with_logo,
+            })
 
         return {
             ATTR_VERSION: SUPERVISOR_VERSION,
@@ -167,8 +170,9 @@ class APISupervisor(CoreSysAttributes):
     def reload(self, request: web.Request) -> Awaitable[None]:
         """Reload add-ons, configuration, etc."""
         return asyncio.shield(
-            asyncio.wait([self.sys_updater.reload(), self.sys_secrets.reload()])
-        )
+            asyncio.wait(
+                [self.sys_updater.reload(),
+                 self.sys_secrets.reload()]))
 
     @api_process
     def repair(self, request: web.Request) -> Awaitable[None]:

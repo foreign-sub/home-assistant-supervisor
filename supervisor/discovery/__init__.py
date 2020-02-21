@@ -83,12 +83,14 @@ class Discovery(CoreSysAttributes, JsonConfig):
         """Return list of available discovery messages."""
         return list(self.message_obj.values())
 
-    def send(self, addon: Addon, service: str, config: Dict[str, Any]) -> Message:
+    def send(self, addon: Addon, service: str,
+             config: Dict[str, Any]) -> Message:
         """Send a discovery message to Home Assistant."""
         try:
             config = valid_discovery_config(service, config)
         except vol.Invalid as err:
-            _LOGGER.error("Invalid discovery %s config", humanize_error(config, err))
+            _LOGGER.error("Invalid discovery %s config",
+                          humanize_error(config, err))
             raise DiscoveryError() from None
 
         # Create message
@@ -102,11 +104,13 @@ class Discovery(CoreSysAttributes, JsonConfig):
                 message = exists_msg
                 message.config = config
             else:
-                _LOGGER.debug("Duplicate discovery message from %s", addon.slug)
+                _LOGGER.debug("Duplicate discovery message from %s",
+                              addon.slug)
                 return exists_msg
             break
 
-        _LOGGER.info("Send discovery to Home Assistant %s from %s", service, addon.slug)
+        _LOGGER.info("Send discovery to Home Assistant %s from %s", service,
+                     addon.slug)
         self.message_obj[message.uuid] = message
         self.save()
 
@@ -136,10 +140,10 @@ class Discovery(CoreSysAttributes, JsonConfig):
 
         with suppress(HomeAssistantAPIError):
             async with self.sys_homeassistant.make_request(
-                command,
-                f"api/hassio_push/discovery/{message.uuid}",
-                json=data,
-                timeout=10,
+                    command,
+                    f"api/hassio_push/discovery/{message.uuid}",
+                    json=data,
+                    timeout=10,
             ):
                 _LOGGER.info("Discovery %s message send", message.uuid)
                 return

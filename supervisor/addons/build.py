@@ -26,9 +26,8 @@ class AddonBuild(JsonConfig, CoreSysAttributes):
         self.coresys: CoreSys = coresys
         self.addon = addon
 
-        super().__init__(
-            Path(self.addon.path_location, "build.json"), SCHEMA_BUILD_CONFIG
-        )
+        super().__init__(Path(self.addon.path_location, "build.json"),
+                         SCHEMA_BUILD_CONFIG)
 
     def save_data(self):
         """Ignore save function."""
@@ -38,8 +37,8 @@ class AddonBuild(JsonConfig, CoreSysAttributes):
     def base_image(self) -> str:
         """Base images for this add-on."""
         return self._data[ATTR_BUILD_FROM].get(
-            self.sys_arch.default, f"homeassistant/{self.sys_arch.default}-base:latest"
-        )
+            self.sys_arch.default,
+            f"homeassistant/{self.sys_arch.default}-base:latest")
 
     @property
     def squash(self) -> bool:
