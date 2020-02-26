@@ -23,7 +23,8 @@ On success / Code 200:
 ```
 
 For access to API you need use a authorization header with a `Bearer` token.
-They are available for Add-ons and the Home Assistant using the `SUPERVISOR_TOKEN` environment variable.
+They are available for Add-ons and the Home Assistant using the
+`SUPERVISOR_TOKEN` environment variable.
 
 ### Supervisor
 
@@ -659,8 +660,8 @@ Return a list of enabled panels.
 
 - VIEW `/ingress/{token}`
 
-Ingress WebUI for this Add-on. The addon need support HASS Auth!
-Need ingress session as cookie.
+Ingress WebUI for this Add-on. The addon need support HASS Auth! Need ingress
+session as cookie.
 
 ### discovery
 
