@@ -71,7 +71,8 @@ class HostManager(CoreSysAttributes):
         features = []
 
         if self.sys_dbus.systemd.is_connected:
-            features.extend([FEATURES_REBOOT, FEATURES_SHUTDOWN, FEATURES_SERVICES])
+            features.extend(
+                [FEATURES_REBOOT, FEATURES_SHUTDOWN, FEATURES_SERVICES])
 
         if self.sys_dbus.hostname.is_connected:
             features.append(FEATURES_HOSTNAME)

@@ -37,12 +37,10 @@ _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 SCHEMA_VERSION = vol.Schema({vol.Optional(ATTR_VERSION): vol.Coerce(str)})
 
-SCHEMA_VOLUME = vol.Schema(
-    {
-        vol.Required(ATTR_NAME): vol.Coerce(str),
-        vol.Required(ATTR_VOLUME): vol.Coerce(float),
-    }
-)
+SCHEMA_VOLUME = vol.Schema({
+    vol.Required(ATTR_NAME): vol.Coerce(str),
+    vol.Required(ATTR_VOLUME): vol.Coerce(float),
+})
 
 SCHEMA_DEFAULT = vol.Schema({vol.Required(ATTR_NAME): vol.Coerce(str)})
 
@@ -117,8 +115,8 @@ class APIAudio(CoreSysAttributes):
         body = await api_validate(SCHEMA_VOLUME, request)
 
         await asyncio.shield(
-            self.sys_host.sound.set_volume(source, body[ATTR_NAME], body[ATTR_VOLUME])
-        )
+            self.sys_host.sound.set_volume(source, body[ATTR_NAME],
+                                           body[ATTR_VOLUME]))
 
     @api_process
     async def set_default(self, request: web.Request) -> None:
@@ -126,4 +124,5 @@ class APIAudio(CoreSysAttributes):
         source: SourceType = SourceType(request.match_info.get("source"))
         body = await api_validate(SCHEMA_DEFAULT, request)
 
-        await asyncio.shield(self.sys_host.sound.set_default(source, body[ATTR_NAME]))
+        await asyncio.shield(
+            self.sys_host.sound.set_default(source, body[ATTR_NAME]))
