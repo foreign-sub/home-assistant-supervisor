@@ -1,16 +1,16 @@
 """Host function like audio, D-Bus or systemd."""
-from contextlib import suppress
 import logging
+from contextlib import suppress
 
-from ..const import (
-    FEATURES_HASSOS,
-    FEATURES_HOSTNAME,
-    FEATURES_REBOOT,
-    FEATURES_SERVICES,
-    FEATURES_SHUTDOWN,
-)
-from ..coresys import CoreSys, CoreSysAttributes
-from ..exceptions import HassioError, PulseAudioError
+from ..const import FEATURES_HASSOS
+from ..const import FEATURES_HOSTNAME
+from ..const import FEATURES_REBOOT
+from ..const import FEATURES_SERVICES
+from ..const import FEATURES_SHUTDOWN
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
+from ..exceptions import HassioError
+from ..exceptions import PulseAudioError
 from .apparmor import AppArmorControl
 from .control import SystemControl
 from .info import InfoCenter
