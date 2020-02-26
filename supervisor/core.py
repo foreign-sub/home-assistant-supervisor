@@ -98,8 +98,7 @@ class Core(CoreSysAttributes):
             except SupervisorUpdateError:
                 _LOGGER.fatal(
                     "Can't update supervisor! This will break some Add-ons or affect "
-                    "future version of Home Assistant!"
-                )
+                    "future version of Home Assistant!")
 
         # Start addon mark as initialize
         await self.sys_addons.boot(STARTUP_INITIALIZE)
@@ -120,10 +119,8 @@ class Core(CoreSysAttributes):
             await self.sys_addons.boot(STARTUP_SERVICES)
 
             # run HomeAssistant
-            if (
-                self.sys_homeassistant.boot
-                and not await self.sys_homeassistant.is_running()
-            ):
+            if (self.sys_homeassistant.boot
+                    and not await self.sys_homeassistant.is_running()):
                 with suppress(HomeAssistantError):
                     await self.sys_homeassistant.start()
             else:
@@ -162,15 +159,13 @@ class Core(CoreSysAttributes):
         # process async stop tasks
         try:
             with async_timeout.timeout(10):
-                await asyncio.wait(
-                    [
-                        self.sys_api.stop(),
-                        self.sys_websession.close(),
-                        self.sys_websession_ssl.close(),
-                        self.sys_ingress.unload(),
-                        self.sys_dns.unload(),
-                    ]
-                )
+                await asyncio.wait([
+                    self.sys_api.stop(),
+                    self.sys_websession.close(),
+                    self.sys_websession_ssl.close(),
+                    self.sys_ingress.unload(),
+                    self.sys_dns.unload(),
+                ])
         except asyncio.TimeoutError:
             _LOGGER.warning("Force Shutdown!")
 
