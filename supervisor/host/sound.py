@@ -100,7 +100,8 @@ class SoundControl(CoreSysAttributes):
         # Reload data
         await self.update()
 
-    async def set_volume(self, source: SourceType, name: str, volume: float) -> None:
+    async def set_volume(self, source: SourceType, name: str,
+                         volume: float) -> None:
         """Set a stream to volume input/output."""
         try:
             with Pulse(PULSE_NAME) as pulse:
@@ -133,9 +134,8 @@ class SoundControl(CoreSysAttributes):
             _LOGGER.error("Can't find %s profile %s", card_name, profile_name)
             raise PulseAudioError() from None
         except PulseError as err:
-            _LOGGER.error(
-                "Can't activate %s profile %s: %s", card_name, profile_name, err
-            )
+            _LOGGER.error("Can't activate %s profile %s: %s", card_name,
+                          profile_name, err)
             raise PulseAudioError() from None
 
         # Reload data
@@ -157,8 +157,7 @@ class SoundControl(CoreSysAttributes):
                             sink.description,
                             sink.volume.value_flat,
                             sink.name == server.default_sink_name,
-                        )
-                    )
+                        ))
 
                 # Update input
                 self._inputs.clear()
@@ -172,8 +171,7 @@ class SoundControl(CoreSysAttributes):
                             source.description,
                             source.volume.value_flat,
                             source.name == server.default_source_name,
-                        )
-                    )
+                        ))
 
                 # Update Sound Card
                 self._cards.clear()
@@ -189,12 +187,10 @@ class SoundControl(CoreSysAttributes):
                                 profile.name,
                                 profile.description,
                                 profile.name == card.profile_active.name,
-                            )
-                        )
+                            ))
 
                     self._cards.append(
-                        SoundCard(card.name, card.driver, sound_profiles)
-                    )
+                        SoundCard(card.name, card.driver, sound_profiles))
 
         except PulseOperationFailed as err:
             _LOGGER.error("Error while processing pulse update: %s", err)
