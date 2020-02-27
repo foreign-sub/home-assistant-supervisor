@@ -1,12 +1,16 @@
 """Pulse host control."""
-from enum import Enum
 import logging
+from enum import Enum
 from typing import List
 
 import attr
-from pulsectl import Pulse, PulseError, PulseIndexError, PulseOperationFailed
+from pulsectl import Pulse
+from pulsectl import PulseError
+from pulsectl import PulseIndexError
+from pulsectl import PulseOperationFailed
 
-from ..coresys import CoreSys, CoreSysAttributes
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 from ..exceptions import PulseAudioError
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
