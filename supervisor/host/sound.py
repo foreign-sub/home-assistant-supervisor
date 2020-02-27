@@ -76,7 +76,8 @@ class SoundControl(CoreSysAttributes):
         # Reload data
         await self.update()
 
-    async def set_volume(self, source: SourceType, name: str, volume: float) -> None:
+    async def set_volume(self, source: SourceType, name: str,
+                         volume: float) -> None:
         """Set a profile to volume input/output."""
         try:
             with Pulse(PULSE_NAME) as pulse:
@@ -114,8 +115,7 @@ class SoundControl(CoreSysAttributes):
                             sink.description,
                             sink.volume.value_flat,
                             sink.name == server.default_sink_name,
-                        )
-                    )
+                        ))
 
                 # Update input
                 self._input.clear()
@@ -129,8 +129,7 @@ class SoundControl(CoreSysAttributes):
                             source.description,
                             source.volume.value_flat,
                             source.name == server.default_source_name,
-                        )
-                    )
+                        ))
         except PulseOperationFailed as err:
             _LOGGER.error("Error while processing pulse update: %s", err)
             raise PulseAudioError() from None

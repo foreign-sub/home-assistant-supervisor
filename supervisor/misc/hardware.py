@@ -20,7 +20,6 @@ from ..const import CHAN_ID
 from ..const import CHAN_TYPE
 from ..exceptions import HardwareNotSupportedError
 
-
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 ASOUND_CARDS: Path = Path("/proc/asound/cards")
@@ -71,8 +70,7 @@ class Hardware:
                     device.sys_name,
                     Path(device.device_node),
                     [Path(node) for node in device.device_links],
-                )
-            )
+                ))
 
         return dev_list
 
@@ -93,7 +91,8 @@ class Hardware:
         """Return all serial and connected devices."""
         dev_list: Set[str] = set()
         for device in self.context.list_devices(subsystem="tty"):
-            if "ID_VENDOR" in device.properties or RE_TTY.search(device.device_node):
+            if "ID_VENDOR" in device.properties or RE_TTY.search(
+                    device.device_node):
                 dev_list.add(device.device_node)
 
         return dev_list
@@ -103,7 +102,8 @@ class Hardware:
         """Return all /dev/serial/by-id for serial devices."""
         dev_list: Set[str] = set()
         for device in self.context.list_devices(subsystem="tty"):
-            if "ID_VENDOR" in device.properties or RE_TTY.search(device.device_node):
+            if "ID_VENDOR" in device.properties or RE_TTY.search(
+                    device.device_node):
                 # Add /dev/serial/by-id devlink for current device
                 for dev_link in device.device_links:
                     if not dev_link.startswith("/dev/serial/by-id"):
@@ -163,9 +163,12 @@ class Hardware:
         # parse devices
         for match in RE_DEVICES.finditer(devices):
             try:
-                audio_list[match.group(1)][ATTR_DEVICES].append(
-                    {CHAN_ID: match.group(2), CHAN_TYPE: match.group(3)}
-                )
+                audio_list[match.group(1)][ATTR_DEVICES].append({
+                    CHAN_ID:
+                    match.group(2),
+                    CHAN_TYPE:
+                    match.group(3)
+                })
             except KeyError:
                 _LOGGER.warning("Wrong audio device found %s", match.group(0))
                 continue
@@ -207,8 +210,7 @@ class Hardware:
     async def udev_trigger(self) -> None:
         """Trigger a udev reload."""
         proc = await asyncio.create_subprocess_shell(
-            "udevadm trigger && udevadm settle"
-        )
+            "udevadm trigger && udevadm settle")
 
         await proc.wait()
         if proc.returncode == 0:
