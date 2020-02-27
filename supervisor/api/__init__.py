@@ -5,8 +5,10 @@ from typing import Optional
 
 from aiohttp import web
 
-from ..coresys import CoreSys, CoreSysAttributes
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 from .addons import APIAddons
+from .audio import APIAudio
 from .auth import APIAuth
 from .discovery import APIDiscovery
 from .dns import APICoreDNS
@@ -21,7 +23,6 @@ from .security import SecurityMiddleware
 from .services import APIServices
 from .snapshots import APISnapshots
 from .supervisor import APISupervisor
-from .audio import APIAudio
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

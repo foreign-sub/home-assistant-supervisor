@@ -1,15 +1,23 @@
 """Read hardware info from system."""
 import asyncio
-from datetime import datetime
 import logging
-from pathlib import Path
 import re
-from typing import Any, Dict, List, Optional, Set
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Set
 
 import attr
 import pyudev
 
-from ..const import ATTR_DEVICES, ATTR_NAME, ATTR_TYPE, CHAN_ID, CHAN_TYPE
+from ..const import ATTR_DEVICES
+from ..const import ATTR_NAME
+from ..const import ATTR_TYPE
+from ..const import CHAN_ID
+from ..const import CHAN_TYPE
 from ..exceptions import HardwareNotSupportedError
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)

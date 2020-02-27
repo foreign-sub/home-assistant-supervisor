@@ -1,20 +1,19 @@
 """Init file for Supervisor hardware RESTful API."""
 import asyncio
 import logging
-from typing import Any, Dict
+from typing import Any
+from typing import Dict
 
 from aiohttp import web
 
-from .utils import api_process
-from ..const import (
-    ATTR_SERIAL,
-    ATTR_DISK,
-    ATTR_GPIO,
-    ATTR_AUDIO,
-    ATTR_INPUT,
-    ATTR_OUTPUT,
-)
+from ..const import ATTR_AUDIO
+from ..const import ATTR_DISK
+from ..const import ATTR_GPIO
+from ..const import ATTR_INPUT
+from ..const import ATTR_OUTPUT
+from ..const import ATTR_SERIAL
 from ..coresys import CoreSysAttributes
+from .utils import api_process
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
