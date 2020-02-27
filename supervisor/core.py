@@ -1,19 +1,20 @@
 """Main file for Supervisor."""
 import asyncio
-from contextlib import suppress
 import logging
+from contextlib import suppress
 
 import async_timeout
 
-from .const import (
-    STARTUP_APPLICATION,
-    STARTUP_INITIALIZE,
-    STARTUP_SERVICES,
-    STARTUP_SYSTEM,
-    CoreStates,
-)
-from .coresys import CoreSys, CoreSysAttributes
-from .exceptions import HassioError, HomeAssistantError, SupervisorUpdateError
+from .const import CoreStates
+from .const import STARTUP_APPLICATION
+from .const import STARTUP_INITIALIZE
+from .const import STARTUP_SERVICES
+from .const import STARTUP_SYSTEM
+from .coresys import CoreSys
+from .coresys import CoreSysAttributes
+from .exceptions import HassioError
+from .exceptions import HomeAssistantError
+from .exceptions import SupervisorUpdateError
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
