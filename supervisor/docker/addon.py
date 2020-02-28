@@ -36,7 +36,6 @@ from .interface import DockerInterface
 if TYPE_CHECKING:
     from ..addons.addon import Addon
 
-
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 NO_ADDDRESS = ip_address("0.0.0.0")
@@ -63,9 +62,8 @@ class DockerAddon(DockerInterface):
 
         # Extract IP-Address
         try:
-            return ip_address(
-                self._meta["NetworkSettings"]["Networks"]["hassio"]["IPAddress"]
-            )
+            return ip_address(self._meta["NetworkSettings"]["Networks"]
+                              ["hassio"]["IPAddress"])
         except (KeyError, TypeError, ValueError):
             return NO_ADDDRESS
 
@@ -116,7 +114,8 @@ class DockerAddon(DockerInterface):
                 if isinstance(value, (int, str)):
                     addon_env[key] = value
                 else:
-                    _LOGGER.warning("Can not set nested option %s as Docker env", key)
+                    _LOGGER.warning(
+                        "Can not set nested option %s as Docker env", key)
 
         return {
             **addon_env,
@@ -139,9 +138,8 @@ class DockerAddon(DockerInterface):
             if self.addon.with_udev:
                 serial_devs = self.sys_hardware.serial_devices
             else:
-                serial_devs = (
-                    self.sys_hardware.serial_devices | self.sys_hardware.serial_by_id
-                )
+                serial_devs = (self.sys_hardware.serial_devices
+                               | self.sys_hardware.serial_by_id)
 
             for device in serial_devs:
                 devices.append(f"{device}:{device}:rwm")
@@ -217,60 +215,55 @@ class DockerAddon(DockerInterface):
     @property
     def volumes(self) -> Dict[str, Dict[str, str]]:
         """Generate volumes for mappings."""
-        volumes = {str(self.addon.path_extern_data): {"bind": "/data", "mode": "rw"}}
+        volumes = {
+            str(self.addon.path_extern_data): {
+                "bind": "/data",
+                "mode": "rw"
+            }
+        }
 
         addon_mapping = self.addon.map_volumes
 
         # setup config mappings
         if MAP_CONFIG in addon_mapping:
-            volumes.update(
-                {
-                    str(self.sys_config.path_extern_homeassistant): {
-                        "bind": "/config",
-                        "mode": addon_mapping[MAP_CONFIG],
-                    }
+            volumes.update({
+                str(self.sys_config.path_extern_homeassistant): {
+                    "bind": "/config",
+                    "mode": addon_mapping[MAP_CONFIG],
                 }
-            )
+            })
 
         if MAP_SSL in addon_mapping:
-            volumes.update(
-                {
-                    str(self.sys_config.path_extern_ssl): {
-                        "bind": "/ssl",
-                        "mode": addon_mapping[MAP_SSL],
-                    }
+            volumes.update({
+                str(self.sys_config.path_extern_ssl): {
+                    "bind": "/ssl",
+                    "mode": addon_mapping[MAP_SSL],
                 }
-            )
+            })
 
         if MAP_ADDONS in addon_mapping:
-            volumes.update(
-                {
-                    str(self.sys_config.path_extern_addons_local): {
-                        "bind": "/addons",
-                        "mode": addon_mapping[MAP_ADDONS],
-                    }
+            volumes.update({
+                str(self.sys_config.path_extern_addons_local): {
+                    "bind": "/addons",
+                    "mode": addon_mapping[MAP_ADDONS],
                 }
-            )
+            })
 
         if MAP_BACKUP in addon_mapping:
-            volumes.update(
-                {
-                    str(self.sys_config.path_extern_backup): {
-                        "bind": "/backup",
-                        "mode": addon_mapping[MAP_BACKUP],
-                    }
+            volumes.update({
+                str(self.sys_config.path_extern_backup): {
+                    "bind": "/backup",
+                    "mode": addon_mapping[MAP_BACKUP],
                 }
-            )
+            })
 
         if MAP_SHARE in addon_mapping:
-            volumes.update(
-                {
-                    str(self.sys_config.path_extern_share): {
-                        "bind": "/share",
-                        "mode": addon_mapping[MAP_SHARE],
-                    }
+            volumes.update({
+                str(self.sys_config.path_extern_share): {
+                    "bind": "/share",
+                    "mode": addon_mapping[MAP_SHARE],
                 }
-            )
+            })
 
         # Init other hardware mappings
 
@@ -281,24 +274,29 @@ class DockerAddon(DockerInterface):
 
         # DeviceTree support
         if self.addon.with_devicetree:
-            volumes.update(
-                {
-                    "/sys/firmware/devicetree/base": {
-                        "bind": "/device-tree",
-                        "mode": "ro",
-                    }
+            volumes.update({
+                "/sys/firmware/devicetree/base": {
+                    "bind": "/device-tree",
+                    "mode": "ro",
                 }
-            )
+            })
 
         # Kernel Modules support
         if self.addon.with_kernel_modules:
-            volumes.update({"/lib/modules": {"bind": "/lib/modules", "mode": "ro"}})
+            volumes.update(
+                {"/lib/modules": {
+                    "bind": "/lib/modules",
+                    "mode": "ro"
+                }})
 
         # Docker API support
         if not self.addon.protected and self.addon.access_docker_api:
-            volumes.update(
-                {"/run/docker.sock": {"bind": "/run/docker.sock", "mode": "ro"}}
-            )
+            volumes.update({
+                "/run/docker.sock": {
+                    "bind": "/run/docker.sock",
+                    "mode": "ro"
+                }
+            })
 
         # Host D-Bus system
         if self.addon.host_dbus:
@@ -306,22 +304,20 @@ class DockerAddon(DockerInterface):
 
         # Configuration Audio
         if self.addon.with_audio:
-            volumes.update(
-                {
-                    str(self.addon.path_extern_pulse): {
-                        "bind": "/etc/pulse/client.conf",
-                        "mode": "ro",
-                    },
-                    str(self.sys_audio.path_extern_pulse): {
-                        "bind": "/run/pulse.sock",
-                        "mode": "rw",
-                    },
-                    str(self.sys_audio.path_extern_asound): {
-                        "bind": "/etc/asound.conf",
-                        "mode": "ro",
-                    },
-                }
-            )
+            volumes.update({
+                str(self.addon.path_extern_pulse): {
+                    "bind": "/etc/pulse/client.conf",
+                    "mode": "ro",
+                },
+                str(self.sys_audio.path_extern_pulse): {
+                    "bind": "/run/pulse.sock",
+                    "mode": "rw",
+                },
+                str(self.sys_audio.path_extern_asound): {
+                    "bind": "/etc/asound.conf",
+                    "mode": "ro",
+                },
+            })
 
         return volumes
 
@@ -335,7 +331,8 @@ class DockerAddon(DockerInterface):
 
         # Security check
         if not self.addon.protected:
-            _LOGGER.warning("%s run with disabled protected mode!", self.addon.name)
+            _LOGGER.warning("%s run with disabled protected mode!",
+                            self.addon.name)
 
         # Cleanup
         with suppress(DockerAPIError):
@@ -365,14 +362,17 @@ class DockerAddon(DockerInterface):
         )
 
         self._meta = docker_container.attrs
-        _LOGGER.info("Start Docker add-on %s with version %s", self.image, self.version)
+        _LOGGER.info("Start Docker add-on %s with version %s", self.image,
+                     self.version)
 
         # Write data to DNS server
-        self.sys_dns.add_host(ipv4=self.ip_address, names=[self.addon.hostname])
+        self.sys_dns.add_host(ipv4=self.ip_address,
+                              names=[self.addon.hostname])
 
-    def _install(
-        self, tag: str, image: Optional[str] = None, latest: bool = False
-    ) -> None:
+    def _install(self,
+                 tag: str,
+                 image: Optional[str] = None,
+                 latest: bool = False) -> None:
         """Pull Docker image or build it.
 
         Need run inside executor.
@@ -392,8 +392,7 @@ class DockerAddon(DockerInterface):
         _LOGGER.info("Start build %s:%s", self.image, tag)
         try:
             image, log = self.sys_docker.images.build(
-                use_config_proxy=False, **build_env.get_docker_args(tag)
-            )
+                use_config_proxy=False, **build_env.get_docker_args(tag))
 
             _LOGGER.debug("Build %s:%s done: %s", self.image, tag, log)
 
@@ -417,7 +416,8 @@ class DockerAddon(DockerInterface):
         Need run inside executor.
         """
         try:
-            image = self.sys_docker.api.get_image(f"{self.image}:{self.version}")
+            image = self.sys_docker.api.get_image(
+                f"{self.image}:{self.version}")
         except docker.errors.DockerException as err:
             _LOGGER.error("Can't fetch image %s: %s", self.image, err)
             raise DockerAPIError() from None
@@ -447,7 +447,8 @@ class DockerAddon(DockerInterface):
             with tar_file.open("rb") as read_tar:
                 self.sys_docker.api.load_image(read_tar, quiet=True)
 
-            docker_image = self.sys_docker.images.get(f"{self.image}:{self.version}")
+            docker_image = self.sys_docker.images.get(
+                f"{self.image}:{self.version}")
         except (docker.errors.DockerException, OSError) as err:
             _LOGGER.error("Can't import image %s: %s", self.image, err)
             raise DockerAPIError() from None

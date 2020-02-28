@@ -23,7 +23,8 @@ from .validate import SCHEMA_AUDIO_CONFIG
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
-PULSE_CLIENT_TMPL: Path = Path(__file__).parents[0].joinpath("data/pulse-client.tmpl")
+PULSE_CLIENT_TMPL: Path = Path(__file__).parents[0].joinpath(
+    "data/pulse-client.tmpl")
 ASOUND_TMPL: Path = Path(__file__).parents[0].joinpath("data/asound.tmpl")
 
 
@@ -40,7 +41,8 @@ class Audio(JsonConfig, CoreSysAttributes):
     @property
     def path_extern_pulse(self) -> Path:
         """Return path of pulse socket file."""
-        return self.sys_config.path_extern_audio.joinpath("external/pulse.sock")
+        return self.sys_config.path_extern_audio.joinpath(
+            "external/pulse.sock")
 
     @property
     def path_extern_asound(self) -> Path:
@@ -82,7 +84,8 @@ class Audio(JsonConfig, CoreSysAttributes):
 
             await self.instance.attach(tag=self.version)
         except DockerAPIError:
-            _LOGGER.info("No Audio plugin Docker image %s found.", self.instance.image)
+            _LOGGER.info("No Audio plugin Docker image %s found.",
+                         self.instance.image)
 
             # Install PulseAudio
             with suppress(AudioError):
@@ -98,7 +101,8 @@ class Audio(JsonConfig, CoreSysAttributes):
 
         # Initialize Client Template
         try:
-            self.client_template = jinja2.Template(PULSE_CLIENT_TMPL.read_text())
+            self.client_template = jinja2.Template(
+                PULSE_CLIENT_TMPL.read_text())
         except OSError as err:
             _LOGGER.error("Can't read pulse-client.tmpl: %s", err)
 
@@ -134,7 +138,8 @@ class Audio(JsonConfig, CoreSysAttributes):
         version = version or self.latest_version
 
         if version == self.version:
-            _LOGGER.warning("Version %s is already installed for Audio", version)
+            _LOGGER.warning("Version %s is already installed for Audio",
+                            version)
             return
 
         try:
