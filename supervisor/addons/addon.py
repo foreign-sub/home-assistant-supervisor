@@ -65,8 +65,7 @@ _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 RE_WEBUI = re.compile(
     r"^(?:(?P<s_prefix>https?)|\[PROTO:(?P<t_proto>\w+)\])"
-    r":\/\/\[HOST\]:\[PORT:(?P<t_port>\d+)\](?P<s_suffix>.*)$"
-)
+    r":\/\/\[HOST\]:\[PORT:(?P<t_port>\d+)\](?P<s_suffix>.*)$")
 
 RE_OLD_AUDIO = re.compile(r"\d+,\d+")
 
@@ -395,21 +394,18 @@ class Addon(AddonModel):
     def write_pulse(self):
         """Write asound config to file and return True on success."""
         pulse_config = self.sys_audio.pulse_client(
-            input_profile=self.audio_input, output_profile=self.audio_output
-        )
+            input_profile=self.audio_input, output_profile=self.audio_output)
 
         try:
             with self.path_pulse.open("w") as config_file:
                 config_file.write(pulse_config)
         except OSError as err:
-            _LOGGER.error(
-                "Add-on %s can't write pulse/client.config: %s", self.slug, err
-            )
+            _LOGGER.error("Add-on %s can't write pulse/client.config: %s",
+                          self.slug, err)
             raise AddonsError()
 
-        _LOGGER.debug(
-            "Add-on %s write pulse/client.config: %s", self.slug, self.path_pulse
-        )
+        _LOGGER.debug("Add-on %s write pulse/client.config: %s", self.slug,
+                      self.path_pulse)
 
     async def install_apparmor(self) -> None:
         """Install or Update AppArmor profile for Add-on."""
@@ -453,14 +449,14 @@ class Addon(AddonModel):
 
         # create voluptuous
         new_schema = vol.Schema(
-            vol.All(dict, validate_options(self.coresys, new_raw_schema))
-        )
+            vol.All(dict, validate_options(self.coresys, new_raw_schema)))
 
         # validate
         try:
             new_schema(options)
         except vol.Invalid:
-            _LOGGER.warning("Add-on %s new schema is not compatible", self.slug)
+            _LOGGER.warning("Add-on %s new schema is not compatible",
+                            self.slug)
             return False
         return True
 
@@ -597,7 +593,8 @@ class Addon(AddonModel):
             def _extract_tarfile():
                 """Extract tar snapshot."""
                 with tar_file as snapshot:
-                    snapshot.extractall(path=Path(temp), members=secure_path(snapshot))
+                    snapshot.extractall(path=Path(temp),
+                                        members=secure_path(snapshot))
 
             try:
                 await self.sys_run_in_executor(_extract_tarfile)
@@ -624,15 +621,15 @@ class Addon(AddonModel):
 
             # If available
             if not self._available(data[ATTR_SYSTEM]):
-                _LOGGER.error("Add-on %s is not available for this Platform", self.slug)
+                _LOGGER.error("Add-on %s is not available for this Platform",
+                              self.slug)
                 raise AddonsNotSupportedError()
 
             # Restore local add-on informations
             _LOGGER.info("Restore config for addon %s", self.slug)
             restore_image = self._image(data[ATTR_SYSTEM])
-            self.sys_addons.data.restore(
-                self.slug, data[ATTR_USER], data[ATTR_SYSTEM], restore_image
-            )
+            self.sys_addons.data.restore(self.slug, data[ATTR_USER],
+                                         data[ATTR_SYSTEM], restore_image)
 
             # Check version / restore image
             version = data[ATTR_VERSION]
@@ -673,7 +670,8 @@ class Addon(AddonModel):
             profile_file = Path(temp, "apparmor.txt")
             if profile_file.exists():
                 try:
-                    await self.sys_host.apparmor.load_profile(self.slug, profile_file)
+                    await self.sys_host.apparmor.load_profile(
+                        self.slug, profile_file)
                 except HostAppArmorError:
                     _LOGGER.error("Can't restore AppArmor profile")
                     raise AddonsError() from None
