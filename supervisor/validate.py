@@ -5,38 +5,36 @@ import uuid
 
 import voluptuous as vol
 
-from .const import (
-    ATTR_ACCESS_TOKEN,
-    ATTR_ADDONS_CUSTOM_LIST,
-    ATTR_AUDIO,
-    ATTR_AUDIO_INPUT,
-    ATTR_AUDIO_OUTPUT,
-    ATTR_BOOT,
-    ATTR_CHANNEL,
-    ATTR_CLI,
-    ATTR_DEBUG,
-    ATTR_DEBUG_BLOCK,
-    ATTR_DNS,
-    ATTR_HASSIO,
-    ATTR_HASSOS,
-    ATTR_HOMEASSISTANT,
-    ATTR_IMAGE,
-    ATTR_LAST_BOOT,
-    ATTR_LAST_VERSION,
-    ATTR_LOGGING,
-    ATTR_PORT,
-    ATTR_PORTS,
-    ATTR_REFRESH_TOKEN,
-    ATTR_SERVERS,
-    ATTR_SESSION,
-    ATTR_SSL,
-    ATTR_TIMEZONE,
-    ATTR_UUID,
-    ATTR_VERSION,
-    ATTR_WAIT_BOOT,
-    ATTR_WATCHDOG,
-    UpdateChannels,
-)
+from .const import ATTR_ACCESS_TOKEN
+from .const import ATTR_ADDONS_CUSTOM_LIST
+from .const import ATTR_AUDIO
+from .const import ATTR_AUDIO_INPUT
+from .const import ATTR_AUDIO_OUTPUT
+from .const import ATTR_BOOT
+from .const import ATTR_CHANNEL
+from .const import ATTR_CLI
+from .const import ATTR_DEBUG
+from .const import ATTR_DEBUG_BLOCK
+from .const import ATTR_DNS
+from .const import ATTR_HASSIO
+from .const import ATTR_HASSOS
+from .const import ATTR_HOMEASSISTANT
+from .const import ATTR_IMAGE
+from .const import ATTR_LAST_BOOT
+from .const import ATTR_LAST_VERSION
+from .const import ATTR_LOGGING
+from .const import ATTR_PORT
+from .const import ATTR_PORTS
+from .const import ATTR_REFRESH_TOKEN
+from .const import ATTR_SERVERS
+from .const import ATTR_SESSION
+from .const import ATTR_SSL
+from .const import ATTR_TIMEZONE
+from .const import ATTR_UUID
+from .const import ATTR_VERSION
+from .const import ATTR_WAIT_BOOT
+from .const import ATTR_WATCHDOG
+from .const import UpdateChannels
 from .utils.validate import validate_timezone
 
 RE_REPOSITORY = re.compile(r"^(?P<url>[^#]+)(?:#(?P<branch>[\w\-]+))?$")
