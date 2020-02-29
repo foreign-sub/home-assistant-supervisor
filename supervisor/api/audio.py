@@ -41,26 +41,23 @@ _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 SCHEMA_VERSION = vol.Schema({vol.Optional(ATTR_VERSION): vol.Coerce(str)})
 
-SCHEMA_VOLUME = vol.Schema(
-    {
-        vol.Required(ATTR_INDEX): vol.Coerce(int),
-        vol.Required(ATTR_VOLUME): vol.Coerce(float),
-    }
-)
+SCHEMA_VOLUME = vol.Schema({
+    vol.Required(ATTR_INDEX): vol.Coerce(int),
+    vol.Required(ATTR_VOLUME): vol.Coerce(float),
+})
 
 # pylint: disable=no-value-for-parameter
-SCHEMA_MUTE = vol.Schema(
-    {
-        vol.Required(ATTR_INDEX): vol.Coerce(int),
-        vol.Required(ATTR_ACTIVE): vol.Boolean(),
-    }
-)
+SCHEMA_MUTE = vol.Schema({
+    vol.Required(ATTR_INDEX): vol.Coerce(int),
+    vol.Required(ATTR_ACTIVE): vol.Boolean(),
+})
 
 SCHEMA_DEFAULT = vol.Schema({vol.Required(ATTR_NAME): vol.Coerce(str)})
 
-SCHEMA_PROFILE = vol.Schema(
-    {vol.Required(ATTR_CARD): vol.Coerce(str), vol.Required(ATTR_NAME): vol.Coerce(str)}
-)
+SCHEMA_PROFILE = vol.Schema({
+    vol.Required(ATTR_CARD): vol.Coerce(str),
+    vol.Required(ATTR_NAME): vol.Coerce(str)
+})
 
 
 class APIAudio(CoreSysAttributes):
@@ -74,15 +71,17 @@ class APIAudio(CoreSysAttributes):
             ATTR_LATEST_VERSION: self.sys_audio.latest_version,
             ATTR_HOST: str(self.sys_docker.network.audio),
             ATTR_AUDIO: {
-                ATTR_CARD: [attr.asdict(card) for card in self.sys_host.sound.cards],
-                ATTR_INPUT: [
-                    attr.asdict(stream) for stream in self.sys_host.sound.inputs
-                ],
+                ATTR_CARD:
+                [attr.asdict(card) for card in self.sys_host.sound.cards],
+                ATTR_INPUT:
+                [attr.asdict(stream) for stream in self.sys_host.sound.inputs],
                 ATTR_OUTPUT: [
-                    attr.asdict(stream) for stream in self.sys_host.sound.outputs
+                    attr.asdict(stream)
+                    for stream in self.sys_host.sound.outputs
                 ],
                 ATTR_APPLICATION: [
-                    attr.asdict(stream) for stream in self.sys_host.sound.applications
+                    attr.asdict(stream)
+                    for stream in self.sys_host.sound.applications
                 ],
             },
         }
@@ -136,10 +135,8 @@ class APIAudio(CoreSysAttributes):
         body = await api_validate(SCHEMA_VOLUME, request)
 
         await asyncio.shield(
-            self.sys_host.sound.set_volume(
-                source, body[ATTR_INDEX], body[ATTR_VOLUME], application
-            )
-        )
+            self.sys_host.sound.set_volume(source, body[ATTR_INDEX],
+                                           body[ATTR_VOLUME], application))
 
     @api_process
     async def set_mute(self, request: web.Request) -> None:
@@ -149,10 +146,8 @@ class APIAudio(CoreSysAttributes):
         body = await api_validate(SCHEMA_MUTE, request)
 
         await asyncio.shield(
-            self.sys_host.sound.set_mute(
-                source, body[ATTR_INDEX], body[ATTR_ACTIVE], application
-            )
-        )
+            self.sys_host.sound.set_mute(source, body[ATTR_INDEX],
+                                         body[ATTR_ACTIVE], application))
 
     @api_process
     async def set_default(self, request: web.Request) -> None:
@@ -160,7 +155,8 @@ class APIAudio(CoreSysAttributes):
         source: StreamType = StreamType(request.match_info.get("source"))
         body = await api_validate(SCHEMA_DEFAULT, request)
 
-        await asyncio.shield(self.sys_host.sound.set_default(source, body[ATTR_NAME]))
+        await asyncio.shield(
+            self.sys_host.sound.set_default(source, body[ATTR_NAME]))
 
     @api_process
     async def set_profile(self, request: web.Request) -> None:
@@ -168,5 +164,4 @@ class APIAudio(CoreSysAttributes):
         body = await api_validate(SCHEMA_PROFILE, request)
 
         await asyncio.shield(
-            self.sys_host.sound.set_profile(body[ATTR_CARD], body[ATTR_NAME])
-        )
+            self.sys_host.sound.set_profile(body[ATTR_CARD], body[ATTR_NAME]))
