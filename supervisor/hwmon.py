@@ -27,9 +27,11 @@ class HwMonitor(CoreSysAttributes):
         """Start hardware monitor."""
         try:
             self.monitor = pyudev.Monitor.from_netlink(self.context)
-            self.observer = pyudev.MonitorObserver(self.monitor, self._udev_events)
+            self.observer = pyudev.MonitorObserver(self.monitor,
+                                                   self._udev_events)
         except OSError:
-            _LOGGER.fatal("Not privileged to run udev. Update your installation!")
+            _LOGGER.fatal(
+                "Not privileged to run udev. Update your installation!")
         else:
             self.observer.start()
             _LOGGER.info("Started Supervisor hardware monitor")
@@ -48,7 +50,8 @@ class HwMonitor(CoreSysAttributes):
         This is inside a observe thread and need pass into our eventloop.
         """
         _LOGGER.debug("Hardware monitor: %s - %s", action, pformat(device))
-        self.sys_loop.call_soon_threadsafe(self._async_udev_events, action, device)
+        self.sys_loop.call_soon_threadsafe(self._async_udev_events, action,
+                                           device)
 
     def _async_udev_events(self, action: str, device: pyudev.Device):
         """Incomming events from udev into loop."""
@@ -60,4 +63,5 @@ class HwMonitor(CoreSysAttributes):
     def _action_sound(self, device: pyudev.Device):
         """Process sound actions."""
         _LOGGER.info("Detect changed audio hardware")
-        self.sys_loop.call_later(5, self.sys_create_task, self.sys_host.sound.update())
+        self.sys_loop.call_later(5, self.sys_create_task,
+                                 self.sys_host.sound.update())
