@@ -1,12 +1,13 @@
 """Supervisor Hardware monitor based on udev."""
-from datetime import timedelta
 import logging
+from datetime import timedelta
 from pprint import pformat
 from typing import Optional
 
 import pyudev
 
-from .coresys import CoreSysAttributes, CoreSys
+from .coresys import CoreSys
+from .coresys import CoreSysAttributes
 from .utils import AsyncCallFilter
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)

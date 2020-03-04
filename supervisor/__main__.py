@@ -1,8 +1,8 @@
 """Main file for Supervisor."""
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
 import logging
 import sys
+from concurrent.futures import ThreadPoolExecutor
 
 from supervisor import bootstrap
 
