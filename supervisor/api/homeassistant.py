@@ -1,41 +1,44 @@
 """Init file for Supervisor Home Assistant RESTful API."""
 import asyncio
 import logging
-from typing import Any, Coroutine, Dict
+from typing import Any
+from typing import Coroutine
+from typing import Dict
 
-from aiohttp import web
 import voluptuous as vol
+from aiohttp import web
 
-from ..const import (
-    ATTR_ARCH,
-    ATTR_AUDIO_INPUT,
-    ATTR_AUDIO_OUTPUT,
-    ATTR_BLK_READ,
-    ATTR_BLK_WRITE,
-    ATTR_BOOT,
-    ATTR_CPU_PERCENT,
-    ATTR_CUSTOM,
-    ATTR_IMAGE,
-    ATTR_IP_ADDRESS,
-    ATTR_VERSION_LATEST,
-    ATTR_MACHINE,
-    ATTR_MEMORY_LIMIT,
-    ATTR_MEMORY_PERCENT,
-    ATTR_MEMORY_USAGE,
-    ATTR_NETWORK_RX,
-    ATTR_NETWORK_TX,
-    ATTR_PORT,
-    ATTR_REFRESH_TOKEN,
-    ATTR_SSL,
-    ATTR_VERSION,
-    ATTR_WAIT_BOOT,
-    ATTR_WATCHDOG,
-    CONTENT_TYPE_BINARY,
-)
+from ..const import ATTR_ARCH
+from ..const import ATTR_AUDIO_INPUT
+from ..const import ATTR_AUDIO_OUTPUT
+from ..const import ATTR_BLK_READ
+from ..const import ATTR_BLK_WRITE
+from ..const import ATTR_BOOT
+from ..const import ATTR_CPU_PERCENT
+from ..const import ATTR_CUSTOM
+from ..const import ATTR_IMAGE
+from ..const import ATTR_IP_ADDRESS
+from ..const import ATTR_MACHINE
+from ..const import ATTR_MEMORY_LIMIT
+from ..const import ATTR_MEMORY_PERCENT
+from ..const import ATTR_MEMORY_USAGE
+from ..const import ATTR_NETWORK_RX
+from ..const import ATTR_NETWORK_TX
+from ..const import ATTR_PORT
+from ..const import ATTR_REFRESH_TOKEN
+from ..const import ATTR_SSL
+from ..const import ATTR_VERSION
+from ..const import ATTR_VERSION_LATEST
+from ..const import ATTR_WAIT_BOOT
+from ..const import ATTR_WATCHDOG
+from ..const import CONTENT_TYPE_BINARY
 from ..coresys import CoreSysAttributes
 from ..exceptions import APIError
-from ..validate import docker_image, network_port
-from .utils import api_process, api_process_raw, api_validate
+from ..validate import docker_image
+from ..validate import network_port
+from .utils import api_process
+from .utils import api_process_raw
+from .utils import api_validate
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

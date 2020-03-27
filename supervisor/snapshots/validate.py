@@ -1,38 +1,38 @@
 """Validate some things around restore."""
 import voluptuous as vol
 
-from ..const import (
-    ATTR_ADDONS,
-    ATTR_AUDIO_INPUT,
-    ATTR_AUDIO_OUTPUT,
-    ATTR_BOOT,
-    ATTR_CRYPTO,
-    ATTR_DATE,
-    ATTR_FOLDERS,
-    ATTR_HOMEASSISTANT,
-    ATTR_IMAGE,
-    ATTR_VERSION_LATEST,
-    ATTR_NAME,
-    ATTR_PORT,
-    ATTR_PROTECTED,
-    ATTR_REFRESH_TOKEN,
-    ATTR_REPOSITORIES,
-    ATTR_SIZE,
-    ATTR_SLUG,
-    ATTR_SSL,
-    ATTR_TYPE,
-    ATTR_VERSION,
-    ATTR_WAIT_BOOT,
-    ATTR_WATCHDOG,
-    CRYPTO_AES128,
-    FOLDER_ADDONS,
-    FOLDER_HOMEASSISTANT,
-    FOLDER_SHARE,
-    FOLDER_SSL,
-    SNAPSHOT_FULL,
-    SNAPSHOT_PARTIAL,
-)
-from ..validate import docker_image, network_port, repositories
+from ..const import ATTR_ADDONS
+from ..const import ATTR_AUDIO_INPUT
+from ..const import ATTR_AUDIO_OUTPUT
+from ..const import ATTR_BOOT
+from ..const import ATTR_CRYPTO
+from ..const import ATTR_DATE
+from ..const import ATTR_FOLDERS
+from ..const import ATTR_HOMEASSISTANT
+from ..const import ATTR_IMAGE
+from ..const import ATTR_NAME
+from ..const import ATTR_PORT
+from ..const import ATTR_PROTECTED
+from ..const import ATTR_REFRESH_TOKEN
+from ..const import ATTR_REPOSITORIES
+from ..const import ATTR_SIZE
+from ..const import ATTR_SLUG
+from ..const import ATTR_SSL
+from ..const import ATTR_TYPE
+from ..const import ATTR_VERSION
+from ..const import ATTR_VERSION_LATEST
+from ..const import ATTR_WAIT_BOOT
+from ..const import ATTR_WATCHDOG
+from ..const import CRYPTO_AES128
+from ..const import FOLDER_ADDONS
+from ..const import FOLDER_HOMEASSISTANT
+from ..const import FOLDER_SHARE
+from ..const import FOLDER_SSL
+from ..const import SNAPSHOT_FULL
+from ..const import SNAPSHOT_PARTIAL
+from ..validate import docker_image
+from ..validate import network_port
+from ..validate import repositories
 
 ALL_FOLDERS = [FOLDER_HOMEASSISTANT, FOLDER_SHARE, FOLDER_ADDONS, FOLDER_SSL]
 

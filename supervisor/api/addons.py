@@ -1,103 +1,106 @@
 """Init file for Supervisor Home Assistant RESTful API."""
 import asyncio
 import logging
-from typing import Any, Awaitable, Dict, List
+from typing import Any
+from typing import Awaitable
+from typing import Dict
+from typing import List
 
-from aiohttp import web
 import voluptuous as vol
+from aiohttp import web
 
 from ..addons import AnyAddon
 from ..addons.addon import Addon
 from ..addons.utils import rating_security
-from ..const import (
-    ATTR_ADDONS,
-    ATTR_ADVANCED,
-    ATTR_APPARMOR,
-    ATTR_ARCH,
-    ATTR_AUDIO,
-    ATTR_AUDIO_INPUT,
-    ATTR_AUDIO_OUTPUT,
-    ATTR_AUTH_API,
-    ATTR_AUTO_UPDATE,
-    ATTR_AVAILABLE,
-    ATTR_BLK_READ,
-    ATTR_BLK_WRITE,
-    ATTR_BOOT,
-    ATTR_BUILD,
-    ATTR_CHANGELOG,
-    ATTR_CPU_PERCENT,
-    ATTR_DESCRIPTON,
-    ATTR_DETACHED,
-    ATTR_DEVICES,
-    ATTR_DEVICETREE,
-    ATTR_DISCOVERY,
-    ATTR_DNS,
-    ATTR_DOCKER_API,
-    ATTR_DOCUMENTATION,
-    ATTR_FULL_ACCESS,
-    ATTR_GPIO,
-    ATTR_HASSIO_API,
-    ATTR_HASSIO_ROLE,
-    ATTR_HOMEASSISTANT,
-    ATTR_HOMEASSISTANT_API,
-    ATTR_HOST_DBUS,
-    ATTR_HOST_IPC,
-    ATTR_HOST_NETWORK,
-    ATTR_HOST_PID,
-    ATTR_HOSTNAME,
-    ATTR_ICON,
-    ATTR_INGRESS,
-    ATTR_INGRESS_ENTRY,
-    ATTR_INGRESS_PANEL,
-    ATTR_INGRESS_PORT,
-    ATTR_INGRESS_URL,
-    ATTR_INSTALLED,
-    ATTR_IP_ADDRESS,
-    ATTR_KERNEL_MODULES,
-    ATTR_VERSION_LATEST,
-    ATTR_LOGO,
-    ATTR_LONG_DESCRIPTION,
-    ATTR_MACHINE,
-    ATTR_MAINTAINER,
-    ATTR_MEMORY_LIMIT,
-    ATTR_MEMORY_PERCENT,
-    ATTR_MEMORY_USAGE,
-    ATTR_NAME,
-    ATTR_NETWORK,
-    ATTR_NETWORK_DESCRIPTION,
-    ATTR_NETWORK_RX,
-    ATTR_NETWORK_TX,
-    ATTR_OPTIONS,
-    ATTR_PRIVILEGED,
-    ATTR_PROTECTED,
-    ATTR_RATING,
-    ATTR_REPOSITORIES,
-    ATTR_REPOSITORY,
-    ATTR_SCHEMA,
-    ATTR_SERVICES,
-    ATTR_SLUG,
-    ATTR_SOURCE,
-    ATTR_STAGE,
-    ATTR_STATE,
-    ATTR_STDIN,
-    ATTR_UDEV,
-    ATTR_URL,
-    ATTR_VERSION,
-    ATTR_VIDEO,
-    ATTR_WEBUI,
-    BOOT_AUTO,
-    BOOT_MANUAL,
-    CONTENT_TYPE_BINARY,
-    CONTENT_TYPE_PNG,
-    CONTENT_TYPE_TEXT,
-    REQUEST_FROM,
-    STATE_NONE,
-)
+from ..const import ATTR_ADDONS
+from ..const import ATTR_ADVANCED
+from ..const import ATTR_APPARMOR
+from ..const import ATTR_ARCH
+from ..const import ATTR_AUDIO
+from ..const import ATTR_AUDIO_INPUT
+from ..const import ATTR_AUDIO_OUTPUT
+from ..const import ATTR_AUTH_API
+from ..const import ATTR_AUTO_UPDATE
+from ..const import ATTR_AVAILABLE
+from ..const import ATTR_BLK_READ
+from ..const import ATTR_BLK_WRITE
+from ..const import ATTR_BOOT
+from ..const import ATTR_BUILD
+from ..const import ATTR_CHANGELOG
+from ..const import ATTR_CPU_PERCENT
+from ..const import ATTR_DESCRIPTON
+from ..const import ATTR_DETACHED
+from ..const import ATTR_DEVICES
+from ..const import ATTR_DEVICETREE
+from ..const import ATTR_DISCOVERY
+from ..const import ATTR_DNS
+from ..const import ATTR_DOCKER_API
+from ..const import ATTR_DOCUMENTATION
+from ..const import ATTR_FULL_ACCESS
+from ..const import ATTR_GPIO
+from ..const import ATTR_HASSIO_API
+from ..const import ATTR_HASSIO_ROLE
+from ..const import ATTR_HOMEASSISTANT
+from ..const import ATTR_HOMEASSISTANT_API
+from ..const import ATTR_HOST_DBUS
+from ..const import ATTR_HOST_IPC
+from ..const import ATTR_HOST_NETWORK
+from ..const import ATTR_HOST_PID
+from ..const import ATTR_HOSTNAME
+from ..const import ATTR_ICON
+from ..const import ATTR_INGRESS
+from ..const import ATTR_INGRESS_ENTRY
+from ..const import ATTR_INGRESS_PANEL
+from ..const import ATTR_INGRESS_PORT
+from ..const import ATTR_INGRESS_URL
+from ..const import ATTR_INSTALLED
+from ..const import ATTR_IP_ADDRESS
+from ..const import ATTR_KERNEL_MODULES
+from ..const import ATTR_LOGO
+from ..const import ATTR_LONG_DESCRIPTION
+from ..const import ATTR_MACHINE
+from ..const import ATTR_MAINTAINER
+from ..const import ATTR_MEMORY_LIMIT
+from ..const import ATTR_MEMORY_PERCENT
+from ..const import ATTR_MEMORY_USAGE
+from ..const import ATTR_NAME
+from ..const import ATTR_NETWORK
+from ..const import ATTR_NETWORK_DESCRIPTION
+from ..const import ATTR_NETWORK_RX
+from ..const import ATTR_NETWORK_TX
+from ..const import ATTR_OPTIONS
+from ..const import ATTR_PRIVILEGED
+from ..const import ATTR_PROTECTED
+from ..const import ATTR_RATING
+from ..const import ATTR_REPOSITORIES
+from ..const import ATTR_REPOSITORY
+from ..const import ATTR_SCHEMA
+from ..const import ATTR_SERVICES
+from ..const import ATTR_SLUG
+from ..const import ATTR_SOURCE
+from ..const import ATTR_STAGE
+from ..const import ATTR_STATE
+from ..const import ATTR_STDIN
+from ..const import ATTR_UDEV
+from ..const import ATTR_URL
+from ..const import ATTR_VERSION
+from ..const import ATTR_VERSION_LATEST
+from ..const import ATTR_VIDEO
+from ..const import ATTR_WEBUI
+from ..const import BOOT_AUTO
+from ..const import BOOT_MANUAL
+from ..const import CONTENT_TYPE_BINARY
+from ..const import CONTENT_TYPE_PNG
+from ..const import CONTENT_TYPE_TEXT
+from ..const import REQUEST_FROM
+from ..const import STATE_NONE
 from ..coresys import CoreSysAttributes
 from ..docker.stats import DockerStats
 from ..exceptions import APIError
 from ..validate import DOCKER_PORTS
-from .utils import api_process, api_process_raw, api_validate
+from .utils import api_process
+from .utils import api_process_raw
+from .utils import api_validate
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
