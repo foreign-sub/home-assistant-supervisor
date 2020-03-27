@@ -1,20 +1,21 @@
 """Bootstrap Supervisor."""
 import logging
 import os
-from pathlib import Path
 import shutil
 import signal
+from pathlib import Path
 
 from colorlog import ColoredFormatter
 
 from .addons import AddonManager
 from .api import RestAPI
 from .arch import CpuArch
-from .auth import Auth
 from .audio import Audio
-from .const import SOCKET_DOCKER, UpdateChannels
-from .core import Core
+from .auth import Auth
 from .cli import HaCli
+from .const import SOCKET_DOCKER
+from .const import UpdateChannels
+from .core import Core
 from .coresys import CoreSys
 from .dbus import DBusManager
 from .discovery import Discovery
@@ -24,13 +25,13 @@ from .homeassistant import HomeAssistant
 from .host import HostManager
 from .hwmon import HwMonitor
 from .ingress import Ingress
+from .secrets import SecretsManager
 from .services import ServiceManager
 from .snapshots import SnapshotManager
 from .store import StoreManager
 from .supervisor import Supervisor
 from .tasks import Tasks
 from .updater import Updater
-from .secrets import SecretsManager
 from .utils.dt import fetch_timezone
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)

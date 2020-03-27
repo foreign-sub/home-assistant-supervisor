@@ -1,72 +1,77 @@
 """Init file for Supervisor add-ons."""
 from pathlib import Path
-from typing import Any, Awaitable, Dict, List, Optional
+from typing import Any
+from typing import Awaitable
+from typing import Dict
+from typing import List
+from typing import Optional
 
-from packaging import version as pkg_version
 import voluptuous as vol
+from packaging import version as pkg_version
 
-from ..const import (
-    ATTR_ADVANCED,
-    ATTR_APPARMOR,
-    ATTR_ARCH,
-    ATTR_AUDIO,
-    ATTR_AUTH_API,
-    ATTR_AUTO_UART,
-    ATTR_BOOT,
-    ATTR_DESCRIPTON,
-    ATTR_DEVICES,
-    ATTR_DEVICETREE,
-    ATTR_DISCOVERY,
-    ATTR_DOCKER_API,
-    ATTR_ENVIRONMENT,
-    ATTR_FULL_ACCESS,
-    ATTR_GPIO,
-    ATTR_HASSIO_API,
-    ATTR_HASSIO_ROLE,
-    ATTR_HOMEASSISTANT,
-    ATTR_HOMEASSISTANT_API,
-    ATTR_HOST_DBUS,
-    ATTR_HOST_IPC,
-    ATTR_HOST_NETWORK,
-    ATTR_HOST_PID,
-    ATTR_IMAGE,
-    ATTR_INGRESS,
-    ATTR_INIT,
-    ATTR_KERNEL_MODULES,
-    ATTR_LEGACY,
-    ATTR_LOCATON,
-    ATTR_MACHINE,
-    ATTR_MAP,
-    ATTR_NAME,
-    ATTR_OPTIONS,
-    ATTR_PANEL_ADMIN,
-    ATTR_PANEL_ICON,
-    ATTR_PANEL_TITLE,
-    ATTR_PORTS,
-    ATTR_PORTS_DESCRIPTION,
-    ATTR_PRIVILEGED,
-    ATTR_REPOSITORY,
-    ATTR_SCHEMA,
-    ATTR_SERVICES,
-    ATTR_SLUG,
-    ATTR_SNAPSHOT_EXCLUDE,
-    ATTR_STAGE,
-    ATTR_STARTUP,
-    ATTR_STDIN,
-    ATTR_TIMEOUT,
-    ATTR_TMPFS,
-    ATTR_UDEV,
-    ATTR_URL,
-    ATTR_VERSION,
-    ATTR_VIDEO,
-    ATTR_WEBUI,
-    SECURITY_DEFAULT,
-    SECURITY_DISABLE,
-    SECURITY_PROFILE,
-    AddonStages,
-)
+from ..const import AddonStages
+from ..const import ATTR_ADVANCED
+from ..const import ATTR_APPARMOR
+from ..const import ATTR_ARCH
+from ..const import ATTR_AUDIO
+from ..const import ATTR_AUTH_API
+from ..const import ATTR_AUTO_UART
+from ..const import ATTR_BOOT
+from ..const import ATTR_DESCRIPTON
+from ..const import ATTR_DEVICES
+from ..const import ATTR_DEVICETREE
+from ..const import ATTR_DISCOVERY
+from ..const import ATTR_DOCKER_API
+from ..const import ATTR_ENVIRONMENT
+from ..const import ATTR_FULL_ACCESS
+from ..const import ATTR_GPIO
+from ..const import ATTR_HASSIO_API
+from ..const import ATTR_HASSIO_ROLE
+from ..const import ATTR_HOMEASSISTANT
+from ..const import ATTR_HOMEASSISTANT_API
+from ..const import ATTR_HOST_DBUS
+from ..const import ATTR_HOST_IPC
+from ..const import ATTR_HOST_NETWORK
+from ..const import ATTR_HOST_PID
+from ..const import ATTR_IMAGE
+from ..const import ATTR_INGRESS
+from ..const import ATTR_INIT
+from ..const import ATTR_KERNEL_MODULES
+from ..const import ATTR_LEGACY
+from ..const import ATTR_LOCATON
+from ..const import ATTR_MACHINE
+from ..const import ATTR_MAP
+from ..const import ATTR_NAME
+from ..const import ATTR_OPTIONS
+from ..const import ATTR_PANEL_ADMIN
+from ..const import ATTR_PANEL_ICON
+from ..const import ATTR_PANEL_TITLE
+from ..const import ATTR_PORTS
+from ..const import ATTR_PORTS_DESCRIPTION
+from ..const import ATTR_PRIVILEGED
+from ..const import ATTR_REPOSITORY
+from ..const import ATTR_SCHEMA
+from ..const import ATTR_SERVICES
+from ..const import ATTR_SLUG
+from ..const import ATTR_SNAPSHOT_EXCLUDE
+from ..const import ATTR_STAGE
+from ..const import ATTR_STARTUP
+from ..const import ATTR_STDIN
+from ..const import ATTR_TIMEOUT
+from ..const import ATTR_TMPFS
+from ..const import ATTR_UDEV
+from ..const import ATTR_URL
+from ..const import ATTR_VERSION
+from ..const import ATTR_VIDEO
+from ..const import ATTR_WEBUI
+from ..const import SECURITY_DEFAULT
+from ..const import SECURITY_DISABLE
+from ..const import SECURITY_PROFILE
 from ..coresys import CoreSysAttributes
-from .validate import RE_SERVICE, RE_VOLUME, schema_ui_options, validate_options
+from .validate import RE_SERVICE
+from .validate import RE_VOLUME
+from .validate import schema_ui_options
+from .validate import validate_options
 
 Data = Dict[str, Any]
 

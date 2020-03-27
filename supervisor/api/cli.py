@@ -1,25 +1,25 @@
 """Init file for Supervisor HA cli RESTful API."""
 import asyncio
 import logging
-from typing import Any, Dict
+from typing import Any
+from typing import Dict
 
-from aiohttp import web
 import voluptuous as vol
+from aiohttp import web
 
-from ..const import (
-    ATTR_VERSION,
-    ATTR_VERSION_LATEST,
-    ATTR_BLK_READ,
-    ATTR_BLK_WRITE,
-    ATTR_CPU_PERCENT,
-    ATTR_MEMORY_LIMIT,
-    ATTR_MEMORY_PERCENT,
-    ATTR_MEMORY_USAGE,
-    ATTR_NETWORK_RX,
-    ATTR_NETWORK_TX,
-)
+from ..const import ATTR_BLK_READ
+from ..const import ATTR_BLK_WRITE
+from ..const import ATTR_CPU_PERCENT
+from ..const import ATTR_MEMORY_LIMIT
+from ..const import ATTR_MEMORY_PERCENT
+from ..const import ATTR_MEMORY_USAGE
+from ..const import ATTR_NETWORK_RX
+from ..const import ATTR_NETWORK_TX
+from ..const import ATTR_VERSION
+from ..const import ATTR_VERSION_LATEST
 from ..coresys import CoreSysAttributes
-from .utils import api_process, api_validate
+from .utils import api_process
+from .utils import api_validate
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

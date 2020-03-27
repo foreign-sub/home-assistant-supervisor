@@ -2,19 +2,19 @@
 import asyncio
 import logging
 from pathlib import Path
-from typing import Awaitable, Optional
+from typing import Awaitable
+from typing import Optional
 
 import aiohttp
 from cpe import CPE
 
 from .const import URL_HASSOS_OTA
-from .coresys import CoreSysAttributes, CoreSys
-from .exceptions import (
-    DBusError,
-    HassOSNotSupportedError,
-    HassOSUpdateError,
-)
+from .coresys import CoreSys
+from .coresys import CoreSysAttributes
 from .dbus.rauc import RaucState
+from .exceptions import DBusError
+from .exceptions import HassOSNotSupportedError
+from .exceptions import HassOSUpdateError
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
