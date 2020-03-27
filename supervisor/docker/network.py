@@ -85,10 +85,10 @@ class DockerNetwork:
         )
 
     def attach_container(
-        self,
-        container: docker.models.containers.Container,
-        alias: Optional[List[str]] = None,
-        ipv4: Optional[IPv4Address] = None,
+            self,
+            container: docker.models.containers.Container,
+            alias: Optional[List[str]] = None,
+            ipv4: Optional[IPv4Address] = None,
     ) -> None:
         """Attach container to Supervisor network.
 
@@ -104,9 +104,9 @@ class DockerNetwork:
 
         self.network.reload()
 
-    def detach_default_bridge(
-        self, container: docker.models.containers.Container
-    ) -> None:
+    def detach_default_bridge(self,
+                              container: docker.models.containers.Container
+                              ) -> None:
         """Detach default Docker bridge.
 
         Need run inside executor.

@@ -125,7 +125,8 @@ class AddonManager(CoreSysAttributes):
         addon = Addon(self.coresys, slug)
 
         if not addon.path_data.is_dir():
-            _LOGGER.info("Create Home Assistant add-on data folder %s", addon.path_data)
+            _LOGGER.info("Create Home Assistant add-on data folder %s",
+                         addon.path_data)
             addon.path_data.mkdir()
 
         # Setup/Fix AppArmor profile
@@ -301,8 +302,7 @@ class AddonManager(CoreSysAttributes):
         for addon in needs_repair:
             _LOGGER.info("Start repair for add-on: %s", addon.slug)
             await self.sys_run_in_executor(
-                self.sys_docker.network.stale_cleanup, addon.instance.name
-            )
+                self.sys_docker.network.stale_cleanup, addon.instance.name)
 
             with suppress(DockerAPIError, KeyError):
                 # Need pull a image again
@@ -315,7 +315,8 @@ class AddonManager(CoreSysAttributes):
                     store = self.store[addon.slug]
                     # If this add-on is available for rebuild
                     if addon.version == store.version:
-                        await addon.instance.install(addon.version, addon.image)
+                        await addon.instance.install(addon.version,
+                                                     addon.image)
                         continue
 
             _LOGGER.error("Can't repair %s", addon.slug)
@@ -328,9 +329,9 @@ class AddonManager(CoreSysAttributes):
         for addon in self.installed:
             if not await addon.instance.is_running():
                 continue
-            self.sys_dns.add_host(
-                ipv4=addon.ip_address, names=[addon.hostname], write=False
-            )
+            self.sys_dns.add_host(ipv4=addon.ip_address,
+                                  names=[addon.hostname],
+                                  write=False)
 
         # Write hosts files
         with suppress(CoreDNSError):

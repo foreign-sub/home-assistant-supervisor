@@ -91,9 +91,8 @@ def initialize_system_data(coresys: CoreSys):
 
     # Home Assistant configuration folder
     if not config.path_homeassistant.is_dir():
-        _LOGGER.info(
-            "Create Home Assistant configuration folder %s", config.path_homeassistant
-        )
+        _LOGGER.info("Create Home Assistant configuration folder %s",
+                     config.path_homeassistant)
         config.path_homeassistant.mkdir()
 
     # Supervisor ssl folder
@@ -103,7 +102,8 @@ def initialize_system_data(coresys: CoreSys):
 
     # Supervisor addon data folder
     if not config.path_addons_data.is_dir():
-        _LOGGER.info("Create Supervisor Add-on data folder %s", config.path_addons_data)
+        _LOGGER.info("Create Supervisor Add-on data folder %s",
+                     config.path_addons_data)
         config.path_addons_data.mkdir(parents=True)
 
     if not config.path_addons_local.is_dir():
@@ -137,7 +137,8 @@ def initialize_system_data(coresys: CoreSys):
 
     # Apparmor folder
     if not config.path_apparmor.is_dir():
-        _LOGGER.info("Create Supervisor Apparmor folder %s", config.path_apparmor)
+        _LOGGER.info("Create Supervisor Apparmor folder %s",
+                     config.path_apparmor)
         config.path_apparmor.mkdir()
 
     # DNS folder
@@ -196,8 +197,7 @@ def initialize_logging():
                 "ERROR": "red",
                 "CRITICAL": "red",
             },
-        )
-    )
+        ))
 
 
 def check_environment() -> None:
@@ -225,17 +225,20 @@ def check_environment() -> None:
 def reg_signal(loop):
     """Register SIGTERM and SIGKILL to stop system."""
     try:
-        loop.add_signal_handler(signal.SIGTERM, lambda: loop.call_soon(loop.stop))
+        loop.add_signal_handler(
+            signal.SIGTERM, lambda: loop.call_soon(loop.stop))
     except (ValueError, RuntimeError):
         _LOGGER.warning("Could not bind to SIGTERM")
 
     try:
-        loop.add_signal_handler(signal.SIGHUP, lambda: loop.call_soon(loop.stop))
+        loop.add_signal_handler(
+            signal.SIGHUP, lambda: loop.call_soon(loop.stop))
     except (ValueError, RuntimeError):
         _LOGGER.warning("Could not bind to SIGHUP")
 
     try:
-        loop.add_signal_handler(signal.SIGINT, lambda: loop.call_soon(loop.stop))
+        loop.add_signal_handler(
+            signal.SIGINT, lambda: loop.call_soon(loop.stop))
     except (ValueError, RuntimeError):
         _LOGGER.warning("Could not bind to SIGINT")
 

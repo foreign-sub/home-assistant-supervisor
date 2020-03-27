@@ -68,7 +68,8 @@ class HassOS(CoreSysAttributes):
         _LOGGER.info("Fetch OTA update from %s", url)
         try:
             timeout = aiohttp.ClientTimeout(total=600)
-            async with self.sys_websession.get(url, timeout=timeout) as request:
+            async with self.sys_websession.get(url,
+                                               timeout=timeout) as request:
                 if request.status != 200:
                     raise HassOSUpdateError()
 
@@ -112,9 +113,8 @@ class HassOS(CoreSysAttributes):
 
         await self.sys_dbus.rauc.update()
 
-        _LOGGER.info(
-            "Detect HassOS %s / BootSlot %s", self.version, self.sys_dbus.rauc.boot_slot
-        )
+        _LOGGER.info("Detect HassOS %s / BootSlot %s", self.version,
+                     self.sys_dbus.rauc.boot_slot)
 
     def config_sync(self) -> Awaitable[None]:
         """Trigger a host config reload from usb.
@@ -159,7 +159,8 @@ class HassOS(CoreSysAttributes):
 
         # Update fails
         await self.sys_dbus.rauc.update()
-        _LOGGER.error("HassOS update fails with: %s", self.sys_dbus.rauc.last_error)
+        _LOGGER.error("HassOS update fails with: %s",
+                      self.sys_dbus.rauc.last_error)
         raise HassOSUpdateError()
 
     async def mark_healthy(self):
@@ -169,4 +170,5 @@ class HassOS(CoreSysAttributes):
         except DBusError:
             _LOGGER.error("Can't mark booted partition as healty!")
         else:
-            _LOGGER.info("Rauc: %s - %s", self.sys_dbus.rauc.boot_slot, response[1])
+            _LOGGER.info("Rauc: %s - %s", self.sys_dbus.rauc.boot_slot,
+                         response[1])

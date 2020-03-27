@@ -43,8 +43,9 @@ class Core(CoreSysAttributes):
 
         # Load Plugins container
         await asyncio.wait(
-            [self.sys_dns.load(), self.sys_audio.load(), self.sys_cli.load()]
-        )
+            [self.sys_dns.load(),
+             self.sys_audio.load(),
+             self.sys_cli.load()])
 
         # Load Home Assistant
         await self.sys_homeassistant.load()
@@ -100,8 +101,7 @@ class Core(CoreSysAttributes):
             except SupervisorUpdateError:
                 _LOGGER.fatal(
                     "Can't update supervisor! This will break some Add-ons or affect "
-                    "future version of Home Assistant!"
-                )
+                    "future version of Home Assistant!")
 
         # Start addon mark as initialize
         await self.sys_addons.boot(STARTUP_INITIALIZE)
@@ -122,10 +122,8 @@ class Core(CoreSysAttributes):
             await self.sys_addons.boot(STARTUP_SERVICES)
 
             # run HomeAssistant
-            if (
-                self.sys_homeassistant.boot
-                and not await self.sys_homeassistant.is_running()
-            ):
+            if (self.sys_homeassistant.boot
+                    and not await self.sys_homeassistant.is_running()):
                 with suppress(HomeAssistantError):
                     await self.sys_homeassistant.start()
             else:
@@ -167,16 +165,14 @@ class Core(CoreSysAttributes):
         # process async stop tasks
         try:
             with async_timeout.timeout(10):
-                await asyncio.wait(
-                    [
-                        self.sys_api.stop(),
-                        self.sys_websession.close(),
-                        self.sys_websession_ssl.close(),
-                        self.sys_ingress.unload(),
-                        self.sys_dns.unload(),
-                        self.sys_hwmonitor.unload(),
-                    ]
-                )
+                await asyncio.wait([
+                    self.sys_api.stop(),
+                    self.sys_websession.close(),
+                    self.sys_websession_ssl.close(),
+                    self.sys_ingress.unload(),
+                    self.sys_dns.unload(),
+                    self.sys_hwmonitor.unload(),
+                ])
         except asyncio.TimeoutError:
             _LOGGER.warning("Force Shutdown!")
 

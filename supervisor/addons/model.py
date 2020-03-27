@@ -507,7 +507,8 @@ class AddonModel(CoreSysAttributes):
 
         if isinstance(raw_schema, bool):
             return vol.Schema(dict)
-        return vol.Schema(vol.All(dict, validate_options(self.coresys, raw_schema)))
+        return vol.Schema(
+            vol.All(dict, validate_options(self.coresys, raw_schema)))
 
     @property
     def schema_ui(self) -> Optional[List[Dict[str, Any]]]:
@@ -536,10 +537,10 @@ class AddonModel(CoreSysAttributes):
             return False
 
         # Home Assistant
-        version = config.get(ATTR_HOMEASSISTANT) or self.sys_homeassistant.version
-        if pkg_version.parse(self.sys_homeassistant.version) < pkg_version.parse(
-            version
-        ):
+        version = config.get(
+            ATTR_HOMEASSISTANT) or self.sys_homeassistant.version
+        if pkg_version.parse(
+                self.sys_homeassistant.version) < pkg_version.parse(version):
             return False
 
         return True
