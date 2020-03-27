@@ -43,20 +43,28 @@ from .utils import api_validate
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 # pylint: disable=no-value-for-parameter
-SCHEMA_OPTIONS = vol.Schema(
-    {
-        vol.Optional(ATTR_BOOT): vol.Boolean(),
-        vol.Inclusive(ATTR_IMAGE, "custom_hass"): vol.Maybe(docker_image),
-        vol.Inclusive(ATTR_VERSION_LATEST, "custom_hass"): vol.Maybe(vol.Coerce(str)),
-        vol.Optional(ATTR_PORT): network_port,
-        vol.Optional(ATTR_SSL): vol.Boolean(),
-        vol.Optional(ATTR_WATCHDOG): vol.Boolean(),
-        vol.Optional(ATTR_WAIT_BOOT): vol.All(vol.Coerce(int), vol.Range(min=60)),
-        vol.Optional(ATTR_REFRESH_TOKEN): vol.Maybe(vol.Coerce(str)),
-        vol.Optional(ATTR_AUDIO_OUTPUT): vol.Maybe(vol.Coerce(str)),
-        vol.Optional(ATTR_AUDIO_INPUT): vol.Maybe(vol.Coerce(str)),
-    }
-)
+SCHEMA_OPTIONS = vol.Schema({
+    vol.Optional(ATTR_BOOT):
+    vol.Boolean(),
+    vol.Inclusive(ATTR_IMAGE, "custom_hass"):
+    vol.Maybe(docker_image),
+    vol.Inclusive(ATTR_VERSION_LATEST, "custom_hass"):
+    vol.Maybe(vol.Coerce(str)),
+    vol.Optional(ATTR_PORT):
+    network_port,
+    vol.Optional(ATTR_SSL):
+    vol.Boolean(),
+    vol.Optional(ATTR_WATCHDOG):
+    vol.Boolean(),
+    vol.Optional(ATTR_WAIT_BOOT):
+    vol.All(vol.Coerce(int), vol.Range(min=60)),
+    vol.Optional(ATTR_REFRESH_TOKEN):
+    vol.Maybe(vol.Coerce(str)),
+    vol.Optional(ATTR_AUDIO_OUTPUT):
+    vol.Maybe(vol.Coerce(str)),
+    vol.Optional(ATTR_AUDIO_INPUT):
+    vol.Maybe(vol.Coerce(str)),
+})
 
 SCHEMA_VERSION = vol.Schema({vol.Optional(ATTR_VERSION): vol.Coerce(str)})
 
