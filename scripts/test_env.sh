@@ -17,7 +17,7 @@ function start_docker() {
     starttime="$(date +%s)"
     endtime="$(date +%s)"
     until docker info >/dev/null 2>&1; do
-        if [ $((endtime - starttime)) -le $DOCKER_TIMEOUT ]; then
+        if [ $((endtime - starttime)) -le "$DOCKER_TIMEOUT" ]; then
             sleep 1
             endtime=$(date +%s)
         else
@@ -41,7 +41,7 @@ function stop_docker() {
         # Now wait for it to die
         kill "$DOCKER_PID"
         while kill -0 "$DOCKER_PID" 2> /dev/null; do
-            if [ $((endtime - starttime)) -le $DOCKER_TIMEOUT ]; then
+            if [ $((endtime - starttime)) -le "$DOCKER_TIMEOUT" ]; then
                 sleep 1
                 endtime=$(date +%s)
             else
@@ -59,7 +59,7 @@ function build_supervisor() {
     docker pull homeassistant/amd64-builder:dev
 
     docker run --rm --privileged \
-        -v /run/docker.sock:/run/docker.sock -v "$(pwd):/data" \
+        -v /run/docker.sock:/run/docker.sock -v "$PWD:/data" \
         homeassistant/amd64-builder:dev \
             --generic dev -t /data --test --amd64 --no-cache
 }
@@ -77,7 +77,7 @@ function cleanup_lastboot() {
 
 function cleanup_docker() {
     echo "Cleaning up stopped containers..."
-    docker rm $(docker ps -a -q) || true
+    docker rm "$(docker ps -a -q)" || true
 }
 
 
