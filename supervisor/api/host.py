@@ -54,8 +54,7 @@ class APIHost(CoreSysAttributes):
         # hostname
         if ATTR_HOSTNAME in body:
             await asyncio.shield(
-                self.sys_host.control.set_hostname(body[ATTR_HOSTNAME])
-            )
+                self.sys_host.control.set_hostname(body[ATTR_HOSTNAME]))
 
     @api_process
     def reboot(self, request):
@@ -77,13 +76,11 @@ class APIHost(CoreSysAttributes):
         """Return list of available services."""
         services = []
         for unit in self.sys_host.services:
-            services.append(
-                {
-                    ATTR_NAME: unit.name,
-                    ATTR_DESCRIPTON: unit.description,
-                    ATTR_STATE: unit.state,
-                }
-            )
+            services.append({
+                ATTR_NAME: unit.name,
+                ATTR_DESCRIPTON: unit.description,
+                ATTR_STATE: unit.state,
+            })
 
         return {ATTR_SERVICES: services}
 

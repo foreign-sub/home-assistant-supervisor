@@ -52,8 +52,9 @@ class InfoCenter(CoreSysAttributes):
     async def get_dmesg(self) -> bytes:
         """Return host dmesg output."""
         proc = await asyncio.create_subprocess_shell(
-            "dmesg", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT
-        )
+            "dmesg",
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.STDOUT)
 
         # Get kernel log
         try:
