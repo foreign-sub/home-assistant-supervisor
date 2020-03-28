@@ -4,12 +4,10 @@ import logging
 from typing import Optional
 
 from ..coresys import CoreSysAttributes
-from ..exceptions import (
-    HostNotSupportedError,
-    HostError,
-    DBusNotConnectedError,
-    DBusError,
-)
+from ..exceptions import DBusError
+from ..exceptions import DBusNotConnectedError
+from ..exceptions import HostError
+from ..exceptions import HostNotSupportedError
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

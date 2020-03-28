@@ -5,7 +5,8 @@ from typing import Optional
 
 from aiohttp import web
 
-from ..coresys import CoreSys, CoreSysAttributes
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 from .addons import APIAddons
 from .audio import APIAudio
 from .auth import APIAuth
@@ -13,11 +14,11 @@ from .cli import APICli
 from .discovery import APIDiscovery
 from .dns import APICoreDNS
 from .hardware import APIHardware
-from .os import APIOS
 from .homeassistant import APIHomeAssistant
 from .host import APIHost
 from .info import APIInfo
 from .ingress import APIIngress
+from .os import APIOS
 from .proxy import APIProxy
 from .security import SecurityMiddleware
 from .services import APIServices
