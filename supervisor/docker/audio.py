@@ -1,6 +1,6 @@
 """Audio docker object."""
-from contextlib import suppress
 import logging
+from contextlib import suppress
 from pathlib import Path
 from typing import Dict
 
