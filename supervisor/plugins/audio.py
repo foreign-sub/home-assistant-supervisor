@@ -3,19 +3,25 @@
 Code: https://github.com/home-assistant/plugin-audio
 """
 import asyncio
-from contextlib import suppress
 import logging
-from pathlib import Path
 import shutil
-from typing import Awaitable, Optional
+from contextlib import suppress
+from pathlib import Path
+from typing import Awaitable
+from typing import Optional
 
 import jinja2
 
-from ..const import ATTR_IMAGE, ATTR_VERSION, FILE_HASSIO_AUDIO
-from ..coresys import CoreSys, CoreSysAttributes
+from ..const import ATTR_IMAGE
+from ..const import ATTR_VERSION
+from ..const import FILE_HASSIO_AUDIO
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 from ..docker.audio import DockerAudio
 from ..docker.stats import DockerStats
-from ..exceptions import AudioError, AudioUpdateError, DockerAPIError
+from ..exceptions import AudioError
+from ..exceptions import AudioUpdateError
+from ..exceptions import DockerAPIError
 from ..utils.json import JsonConfig
 from .validate import SCHEMA_AUDIO_CONFIG
 

@@ -1,9 +1,13 @@
 """Validate functions."""
-
 import voluptuous as vol
 
-from ..const import ATTR_ACCESS_TOKEN, ATTR_IMAGE, ATTR_SERVERS, ATTR_VERSION
-from ..validate import dns_server_list, docker_image, token
+from ..const import ATTR_ACCESS_TOKEN
+from ..const import ATTR_IMAGE
+from ..const import ATTR_SERVERS
+from ..const import ATTR_VERSION
+from ..validate import dns_server_list
+from ..validate import docker_image
+from ..validate import token
 
 
 SCHEMA_DNS_CONFIG = vol.Schema(

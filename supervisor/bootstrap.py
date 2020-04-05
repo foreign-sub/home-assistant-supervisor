@@ -1,9 +1,9 @@
 """Bootstrap Supervisor."""
 import logging
 import os
-from pathlib import Path
 import shutil
 import signal
+from pathlib import Path
 
 from colorlog import ColoredFormatter
 
@@ -11,14 +11,12 @@ from .addons import AddonManager
 from .api import RestAPI
 from .arch import CpuArch
 from .auth import Auth
-from .const import (
-    SOCKET_DOCKER,
-    UpdateChannels,
-    ENV_SUPERVISOR_SHARE,
-    ENV_SUPERVISOR_NAME,
-    ENV_HOMEASSISTANT_REPOSITORY,
-    ENV_SUPERVISOR_MACHINE,
-)
+from .const import ENV_HOMEASSISTANT_REPOSITORY
+from .const import ENV_SUPERVISOR_MACHINE
+from .const import ENV_SUPERVISOR_NAME
+from .const import ENV_SUPERVISOR_SHARE
+from .const import SOCKET_DOCKER
+from .const import UpdateChannels
 from .core import Core
 from .coresys import CoreSys
 from .dbus import DBusManager
@@ -28,14 +26,14 @@ from .homeassistant import HomeAssistant
 from .host import HostManager
 from .hwmon import HwMonitor
 from .ingress import Ingress
+from .plugins import PluginManager
+from .secrets import SecretsManager
 from .services import ServiceManager
 from .snapshots import SnapshotManager
 from .store import StoreManager
 from .supervisor import Supervisor
 from .tasks import Tasks
 from .updater import Updater
-from .secrets import SecretsManager
-from .plugins import PluginManager
 from .utils.dt import fetch_timezone
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)

@@ -1,11 +1,12 @@
 """HA Cli docker object."""
-from contextlib import suppress
 import logging
+from contextlib import suppress
 
+from ..const import ENV_TIME
+from ..const import ENV_TOKEN
 from ..coresys import CoreSysAttributes
 from ..exceptions import DockerAPIError
 from .interface import DockerInterface
-from ..const import ENV_TIME, ENV_TOKEN
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

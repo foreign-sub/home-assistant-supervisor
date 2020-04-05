@@ -3,16 +3,23 @@
 Code: https://github.com/home-assistant/plugin-cli
 """
 import asyncio
-from contextlib import suppress
 import logging
 import secrets
-from typing import Awaitable, Optional
+from contextlib import suppress
+from typing import Awaitable
+from typing import Optional
 
-from ..const import ATTR_ACCESS_TOKEN, ATTR_IMAGE, ATTR_VERSION, FILE_HASSIO_CLI
-from ..coresys import CoreSys, CoreSysAttributes
+from ..const import ATTR_ACCESS_TOKEN
+from ..const import ATTR_IMAGE
+from ..const import ATTR_VERSION
+from ..const import FILE_HASSIO_CLI
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 from ..docker.cli import DockerCli
 from ..docker.stats import DockerStats
-from ..exceptions import CliError, CliUpdateError, DockerAPIError
+from ..exceptions import CliError
+from ..exceptions import CliUpdateError
+from ..exceptions import DockerAPIError
 from ..utils.json import JsonConfig
 from .validate import SCHEMA_CLI_CONFIG
 
