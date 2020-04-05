@@ -10,11 +10,10 @@ setup(
     author="The Home Assistant Authors",
     author_email="hello@home-assistant.io",
     url="https://home-assistant.io/",
-    description=("Open-source private cloud os for Home-Assistant" " based on HassOS"),
-    long_description=(
-        "A maintainless private cloud operator system that"
-        "setup a Home-Assistant instance. Based on HassOS"
-    ),
+    description=("Open-source private cloud os for Home-Assistant"
+                 " based on HassOS"),
+    long_description=("A maintainless private cloud operator system that"
+                      "setup a Home-Assistant instance. Based on HassOS"),
     classifiers=[
         "Intended Audience :: End Users/Desktop",
         "Intended Audience :: Developers",

@@ -215,7 +215,8 @@ class Snapshot(CoreSysAttributes):
         decrypt = self._aes.decryptor()
         padder = padding.PKCS7(128).unpadder()
 
-        data = padder.update(decrypt.update(b64decode(data))) + padder.finalize()
+        data = padder.update(decrypt.update(
+            b64decode(data))) + padder.finalize()
         return data.decode()
 
     async def load(self):
@@ -234,7 +235,8 @@ class Snapshot(CoreSysAttributes):
         try:
             raw = await self.sys_run_in_executor(_load_file)
         except (tarfile.TarError, KeyError) as err:
-            _LOGGER.error("Can't read snapshot tarfile %s: %s", self.tarfile, err)
+            _LOGGER.error("Can't read snapshot tarfile %s: %s", self.tarfile,
+                          err)
             return False
 
         # parse data
@@ -284,9 +286,8 @@ class Snapshot(CoreSysAttributes):
         try:
             self._data = SCHEMA_SNAPSHOT(self._data)
         except vol.Invalid as err:
-            _LOGGER.error(
-                "Invalid data for %s: %s", self.tarfile, humanize_error(self._data, err)
-            )
+            _LOGGER.error("Invalid data for %s: %s", self.tarfile,
+                          humanize_error(self._data, err))
             raise ValueError("Invalid config") from None
 
         # new snapshot, build it
@@ -309,9 +310,10 @@ class Snapshot(CoreSysAttributes):
 
         async def _addon_save(addon):
             """Task to store an add-on into snapshot."""
-            addon_file = SecureTarFile(
-                Path(self._tmp.name, f"{addon.slug}.tar.gz"), "w", key=self._key
-            )
+            addon_file = SecureTarFile(Path(self._tmp.name,
+                                            f"{addon.slug}.tar.gz"),
+                                       "w",
+                                       key=self._key)
 
             # Take snapshot
             try:
@@ -321,14 +323,12 @@ class Snapshot(CoreSysAttributes):
                 return
 
             # Store to config
-            self._data[ATTR_ADDONS].append(
-                {
-                    ATTR_SLUG: addon.slug,
-                    ATTR_NAME: addon.name,
-                    ATTR_VERSION: addon.version,
-                    ATTR_SIZE: addon_file.size,
-                }
-            )
+            self._data[ATTR_ADDONS].append({
+                ATTR_SLUG: addon.slug,
+                ATTR_NAME: addon.name,
+                ATTR_VERSION: addon.version,
+                ATTR_SIZE: addon_file.size,
+            })
 
         # Run tasks
         tasks = [_addon_save(addon) for addon in addon_list]
@@ -341,9 +341,10 @@ class Snapshot(CoreSysAttributes):
 
         async def _addon_restore(addon_slug):
             """Task to restore an add-on into snapshot."""
-            addon_file = SecureTarFile(
-                Path(self._tmp.name, f"{addon_slug}.tar.gz"), "r", key=self._key
-            )
+            addon_file = SecureTarFile(Path(self._tmp.name,
+                                            f"{addon_slug}.tar.gz"),
+                                       "r",
+                                       key=self._key)
 
             # If exists inside snapshot
             if not addon_file.path.exists():
@@ -383,7 +384,8 @@ class Snapshot(CoreSysAttributes):
                     tar_file.add(
                         origin_dir,
                         arcname=".",
-                        filter=exclude_filter(MAP_FOLDER_EXCLUDE.get(name, [])),
+                        filter=exclude_filter(MAP_FOLDER_EXCLUDE.get(name,
+                                                                     [])),
                     )
 
                 _LOGGER.info("Snapshot folder %s done", name)
@@ -393,7 +395,8 @@ class Snapshot(CoreSysAttributes):
 
         # Run tasks
         tasks = [
-            self.sys_run_in_executor(_folder_save, folder) for folder in folder_list
+            self.sys_run_in_executor(_folder_save, folder)
+            for folder in folder_list
         ]
         if tasks:
             await asyncio.wait(tasks)
@@ -428,7 +431,8 @@ class Snapshot(CoreSysAttributes):
 
         # Run tasks
         tasks = [
-            self.sys_run_in_executor(_folder_restore, folder) for folder in folder_list
+            self.sys_run_in_executor(_folder_restore, folder)
+            for folder in folder_list
         ]
         if tasks:
             await asyncio.wait(tasks)
@@ -445,12 +449,13 @@ class Snapshot(CoreSysAttributes):
         self.homeassistant[ATTR_PORT] = self.sys_homeassistant.api_port
         self.homeassistant[ATTR_SSL] = self.sys_homeassistant.api_ssl
         self.homeassistant[ATTR_REFRESH_TOKEN] = self._encrypt_data(
-            self.sys_homeassistant.refresh_token
-        )
+            self.sys_homeassistant.refresh_token)
 
         # Audio
-        self.homeassistant[ATTR_AUDIO_INPUT] = self.sys_homeassistant.audio_input
-        self.homeassistant[ATTR_AUDIO_OUTPUT] = self.sys_homeassistant.audio_output
+        self.homeassistant[
+            ATTR_AUDIO_INPUT] = self.sys_homeassistant.audio_input
+        self.homeassistant[
+            ATTR_AUDIO_OUTPUT] = self.sys_homeassistant.audio_output
 
     def restore_homeassistant(self):
         """Write all data to the Home Assistant object."""
@@ -466,12 +471,13 @@ class Snapshot(CoreSysAttributes):
         self.sys_homeassistant.api_port = self.homeassistant[ATTR_PORT]
         self.sys_homeassistant.api_ssl = self.homeassistant[ATTR_SSL]
         self.sys_homeassistant.refresh_token = self._decrypt_data(
-            self.homeassistant[ATTR_REFRESH_TOKEN]
-        )
+            self.homeassistant[ATTR_REFRESH_TOKEN])
 
         # Audio
-        self.sys_homeassistant.audio_input = self.homeassistant[ATTR_AUDIO_INPUT]
-        self.sys_homeassistant.audio_output = self.homeassistant[ATTR_AUDIO_OUTPUT]
+        self.sys_homeassistant.audio_input = self.homeassistant[
+            ATTR_AUDIO_INPUT]
+        self.sys_homeassistant.audio_output = self.homeassistant[
+            ATTR_AUDIO_OUTPUT]
 
         # save
         self.sys_homeassistant.save_data()

@@ -84,7 +84,8 @@ class HaCli(CoreSysAttributes, JsonConfig):
 
             await self.instance.attach(tag=self.version)
         except DockerAPIError:
-            _LOGGER.info("No cli plugin Docker image %s found.", self.instance.image)
+            _LOGGER.info("No cli plugin Docker image %s found.",
+                         self.instance.image)
 
             # Install cli
             with suppress(CliError):
@@ -133,9 +134,9 @@ class HaCli(CoreSysAttributes, JsonConfig):
             return
 
         try:
-            await self.instance.update(
-                version, image=self.sys_updater.image_cli, latest=True
-            )
+            await self.instance.update(version,
+                                       image=self.sys_updater.image_cli,
+                                       latest=True)
         except DockerAPIError:
             _LOGGER.error("HA cli update fails")
             raise CliUpdateError() from None
