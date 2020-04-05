@@ -1,24 +1,25 @@
 """Home Assistant control object."""
 import asyncio
+import logging
 from contextlib import suppress
 from ipaddress import IPv4Address
-import logging
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Awaitable, Optional
+from typing import Awaitable
+from typing import Optional
 
 import aiohttp
 
-from .const import URL_HASSIO_APPARMOR, SUPERVISOR_VERSION
-from .coresys import CoreSys, CoreSysAttributes
+from .const import SUPERVISOR_VERSION
+from .const import URL_HASSIO_APPARMOR
+from .coresys import CoreSys
+from .coresys import CoreSysAttributes
 from .docker.stats import DockerStats
 from .docker.supervisor import DockerSupervisor
-from .exceptions import (
-    DockerAPIError,
-    HostAppArmorError,
-    SupervisorError,
-    SupervisorUpdateError,
-)
+from .exceptions import DockerAPIError
+from .exceptions import HostAppArmorError
+from .exceptions import SupervisorError
+from .exceptions import SupervisorUpdateError
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
