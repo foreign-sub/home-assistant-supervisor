@@ -61,7 +61,8 @@ class APIMulticast(CoreSysAttributes):
     async def update(self, request: web.Request) -> None:
         """Update Multicast plugin."""
         body = await api_validate(SCHEMA_VERSION, request)
-        version = body.get(ATTR_VERSION, self.sys_plugins.multicast.latest_version)
+        version = body.get(ATTR_VERSION,
+                           self.sys_plugins.multicast.latest_version)
 
         if version == self.sys_plugins.multicast.version:
             raise APIError("Version {} is already in use".format(version))

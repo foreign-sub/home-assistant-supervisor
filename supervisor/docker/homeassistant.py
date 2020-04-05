@@ -57,37 +57,36 @@ class DockerHomeAssistant(DockerInterface):
         volumes = {}
 
         # Add folders
-        volumes.update(
-            {
-                str(self.sys_config.path_extern_homeassistant): {
-                    "bind": "/config",
-                    "mode": "rw",
-                },
-                str(self.sys_config.path_extern_ssl): {"bind": "/ssl", "mode": "ro"},
-                str(self.sys_config.path_extern_share): {
-                    "bind": "/share",
-                    "mode": "rw",
-                },
-            }
-        )
+        volumes.update({
+            str(self.sys_config.path_extern_homeassistant): {
+                "bind": "/config",
+                "mode": "rw",
+            },
+            str(self.sys_config.path_extern_ssl): {
+                "bind": "/ssl",
+                "mode": "ro"
+            },
+            str(self.sys_config.path_extern_share): {
+                "bind": "/share",
+                "mode": "rw",
+            },
+        })
 
         # Configuration Audio
-        volumes.update(
-            {
-                str(self.sys_homeassistant.path_extern_pulse): {
-                    "bind": "/etc/pulse/client.conf",
-                    "mode": "ro",
-                },
-                str(self.sys_plugins.audio.path_extern_pulse): {
-                    "bind": "/run/audio",
-                    "mode": "ro",
-                },
-                str(self.sys_plugins.audio.path_extern_asound): {
-                    "bind": "/etc/asound.conf",
-                    "mode": "ro",
-                },
-            }
-        )
+        volumes.update({
+            str(self.sys_homeassistant.path_extern_pulse): {
+                "bind": "/etc/pulse/client.conf",
+                "mode": "ro",
+            },
+            str(self.sys_plugins.audio.path_extern_pulse): {
+                "bind": "/run/audio",
+                "mode": "ro",
+            },
+            str(self.sys_plugins.audio.path_extern_asound): {
+                "bind": "/etc/asound.conf",
+                "mode": "ro",
+            },
+        })
 
         return volumes
 
@@ -124,7 +123,8 @@ class DockerHomeAssistant(DockerInterface):
         )
 
         self._meta = docker_container.attrs
-        _LOGGER.info("Start homeassistant %s with version %s", self.image, self.version)
+        _LOGGER.info("Start homeassistant %s with version %s", self.image,
+                     self.version)
 
     def _execute_command(self, command: str) -> CommandReturn:
         """Create a temporary container and run command.
@@ -146,7 +146,10 @@ class DockerHomeAssistant(DockerInterface):
                     "bind": "/config",
                     "mode": "rw",
                 },
-                str(self.sys_config.path_extern_ssl): {"bind": "/ssl", "mode": "ro"},
+                str(self.sys_config.path_extern_ssl): {
+                    "bind": "/ssl",
+                    "mode": "ro"
+                },
                 str(self.sys_config.path_extern_share): {
                     "bind": "/share",
                     "mode": "ro",
@@ -167,8 +170,7 @@ class DockerHomeAssistant(DockerInterface):
         try:
             docker_container = self.sys_docker.containers.get(self.name)
             docker_image = self.sys_docker.images.get(
-                f"{self.image}:{self.sys_homeassistant.version}"
-            )
+                f"{self.image}:{self.sys_homeassistant.version}")
         except docker.errors.DockerException:
             return False
 

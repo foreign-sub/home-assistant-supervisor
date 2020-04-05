@@ -85,12 +85,12 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
             # Evaluate Version if we lost this information
             if not self.version:
                 self.version = await self.instance.get_latest_version(
-                    key=pkg_version.parse
-                )
+                    key=pkg_version.parse)
 
             await self.instance.attach(tag=self.version)
         except DockerAPIError:
-            _LOGGER.info("No Home Assistant Docker image %s found.", self.image)
+            _LOGGER.info("No Home Assistant Docker image %s found.",
+                         self.image)
             await self.install_landingpage()
         else:
             self.version = self.instance.version
@@ -140,9 +140,8 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
     @property
     def api_url(self) -> str:
         """Return API url to Home Assistant."""
-        return "{}://{}:{}".format(
-            "https" if self.api_ssl else "http", self.ip_address, self.api_port
-        )
+        return "{}://{}:{}".format("https" if self.api_ssl else "http",
+                                   self.ip_address, self.api_port)
 
     @property
     def watchdog(self) -> bool:
@@ -258,8 +257,7 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
         while True:
             try:
                 await self.instance.install(
-                    "landingpage", image=self.sys_updater.image_homeassistant
-                )
+                    "landingpage", image=self.sys_updater.image_homeassistant)
             except DockerAPIError:
                 _LOGGER.warning("Fails install landingpage, retry after 30sec")
                 await asyncio.sleep(30)
@@ -287,8 +285,7 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
             if tag:
                 with suppress(DockerAPIError):
                     await self.instance.update(
-                        tag, image=self.sys_updater.image_homeassistant
-                    )
+                        tag, image=self.sys_updater.image_homeassistant)
                     break
             _LOGGER.warning("Error on install Home Assistant. Retry in 30sec")
             await asyncio.sleep(30)
@@ -328,8 +325,7 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
             _LOGGER.info("Update Home Assistant to version %s", to_version)
             try:
                 await self.instance.update(
-                    to_version, image=self.sys_updater.image_homeassistant
-                )
+                    to_version, image=self.sys_updater.image_homeassistant)
             except DockerAPIError:
                 _LOGGER.warning("Update Home Assistant image fails")
                 raise HomeAssistantUpdateError() from None
@@ -459,8 +455,7 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
     async def check_config(self) -> ConfigResult:
         """Run Home Assistant config check."""
         result = await self.instance.execute_command(
-            "python3 -m homeassistant -c /config --script check_config"
-        )
+            "python3 -m homeassistant -c /config --script check_config")
 
         # If not valid
         if result.exit_code is None:
@@ -481,20 +476,18 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
 
     async def ensure_access_token(self) -> None:
         """Ensures there is an access token."""
-        if (
-            self.access_token is not None
-            and self._access_token_expires > datetime.utcnow()
-        ):
+        if (self.access_token is not None
+                and self._access_token_expires > datetime.utcnow()):
             return
 
         with suppress(asyncio.TimeoutError, aiohttp.ClientError):
             async with self.sys_websession_ssl.post(
-                f"{self.api_url}/auth/token",
-                timeout=30,
-                data={
-                    "grant_type": "refresh_token",
-                    "refresh_token": self.refresh_token,
-                },
+                    f"{self.api_url}/auth/token",
+                    timeout=30,
+                    data={
+                        "grant_type": "refresh_token",
+                        "refresh_token": self.refresh_token,
+                    },
             ) as resp:
                 if resp.status != 200:
                     _LOGGER.error("Can't update Home Assistant access token!")
@@ -504,20 +497,19 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
                 tokens = await resp.json()
                 self.access_token = tokens["access_token"]
                 self._access_token_expires = datetime.utcnow() + timedelta(
-                    seconds=tokens["expires_in"]
-                )
+                    seconds=tokens["expires_in"])
 
     @asynccontextmanager
     async def make_request(
-        self,
-        method: str,
-        path: str,
-        json: Optional[Dict[str, Any]] = None,
-        content_type: Optional[str] = None,
-        data: Any = None,
-        timeout: int = 30,
-        params: Optional[Dict[str, str]] = None,
-        headers: Optional[Dict[str, str]] = None,
+            self,
+            method: str,
+            path: str,
+            json: Optional[Dict[str, Any]] = None,
+            content_type: Optional[str] = None,
+            data: Any = None,
+            timeout: int = 30,
+            params: Optional[Dict[str, str]] = None,
+            headers: Optional[Dict[str, str]] = None,
     ) -> AsyncContextManager[aiohttp.ClientResponse]:
         """Async context manager to make a request with right auth."""
         url = f"{self.api_url}/{path}"
@@ -535,12 +527,12 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
 
             try:
                 async with getattr(self.sys_websession_ssl, method)(
-                    url,
-                    data=data,
-                    timeout=timeout,
-                    json=json,
-                    headers=headers,
-                    params=params,
+                        url,
+                        data=data,
+                        timeout=timeout,
+                        json=json,
+                        headers=headers,
+                        params=params,
                 ) as resp:
                     # Access token expired
                     if resp.status == 401 and self.refresh_token:
@@ -571,7 +563,8 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
 
         # Database migration
         migration_progress = False
-        migration_file = Path(self.sys_config.path_homeassistant, ".migration_progress")
+        migration_file = Path(self.sys_config.path_homeassistant,
+                              ".migration_progress")
 
         # PIP installation
         pip_progress = False
@@ -586,9 +579,8 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
                 break
 
             # 2: Check if API response
-            if await self.sys_run_in_executor(
-                check_port, self.ip_address, self.api_port
-            ):
+            if await self.sys_run_in_executor(check_port, self.ip_address,
+                                              self.api_port):
                 _LOGGER.info("Detect a running Home Assistant instance")
                 self._error_state = False
                 return
@@ -617,7 +609,8 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
 
             # 5: Timeout
             if time.monotonic() - start_time > self.wait_boot:
-                _LOGGER.warning("Don't wait anymore of Home Assistant startup!")
+                _LOGGER.warning(
+                    "Don't wait anymore of Home Assistant startup!")
                 break
 
         self._error_state = True
@@ -629,9 +622,8 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
             return
 
         _LOGGER.info("Repair Home Assistant %s", self.version)
-        await self.sys_run_in_executor(
-            self.sys_docker.network.stale_cleanup, self.instance.name
-        )
+        await self.sys_run_in_executor(self.sys_docker.network.stale_cleanup,
+                                       self.instance.name)
 
         # Pull image
         try:
@@ -642,8 +634,7 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
     def write_pulse(self):
         """Write asound config to file and return True on success."""
         pulse_config = self.sys_plugins.audio.pulse_client(
-            input_profile=self.audio_input, output_profile=self.audio_output
-        )
+            input_profile=self.audio_input, output_profile=self.audio_output)
 
         # Cleanup wrong maps
         if self.path_pulse.is_dir():
@@ -654,6 +645,7 @@ class HomeAssistant(JsonConfig, CoreSysAttributes):
             with self.path_pulse.open("w") as config_file:
                 config_file.write(pulse_config)
         except OSError as err:
-            _LOGGER.error("Home Assistant can't write pulse/client.config: %s", err)
+            _LOGGER.error("Home Assistant can't write pulse/client.config: %s",
+                          err)
         else:
             _LOGGER.info("Update pulse/client.config: %s", self.path_pulse)

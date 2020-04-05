@@ -85,56 +85,38 @@ class Updater(JsonConfig, CoreSysAttributes):
     @property
     def image_homeassistant(self) -> Optional[str]:
         """Return latest version of Home Assistant."""
-        return (
-            self._data[ATTR_IMAGE]
-            .get(ATTR_HOMEASSISTANT, "")
-            .format(machine=self.sys_machine)
-        )
+        return (self._data[ATTR_IMAGE].get(
+            ATTR_HOMEASSISTANT, "").format(machine=self.sys_machine))
 
     @property
     def image_supervisor(self) -> Optional[str]:
         """Return latest version of Supervisor."""
-        return (
-            self._data[ATTR_IMAGE]
-            .get(ATTR_SUPERVISOR, "")
-            .format(arch=self.sys_arch.supervisor)
-        )
+        return (self._data[ATTR_IMAGE].get(
+            ATTR_SUPERVISOR, "").format(arch=self.sys_arch.supervisor))
 
     @property
     def image_cli(self) -> Optional[str]:
         """Return latest version of CLI."""
-        return (
-            self._data[ATTR_IMAGE]
-            .get(ATTR_CLI, "")
-            .format(arch=self.sys_arch.supervisor)
-        )
+        return (self._data[ATTR_IMAGE].get(
+            ATTR_CLI, "").format(arch=self.sys_arch.supervisor))
 
     @property
     def image_dns(self) -> Optional[str]:
         """Return latest version of DNS."""
-        return (
-            self._data[ATTR_IMAGE]
-            .get(ATTR_DNS, "")
-            .format(arch=self.sys_arch.supervisor)
-        )
+        return (self._data[ATTR_IMAGE].get(
+            ATTR_DNS, "").format(arch=self.sys_arch.supervisor))
 
     @property
     def image_audio(self) -> Optional[str]:
         """Return latest version of Audio."""
-        return (
-            self._data[ATTR_IMAGE]
-            .get(ATTR_AUDIO, "")
-            .format(arch=self.sys_arch.supervisor)
-        )
+        return (self._data[ATTR_IMAGE].get(
+            ATTR_AUDIO, "").format(arch=self.sys_arch.supervisor))
 
     @property
     def image_multicast(self) -> Optional[str]:
         """Return latest version of Multicast."""
-        return (
-            self._data[ATTR_IMAGE]
-            .get(ATTR_MULTICAST, "")
-            .format(arch=self.sys_arch.supervisor)
-        )
+        return (self._data[ATTR_IMAGE].get(
+            ATTR_MULTICAST, "").format(arch=self.sys_arch.supervisor))
 
     @property
     def channel(self) -> UpdateChannels:
@@ -192,7 +174,8 @@ class Updater(JsonConfig, CoreSysAttributes):
 
             # Update images for that versions
             self._data[ATTR_IMAGE][ATTR_HOMEASSISTANT] = data["image"]["core"]
-            self._data[ATTR_IMAGE][ATTR_SUPERVISOR] = data["image"]["supervisor"]
+            self._data[ATTR_IMAGE][ATTR_SUPERVISOR] = data["image"][
+                "supervisor"]
             self._data[ATTR_IMAGE][ATTR_AUDIO] = data["image"]["audio"]
             self._data[ATTR_IMAGE][ATTR_CLI] = data["image"]["cli"]
             self._data[ATTR_IMAGE][ATTR_DNS] = data["image"]["dns"]

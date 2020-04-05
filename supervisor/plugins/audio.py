@@ -27,7 +27,8 @@ from .validate import SCHEMA_AUDIO_CONFIG
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
-PULSE_CLIENT_TMPL: Path = Path(__file__).parents[1].joinpath("data/pulse-client.tmpl")
+PULSE_CLIENT_TMPL: Path = Path(__file__).parents[1].joinpath(
+    "data/pulse-client.tmpl")
 ASOUND_TMPL: Path = Path(__file__).parents[1].joinpath("data/asound.tmpl")
 
 
@@ -98,7 +99,8 @@ class Audio(JsonConfig, CoreSysAttributes):
 
             await self.instance.attach(tag=self.version)
         except DockerAPIError:
-            _LOGGER.info("No Audio plugin Docker image %s found.", self.instance.image)
+            _LOGGER.info("No Audio plugin Docker image %s found.",
+                         self.instance.image)
 
             # Install PulseAudio
             with suppress(AudioError):
@@ -115,7 +117,8 @@ class Audio(JsonConfig, CoreSysAttributes):
 
         # Initialize Client Template
         try:
-            self.client_template = jinja2.Template(PULSE_CLIENT_TMPL.read_text())
+            self.client_template = jinja2.Template(
+                PULSE_CLIENT_TMPL.read_text())
         except OSError as err:
             _LOGGER.error("Can't read pulse-client.tmpl: %s", err)
 
@@ -138,8 +141,8 @@ class Audio(JsonConfig, CoreSysAttributes):
             if self.latest_version:
                 with suppress(DockerAPIError):
                     await self.instance.install(
-                        self.latest_version, image=self.sys_updater.image_audio
-                    )
+                        self.latest_version,
+                        image=self.sys_updater.image_audio)
                     break
             _LOGGER.warning("Error on install Audio plugin. Retry in 30sec")
             await asyncio.sleep(30)
@@ -155,11 +158,13 @@ class Audio(JsonConfig, CoreSysAttributes):
         old_image = self.image
 
         if version == self.version:
-            _LOGGER.warning("Version %s is already installed for Audio", version)
+            _LOGGER.warning("Version %s is already installed for Audio",
+                            version)
             return
 
         try:
-            await self.instance.update(version, image=self.sys_updater.image_audio)
+            await self.instance.update(version,
+                                       image=self.sys_updater.image_audio)
         except DockerAPIError:
             _LOGGER.error("Audio update fails")
             raise AudioUpdateError() from None

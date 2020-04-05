@@ -80,9 +80,8 @@ class Multicast(JsonConfig, CoreSysAttributes):
 
             await self.instance.attach(tag=self.version)
         except DockerAPIError:
-            _LOGGER.info(
-                "No Multicast plugin Docker image %s found.", self.instance.image
-            )
+            _LOGGER.info("No Multicast plugin Docker image %s found.",
+                         self.instance.image)
 
             # Install Multicast plugin
             with suppress(MulticastError):
@@ -110,10 +109,11 @@ class Multicast(JsonConfig, CoreSysAttributes):
             if self.latest_version:
                 with suppress(DockerAPIError):
                     await self.instance.install(
-                        self.latest_version, image=self.sys_updater.image_multicast
-                    )
+                        self.latest_version,
+                        image=self.sys_updater.image_multicast)
                     break
-            _LOGGER.warning("Error on install Multicast plugin. Retry in 30sec")
+            _LOGGER.warning(
+                "Error on install Multicast plugin. Retry in 30sec")
             await asyncio.sleep(30)
 
         _LOGGER.info("Multicast plugin now installed")
@@ -127,12 +127,14 @@ class Multicast(JsonConfig, CoreSysAttributes):
         old_image = self.image
 
         if version == self.version:
-            _LOGGER.warning("Version %s is already installed for Multicast", version)
+            _LOGGER.warning("Version %s is already installed for Multicast",
+                            version)
             return
 
         # Update
         try:
-            await self.instance.update(version, image=self.sys_updater.image_multicast)
+            await self.instance.update(version,
+                                       image=self.sys_updater.image_multicast)
         except DockerAPIError:
             _LOGGER.error("Multicast update fails")
             raise MulticastUpdateError() from None

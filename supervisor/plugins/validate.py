@@ -9,7 +9,6 @@ from ..validate import dns_server_list
 from ..validate import docker_image
 from ..validate import token
 
-
 SCHEMA_DNS_CONFIG = vol.Schema(
     {
         vol.Optional(ATTR_VERSION): vol.Maybe(vol.Coerce(str)),
@@ -19,7 +18,6 @@ SCHEMA_DNS_CONFIG = vol.Schema(
     extra=vol.REMOVE_EXTRA,
 )
 
-
 SCHEMA_AUDIO_CONFIG = vol.Schema(
     {
         vol.Optional(ATTR_VERSION): vol.Maybe(vol.Coerce(str)),
@@ -27,7 +25,6 @@ SCHEMA_AUDIO_CONFIG = vol.Schema(
     },
     extra=vol.REMOVE_EXTRA,
 )
-
 
 SCHEMA_CLI_CONFIG = vol.Schema(
     {
@@ -37,7 +34,6 @@ SCHEMA_CLI_CONFIG = vol.Schema(
     },
     extra=vol.REMOVE_EXTRA,
 )
-
 
 SCHEMA_MULTICAST_CONFIG = vol.Schema(
     {
