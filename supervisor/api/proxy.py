@@ -18,8 +18,7 @@ from ..exceptions import HomeAssistantAuthError
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
-
-FORWARD_HEADERS = ("X-Speech-Content",)
+FORWARD_HEADERS = ("X-Speech-Content", )
 HEADER_HA_ACCESS = "X-Ha-Access"
 
 
@@ -46,21 +45,24 @@ class APIProxy(CoreSysAttributes):
         raise HTTPUnauthorized()
 
     @asynccontextmanager
-    async def _api_client(self, request: web.Request, path: str, timeout: int = 300):
+    async def _api_client(self,
+                          request: web.Request,
+                          path: str,
+                          timeout: int = 300):
         """Return a client request with proxy origin for Home Assistant."""
         try:
             async with self.sys_homeassistant.make_request(
-                request.method.lower(),
-                f"api/{path}",
-                headers={
-                    name: value
-                    for name, value in request.headers.items()
-                    if name in FORWARD_HEADERS
-                },
-                content_type=request.content_type,
-                data=request.content,
-                timeout=timeout,
-                params=request.query,
+                    request.method.lower(),
+                    f"api/{path}",
+                    headers={
+                        name: value
+                        for name, value in request.headers.items()
+                        if name in FORWARD_HEADERS
+                    },
+                    content_type=request.content_type,
+                    data=request.content,
+                    timeout=timeout,
+                    params=request.query,
             ) as resp:
                 yield resp
                 return
@@ -103,18 +105,18 @@ class APIProxy(CoreSysAttributes):
         path = request.match_info.get("path", "")
         async with self._api_client(request, path) as client:
             data = await client.read()
-            return web.Response(
-                body=data, status=client.status, content_type=client.content_type
-            )
+            return web.Response(body=data,
+                                status=client.status,
+                                content_type=client.content_type)
 
     async def _websocket_client(self):
         """Initialize a WebSocket API connection."""
         url = f"{self.sys_homeassistant.api_url}/api/websocket"
 
         try:
-            client = await self.sys_websession_ssl.ws_connect(
-                url, heartbeat=30, verify_ssl=False
-            )
+            client = await self.sys_websession_ssl.ws_connect(url,
+                                                              heartbeat=30,
+                                                              verify_ssl=False)
 
             # Handle authentication
             data = await client.receive_json()
@@ -124,14 +126,18 @@ class APIProxy(CoreSysAttributes):
 
             if data.get("type") != "auth_required":
                 # Invalid protocol
-                _LOGGER.error("Got unexpected response from HA WebSocket: %s", data)
+                _LOGGER.error("Got unexpected response from HA WebSocket: %s",
+                              data)
                 raise APIError()
 
             # Auth session
             await self.sys_homeassistant.ensure_access_token()
-            await client.send_json(
-                {"type": "auth", "access_token": self.sys_homeassistant.access_token}
-            )
+            await client.send_json({
+                "type":
+                "auth",
+                "access_token":
+                self.sys_homeassistant.access_token
+            })
 
             data = await client.receive_json()
 
@@ -139,10 +145,8 @@ class APIProxy(CoreSysAttributes):
                 return client
 
             # Renew the Token is invalid
-            if (
-                data.get("type") == "invalid_auth"
-                and self.sys_homeassistant.refresh_token
-            ):
+            if (data.get("type") == "invalid_auth"
+                    and self.sys_homeassistant.refresh_token):
                 self.sys_homeassistant.access_token = None
                 return await self._websocket_client()
 
@@ -165,29 +169,31 @@ class APIProxy(CoreSysAttributes):
 
         # handle authentication
         try:
-            await server.send_json(
-                {"type": "auth_required", "ha_version": self.sys_homeassistant.version}
-            )
+            await server.send_json({
+                "type": "auth_required",
+                "ha_version": self.sys_homeassistant.version
+            })
 
             # Check API access
             response = await server.receive_json()
             supervisor_token = response.get("api_password") or response.get(
-                "access_token"
-            )
+                "access_token")
             addon = self.sys_addons.from_token(supervisor_token)
 
             if not addon or not addon.access_homeassistant_api:
                 _LOGGER.warning("Unauthorized WebSocket access!")
-                await server.send_json(
-                    {"type": "auth_invalid", "message": "Invalid access"}
-                )
+                await server.send_json({
+                    "type": "auth_invalid",
+                    "message": "Invalid access"
+                })
                 return server
 
             _LOGGER.info("WebSocket access from %s", addon.slug)
 
-            await server.send_json(
-                {"type": "auth_ok", "ha_version": self.sys_homeassistant.version}
-            )
+            await server.send_json({
+                "type": "auth_ok",
+                "ha_version": self.sys_homeassistant.version
+            })
         except (RuntimeError, ValueError) as err:
             _LOGGER.error("Can't initialize handshake: %s", err)
             return server
@@ -209,9 +215,8 @@ class APIProxy(CoreSysAttributes):
                     server_read = self.sys_create_task(server.receive_str())
 
                 # wait until data need to be processed
-                await asyncio.wait(
-                    [client_read, server_read], return_when=asyncio.FIRST_COMPLETED
-                )
+                await asyncio.wait([client_read, server_read],
+                                   return_when=asyncio.FIRST_COMPLETED)
 
                 # server
                 if server_read.done() and not client.closed:
