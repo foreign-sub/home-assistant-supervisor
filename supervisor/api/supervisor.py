@@ -1,50 +1,53 @@
 """Init file for Supervisor Supervisor RESTful API."""
 import asyncio
 import logging
-from typing import Any, Awaitable, Dict
+from typing import Any
+from typing import Awaitable
+from typing import Dict
 
-from aiohttp import web
 import voluptuous as vol
+from aiohttp import web
 
-from ..const import (
-    ATTR_ADDONS,
-    ATTR_ADDONS_REPOSITORIES,
-    ATTR_ARCH,
-    ATTR_BLK_READ,
-    ATTR_BLK_WRITE,
-    ATTR_CHANNEL,
-    ATTR_CPU_PERCENT,
-    ATTR_DEBUG,
-    ATTR_DEBUG_BLOCK,
-    ATTR_DESCRIPTON,
-    ATTR_ICON,
-    ATTR_INSTALLED,
-    ATTR_IP_ADDRESS,
-    ATTR_VERSION_LATEST,
-    ATTR_LOGGING,
-    ATTR_LOGO,
-    ATTR_MEMORY_LIMIT,
-    ATTR_MEMORY_USAGE,
-    ATTR_MEMORY_PERCENT,
-    ATTR_NAME,
-    ATTR_NETWORK_RX,
-    ATTR_NETWORK_TX,
-    ATTR_REPOSITORY,
-    ATTR_SLUG,
-    ATTR_STATE,
-    ATTR_TIMEZONE,
-    ATTR_VERSION,
-    ATTR_WAIT_BOOT,
-    CONTENT_TYPE_BINARY,
-    SUPERVISOR_VERSION,
-    UpdateChannels,
-    LogLevel,
-)
+from ..const import ATTR_ADDONS
+from ..const import ATTR_ADDONS_REPOSITORIES
+from ..const import ATTR_ARCH
+from ..const import ATTR_BLK_READ
+from ..const import ATTR_BLK_WRITE
+from ..const import ATTR_CHANNEL
+from ..const import ATTR_CPU_PERCENT
+from ..const import ATTR_DEBUG
+from ..const import ATTR_DEBUG_BLOCK
+from ..const import ATTR_DESCRIPTON
+from ..const import ATTR_ICON
+from ..const import ATTR_INSTALLED
+from ..const import ATTR_IP_ADDRESS
+from ..const import ATTR_LOGGING
+from ..const import ATTR_LOGO
+from ..const import ATTR_MEMORY_LIMIT
+from ..const import ATTR_MEMORY_PERCENT
+from ..const import ATTR_MEMORY_USAGE
+from ..const import ATTR_NAME
+from ..const import ATTR_NETWORK_RX
+from ..const import ATTR_NETWORK_TX
+from ..const import ATTR_REPOSITORY
+from ..const import ATTR_SLUG
+from ..const import ATTR_STATE
+from ..const import ATTR_TIMEZONE
+from ..const import ATTR_VERSION
+from ..const import ATTR_VERSION_LATEST
+from ..const import ATTR_WAIT_BOOT
+from ..const import CONTENT_TYPE_BINARY
+from ..const import LogLevel
+from ..const import SUPERVISOR_VERSION
+from ..const import UpdateChannels
 from ..coresys import CoreSysAttributes
 from ..exceptions import APIError
 from ..utils.validate import validate_timezone
-from ..validate import repositories, wait_boot
-from .utils import api_process, api_process_raw, api_validate
+from ..validate import repositories
+from ..validate import wait_boot
+from .utils import api_process
+from .utils import api_process_raw
+from .utils import api_validate
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

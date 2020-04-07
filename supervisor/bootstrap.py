@@ -1,9 +1,9 @@
 """Bootstrap Supervisor."""
 import logging
 import os
-from pathlib import Path
 import shutil
 import signal
+from pathlib import Path
 
 from colorlog import ColoredFormatter
 
@@ -11,15 +11,13 @@ from .addons import AddonManager
 from .api import RestAPI
 from .arch import CpuArch
 from .auth import Auth
-from .const import (
-    ENV_HOMEASSISTANT_REPOSITORY,
-    ENV_SUPERVISOR_MACHINE,
-    ENV_SUPERVISOR_NAME,
-    ENV_SUPERVISOR_SHARE,
-    SOCKET_DOCKER,
-    LogLevel,
-    UpdateChannels,
-)
+from .const import ENV_HOMEASSISTANT_REPOSITORY
+from .const import ENV_SUPERVISOR_MACHINE
+from .const import ENV_SUPERVISOR_NAME
+from .const import ENV_SUPERVISOR_SHARE
+from .const import LogLevel
+from .const import SOCKET_DOCKER
+from .const import UpdateChannels
 from .core import Core
 from .coresys import CoreSys
 from .dbus import DBusManager
