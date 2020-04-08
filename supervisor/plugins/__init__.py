@@ -52,9 +52,12 @@ class PluginManager(CoreSysAttributes):
 
     async def load(self):
         """Load Supervisor plugins."""
-        await asyncio.wait(
-            [self.dns.load(), self.audio.load(), self.cli.load(), self.multicast.load()]
-        )
+        await asyncio.wait([
+            self.dns.load(),
+            self.audio.load(),
+            self.cli.load(),
+            self.multicast.load()
+        ])
 
         # Check requirements
         for plugin, required_version in (
@@ -89,14 +92,12 @@ class PluginManager(CoreSysAttributes):
 
     async def repair(self):
         """Repair Supervisor plugins."""
-        await asyncio.wait(
-            [
-                self.dns.repair(),
-                self.audio.repair(),
-                self.cli.repair(),
-                self.multicast.repair(),
-            ]
-        )
+        await asyncio.wait([
+            self.dns.repair(),
+            self.audio.repair(),
+            self.cli.repair(),
+            self.multicast.repair(),
+        ])
 
     async def unload(self) -> None:
         """Unload Supervisor plugin."""
@@ -104,11 +105,9 @@ class PluginManager(CoreSysAttributes):
 
     async def shutdown(self) -> None:
         """Shutdown Supervisor plugin."""
-        await asyncio.wait(
-            [
-                self.dns.stop(),
-                self.audio.stop(),
-                self.cli.stop(),
-                self.multicast.stop(),
-            ]
-        )
+        await asyncio.wait([
+            self.dns.stop(),
+            self.audio.stop(),
+            self.cli.stop(),
+            self.multicast.stop(),
+        ])
