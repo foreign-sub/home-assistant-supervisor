@@ -2,7 +2,8 @@
 import asyncio
 import logging
 
-from ..coresys import CoreSys, CoreSysAttributes
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 from ..exceptions import HassioError
 from .audio import Audio
 from .cli import HaCli
