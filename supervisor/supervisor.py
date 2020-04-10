@@ -100,8 +100,7 @@ class Supervisor(CoreSysAttributes):
 
             try:
                 await self.sys_host.apparmor.load_profile(
-                    "hassio-supervisor", profile_file
-                )
+                    "hassio-supervisor", profile_file)
             except HostAppArmorError:
                 _LOGGER.error("Can't update AppArmor profile!")
                 raise SupervisorError() from None
@@ -117,8 +116,7 @@ class Supervisor(CoreSysAttributes):
         _LOGGER.info("Update Supervisor to version %s", version)
         try:
             await self.instance.install(
-                version, image=self.sys_updater.image_supervisor, latest=True
-            )
+                version, image=self.sys_updater.image_supervisor, latest=True)
         except DockerAPIError:
             _LOGGER.error("Update of Supervisor fails!")
             raise SupervisorUpdateError() from None
