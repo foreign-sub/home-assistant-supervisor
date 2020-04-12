@@ -1,50 +1,60 @@
 """Representation of a snapshot file."""
 import asyncio
-from base64 import b64decode, b64encode
 import json
 import logging
-from pathlib import Path
 import tarfile
+from base64 import b64decode
+from base64 import b64encode
+from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Any, Dict, Optional
+from typing import Any
+from typing import Dict
+from typing import Optional
 
+import voluptuous as vol
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import padding
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-import voluptuous as vol
+from cryptography.hazmat.primitives.ciphers import algorithms
+from cryptography.hazmat.primitives.ciphers import Cipher
+from cryptography.hazmat.primitives.ciphers import modes
 from voluptuous.humanize import humanize_error
 
-from ..const import (
-    ATTR_ADDONS,
-    ATTR_AUDIO_INPUT,
-    ATTR_AUDIO_OUTPUT,
-    ATTR_BOOT,
-    ATTR_CRYPTO,
-    ATTR_DATE,
-    ATTR_FOLDERS,
-    ATTR_HOMEASSISTANT,
-    ATTR_IMAGE,
-    ATTR_NAME,
-    ATTR_PORT,
-    ATTR_PROTECTED,
-    ATTR_REFRESH_TOKEN,
-    ATTR_REPOSITORIES,
-    ATTR_SIZE,
-    ATTR_SLUG,
-    ATTR_SSL,
-    ATTR_TYPE,
-    ATTR_VERSION,
-    ATTR_WAIT_BOOT,
-    ATTR_WATCHDOG,
-    CRYPTO_AES128,
-    FOLDER_HOMEASSISTANT,
-)
-from ..coresys import CoreSys, CoreSysAttributes
+from ..const import ATTR_ADDONS
+from ..const import ATTR_AUDIO_INPUT
+from ..const import ATTR_AUDIO_OUTPUT
+from ..const import ATTR_BOOT
+from ..const import ATTR_CRYPTO
+from ..const import ATTR_DATE
+from ..const import ATTR_FOLDERS
+from ..const import ATTR_HOMEASSISTANT
+from ..const import ATTR_IMAGE
+from ..const import ATTR_NAME
+from ..const import ATTR_PORT
+from ..const import ATTR_PROTECTED
+from ..const import ATTR_REFRESH_TOKEN
+from ..const import ATTR_REPOSITORIES
+from ..const import ATTR_SIZE
+from ..const import ATTR_SLUG
+from ..const import ATTR_SSL
+from ..const import ATTR_TYPE
+from ..const import ATTR_VERSION
+from ..const import ATTR_WAIT_BOOT
+from ..const import ATTR_WATCHDOG
+from ..const import CRYPTO_AES128
+from ..const import FOLDER_HOMEASSISTANT
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 from ..exceptions import AddonsError
 from ..utils.json import write_json_file
-from ..utils.tar import SecureTarFile, exclude_filter, secure_path
-from .utils import key_to_iv, password_for_validating, password_to_key, remove_folder
-from .validate import ALL_FOLDERS, SCHEMA_SNAPSHOT
+from ..utils.tar import exclude_filter
+from ..utils.tar import secure_path
+from ..utils.tar import SecureTarFile
+from .utils import key_to_iv
+from .utils import password_for_validating
+from .utils import password_to_key
+from .utils import remove_folder
+from .validate import ALL_FOLDERS
+from .validate import SCHEMA_SNAPSHOT
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
