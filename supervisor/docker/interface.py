@@ -1,14 +1,20 @@
 """Interface class for Supervisor Docker object."""
 import asyncio
-from contextlib import suppress
 import logging
-from typing import Any, Awaitable, Dict, List, Optional
+from contextlib import suppress
+from typing import Any
+from typing import Awaitable
+from typing import Dict
+from typing import List
+from typing import Optional
 
 import docker
 
 from . import CommandReturn
-from ..const import LABEL_ARCH, LABEL_VERSION
-from ..coresys import CoreSys, CoreSysAttributes
+from ..const import LABEL_ARCH
+from ..const import LABEL_VERSION
+from ..coresys import CoreSys
+from ..coresys import CoreSysAttributes
 from ..exceptions import DockerAPIError
 from ..utils import process_lock
 from .stats import DockerStats
