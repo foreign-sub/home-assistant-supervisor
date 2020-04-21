@@ -84,13 +84,17 @@ class DockerInterface(CoreSysAttributes):
         return self.lock.locked()
 
     @process_lock
-    def install(self, tag: str, image: Optional[str] = None, latest: bool = False):
+    def install(self,
+                tag: str,
+                image: Optional[str] = None,
+                latest: bool = False):
         """Pull docker image."""
         return self.sys_run_in_executor(self._install, tag, image, latest)
 
-    def _install(
-        self, tag: str, image: Optional[str] = None, latest: bool = False
-    ) -> None:
+    def _install(self,
+                 tag: str,
+                 image: Optional[str] = None,
+                 latest: bool = False) -> None:
         """Pull Docker image.
 
         Need run inside executor.
@@ -101,7 +105,8 @@ class DockerInterface(CoreSysAttributes):
         try:
             docker_image = self.sys_docker.images.pull(f"{image}:{tag}")
             if latest:
-                _LOGGER.info("Tag image %s with version %s as latest", image, tag)
+                _LOGGER.info("Tag image %s with version %s as latest", image,
+                             tag)
                 docker_image.tag(image, tag="latest")
         except docker.errors.APIError as err:
             _LOGGER.error("Can't install %s:%s -> %s.", image, tag, err)
@@ -161,7 +166,8 @@ class DockerInterface(CoreSysAttributes):
 
         with suppress(docker.errors.DockerException):
             if not self._meta and self.image:
-                self._meta = self.sys_docker.images.get(f"{self.image}:{tag}").attrs
+                self._meta = self.sys_docker.images.get(
+                    f"{self.image}:{tag}").attrs
 
         # Successfull?
         if not self._meta:
@@ -241,16 +247,17 @@ class DockerInterface(CoreSysAttributes):
         with suppress(DockerAPIError):
             self._stop()
 
-        _LOGGER.info("Remove image %s with latest and %s", self.image, self.version)
+        _LOGGER.info("Remove image %s with latest and %s", self.image,
+                     self.version)
 
         try:
             with suppress(docker.errors.ImageNotFound):
-                self.sys_docker.images.remove(image=f"{self.image}:latest", force=True)
+                self.sys_docker.images.remove(image=f"{self.image}:latest",
+                                              force=True)
 
             with suppress(docker.errors.ImageNotFound):
                 self.sys_docker.images.remove(
-                    image=f"{self.image}:{self.version}", force=True
-                )
+                    image=f"{self.image}:{self.version}", force=True)
 
         except docker.errors.DockerException as err:
             _LOGGER.warning("Can't remove image %s: %s", self.image, err)
@@ -259,24 +266,25 @@ class DockerInterface(CoreSysAttributes):
         self._meta = None
 
     @process_lock
-    def update(
-        self, tag: str, image: Optional[str] = None, latest: bool = False
-    ) -> Awaitable[None]:
+    def update(self,
+               tag: str,
+               image: Optional[str] = None,
+               latest: bool = False) -> Awaitable[None]:
         """Update a Docker image."""
         return self.sys_run_in_executor(self._update, tag, image, latest)
 
-    def _update(
-        self, tag: str, image: Optional[str] = None, latest: bool = False
-    ) -> None:
+    def _update(self,
+                tag: str,
+                image: Optional[str] = None,
+                latest: bool = False) -> None:
         """Update a docker image.
 
         Need run inside executor.
         """
         image = image or self.image
 
-        _LOGGER.info(
-            "Update image %s:%s to %s:%s", self.image, self.version, image, tag
-        )
+        _LOGGER.info("Update image %s:%s to %s:%s", self.image, self.version,
+                     image, tag)
 
         # Update docker image
         self._install(tag, image=image, latest=latest)
@@ -450,7 +458,8 @@ class DockerInterface(CoreSysAttributes):
             _LOGGER.debug("No version found for %s", self.image)
             raise DockerAPIError()
         else:
-            _LOGGER.debug("Found %s versions: %s", self.image, available_version)
+            _LOGGER.debug("Found %s versions: %s", self.image,
+                          available_version)
 
         # Sort version and return latest version
         available_version.sort(key=key, reverse=True)
