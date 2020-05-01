@@ -29,34 +29,34 @@ from .utils import api_validate
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
-
 # pylint: disable=no-value-for-parameter
-SCHEMA_RESTORE_PARTIAL = vol.Schema(
-    {
-        vol.Optional(ATTR_PASSWORD): vol.Any(None, vol.Coerce(str)),
-        vol.Optional(ATTR_HOMEASSISTANT): vol.Boolean(),
-        vol.Optional(ATTR_ADDONS): vol.All([vol.Coerce(str)], vol.Unique()),
-        vol.Optional(ATTR_FOLDERS): vol.All([vol.In(ALL_FOLDERS)], vol.Unique()),
-    }
-)
+SCHEMA_RESTORE_PARTIAL = vol.Schema({
+    vol.Optional(ATTR_PASSWORD):
+    vol.Any(None, vol.Coerce(str)),
+    vol.Optional(ATTR_HOMEASSISTANT):
+    vol.Boolean(),
+    vol.Optional(ATTR_ADDONS):
+    vol.All([vol.Coerce(str)], vol.Unique()),
+    vol.Optional(ATTR_FOLDERS):
+    vol.All([vol.In(ALL_FOLDERS)], vol.Unique()),
+})
 
 SCHEMA_RESTORE_FULL = vol.Schema(
-    {vol.Optional(ATTR_PASSWORD): vol.Any(None, vol.Coerce(str))}
-)
+    {vol.Optional(ATTR_PASSWORD): vol.Any(None, vol.Coerce(str))})
 
-SCHEMA_SNAPSHOT_FULL = vol.Schema(
-    {
-        vol.Optional(ATTR_NAME): vol.Coerce(str),
-        vol.Optional(ATTR_PASSWORD): vol.Any(None, vol.Coerce(str)),
-    }
-)
+SCHEMA_SNAPSHOT_FULL = vol.Schema({
+    vol.Optional(ATTR_NAME):
+    vol.Coerce(str),
+    vol.Optional(ATTR_PASSWORD):
+    vol.Any(None, vol.Coerce(str)),
+})
 
-SCHEMA_SNAPSHOT_PARTIAL = SCHEMA_SNAPSHOT_FULL.extend(
-    {
-        vol.Optional(ATTR_ADDONS): vol.All([vol.Coerce(str)], vol.Unique()),
-        vol.Optional(ATTR_FOLDERS): vol.All([vol.In(ALL_FOLDERS)], vol.Unique()),
-    }
-)
+SCHEMA_SNAPSHOT_PARTIAL = SCHEMA_SNAPSHOT_FULL.extend({
+    vol.Optional(ATTR_ADDONS):
+    vol.All([vol.Coerce(str)], vol.Unique()),
+    vol.Optional(ATTR_FOLDERS):
+    vol.All([vol.In(ALL_FOLDERS)], vol.Unique()),
+})
 
 
 class APISnapshots(CoreSysAttributes):
@@ -74,15 +74,13 @@ class APISnapshots(CoreSysAttributes):
         """Return snapshot list."""
         data_snapshots = []
         for snapshot in self.sys_snapshots.list_snapshots:
-            data_snapshots.append(
-                {
-                    ATTR_SLUG: snapshot.slug,
-                    ATTR_NAME: snapshot.name,
-                    ATTR_DATE: snapshot.date,
-                    ATTR_TYPE: snapshot.sys_type,
-                    ATTR_PROTECTED: snapshot.protected,
-                }
-            )
+            data_snapshots.append({
+                ATTR_SLUG: snapshot.slug,
+                ATTR_NAME: snapshot.name,
+                ATTR_DATE: snapshot.date,
+                ATTR_TYPE: snapshot.sys_type,
+                ATTR_PROTECTED: snapshot.protected,
+            })
 
         return {ATTR_SNAPSHOTS: data_snapshots}
 
@@ -99,14 +97,12 @@ class APISnapshots(CoreSysAttributes):
 
         data_addons = []
         for addon_data in snapshot.addons:
-            data_addons.append(
-                {
-                    ATTR_SLUG: addon_data[ATTR_SLUG],
-                    ATTR_NAME: addon_data[ATTR_NAME],
-                    ATTR_VERSION: addon_data[ATTR_VERSION],
-                    ATTR_SIZE: addon_data[ATTR_SIZE],
-                }
-            )
+            data_addons.append({
+                ATTR_SLUG: addon_data[ATTR_SLUG],
+                ATTR_NAME: addon_data[ATTR_NAME],
+                ATTR_VERSION: addon_data[ATTR_VERSION],
+                ATTR_SIZE: addon_data[ATTR_SIZE],
+            })
 
         return {
             ATTR_SLUG: snapshot.slug,
@@ -125,7 +121,8 @@ class APISnapshots(CoreSysAttributes):
     async def snapshot_full(self, request):
         """Full-Snapshot a snapshot."""
         body = await api_validate(SCHEMA_SNAPSHOT_FULL, request)
-        snapshot = await asyncio.shield(self.sys_snapshots.do_snapshot_full(**body))
+        snapshot = await asyncio.shield(
+            self.sys_snapshots.do_snapshot_full(**body))
 
         if snapshot:
             return {ATTR_SLUG: snapshot.slug}
@@ -135,7 +132,8 @@ class APISnapshots(CoreSysAttributes):
     async def snapshot_partial(self, request):
         """Partial-Snapshot a snapshot."""
         body = await api_validate(SCHEMA_SNAPSHOT_PARTIAL, request)
-        snapshot = await asyncio.shield(self.sys_snapshots.do_snapshot_partial(**body))
+        snapshot = await asyncio.shield(
+            self.sys_snapshots.do_snapshot_partial(**body))
 
         if snapshot:
             return {ATTR_SLUG: snapshot.slug}
@@ -148,8 +146,7 @@ class APISnapshots(CoreSysAttributes):
         body = await api_validate(SCHEMA_RESTORE_FULL, request)
 
         return await asyncio.shield(
-            self.sys_snapshots.do_restore_full(snapshot, **body)
-        )
+            self.sys_snapshots.do_restore_full(snapshot, **body))
 
     @api_process
     async def restore_partial(self, request):
@@ -158,8 +155,7 @@ class APISnapshots(CoreSysAttributes):
         body = await api_validate(SCHEMA_RESTORE_PARTIAL, request)
 
         return await asyncio.shield(
-            self.sys_snapshots.do_restore_partial(snapshot, **body)
-        )
+            self.sys_snapshots.do_restore_partial(snapshot, **body))
 
     @api_process
     async def remove(self, request):
@@ -195,8 +191,7 @@ class APISnapshots(CoreSysAttributes):
                 return False
 
             snapshot = await asyncio.shield(
-                self.sys_snapshots.import_snapshot(tar_file)
-            )
+                self.sys_snapshots.import_snapshot(tar_file))
 
             if snapshot:
                 return {ATTR_SLUG: snapshot.slug}

@@ -14,12 +14,10 @@ from ..exceptions import APIForbidden
 from .utils import api_process
 from .utils import api_validate
 
-SCHEMA_DISCOVERY = vol.Schema(
-    {
-        vol.Required(ATTR_SERVICE): valid_discovery_service,
-        vol.Optional(ATTR_CONFIG): vol.Maybe(dict),
-    }
-)
+SCHEMA_DISCOVERY = vol.Schema({
+    vol.Required(ATTR_SERVICE): valid_discovery_service,
+    vol.Optional(ATTR_CONFIG): vol.Maybe(dict),
+})
 
 
 class APIDiscovery(CoreSysAttributes):
@@ -44,14 +42,12 @@ class APIDiscovery(CoreSysAttributes):
 
         discovery = []
         for message in self.sys_discovery.list_messages:
-            discovery.append(
-                {
-                    ATTR_ADDON: message.addon,
-                    ATTR_SERVICE: message.service,
-                    ATTR_UUID: message.uuid,
-                    ATTR_CONFIG: message.config,
-                }
-            )
+            discovery.append({
+                ATTR_ADDON: message.addon,
+                ATTR_SERVICE: message.service,
+                ATTR_UUID: message.uuid,
+                ATTR_CONFIG: message.config,
+            })
 
         return {ATTR_DISCOVERY: discovery}
 
