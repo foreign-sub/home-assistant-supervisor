@@ -1,10 +1,8 @@
 """Discovery service for HomeMatic."""
+from supervisor.validate import network_port
 import voluptuous as vol
 
-from supervisor.validate import network_port
-
 from ..const import ATTR_HOST, ATTR_PORT
-
 
 SCHEMA = vol.Schema(
     {

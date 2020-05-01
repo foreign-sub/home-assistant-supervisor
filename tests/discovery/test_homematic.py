@@ -1,9 +1,8 @@
 """Test HomeMatic discovery."""
 
-import voluptuous as vol
 import pytest
-
 from supervisor.discovery.validate import valid_discovery_config
+import voluptuous as vol
 
 
 def test_good_config():
