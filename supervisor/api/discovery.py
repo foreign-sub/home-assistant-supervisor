@@ -1,18 +1,18 @@
 """Init file for Supervisor network RESTful API."""
 import voluptuous as vol
 
-from ..const import (
-    ATTR_ADDON,
-    ATTR_CONFIG,
-    ATTR_DISCOVERY,
-    ATTR_SERVICE,
-    ATTR_UUID,
-    REQUEST_FROM,
-)
+from ..const import ATTR_ADDON
+from ..const import ATTR_CONFIG
+from ..const import ATTR_DISCOVERY
+from ..const import ATTR_SERVICE
+from ..const import ATTR_UUID
+from ..const import REQUEST_FROM
 from ..coresys import CoreSysAttributes
 from ..discovery.validate import valid_discovery_service
-from ..exceptions import APIError, APIForbidden
-from .utils import api_process, api_validate
+from ..exceptions import APIError
+from ..exceptions import APIForbidden
+from .utils import api_process
+from .utils import api_validate
 
 SCHEMA_DISCOVERY = vol.Schema(
     {
