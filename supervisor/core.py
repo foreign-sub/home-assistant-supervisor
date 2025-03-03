@@ -26,7 +26,7 @@ from .exceptions import (
 from .homeassistant.core import LANDINGPAGE
 from .resolution.const import ContextType, IssueType, SuggestionType, UnhealthyReason
 from .utils.dt import utcnow
-from .utils.sentry import capture_exception
+from .utils.sentry import async_capture_exception
 from .utils.whoami import WhoamiData, retrieve_whoami
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
@@ -38,7 +38,8 @@ class Core(CoreSysAttributes):
     def __init__(self, coresys: CoreSys):
         """Initialize Supervisor object."""
         self.coresys: CoreSys = coresys
-        self._state: CoreState | None = None
+        self._state: CoreState = CoreState.INITIALIZE
+        self._write_run_state(self._state)
         self.exit_code: int = 0
 
     @property
@@ -56,34 +57,36 @@ class Core(CoreSysAttributes):
         """Return true if the installation is healthy."""
         return len(self.sys_resolution.unhealthy) == 0
 
+    def _write_run_state(self, new_state: CoreState):
+        """Write run state for s6 service supervisor."""
+        try:
+            RUN_SUPERVISOR_STATE.write_text(str(new_state), encoding="utf-8")
+        except OSError as err:
+            _LOGGER.warning(
+                "Can't update the Supervisor state to %s: %s", new_state, err
+            )
+
     @state.setter
     def state(self, new_state: CoreState) -> None:
         """Set core into new state."""
         if self._state == new_state:
             return
-        try:
-            RUN_SUPERVISOR_STATE.write_text(new_state, encoding="utf-8")
-        except OSError as err:
-            _LOGGER.warning(
-                "Can't update the Supervisor state to %s: %s", new_state, err
-            )
-        finally:
-            self._state = new_state
 
-            # Don't attempt to notify anyone on CLOSE as we're about to stop the event loop
-            if new_state != CoreState.CLOSE:
-                self.sys_bus.fire_event(BusEvent.SUPERVISOR_STATE_CHANGE, new_state)
+        self._write_run_state(new_state)
+        self._state = new_state
 
-                # These will be received by HA after startup has completed which won't make sense
-                if new_state not in STARTING_STATES:
-                    self.sys_homeassistant.websocket.supervisor_update_event(
-                        "info", {"state": new_state}
-                    )
+        # Don't attempt to notify anyone on CLOSE as we're about to stop the event loop
+        if new_state != CoreState.CLOSE:
+            self.sys_bus.fire_event(BusEvent.SUPERVISOR_STATE_CHANGE, new_state)
+
+            # These will be received by HA after startup has completed which won't make sense
+            if new_state not in STARTING_STATES:
+                self.sys_homeassistant.websocket.supervisor_update_event(
+                    "info", {"state": new_state}
+                )
 
     async def connect(self):
         """Connect Supervisor container."""
-        self.state = CoreState.INITIALIZE
-
         # Load information from container
         await self.sys_supervisor.load()
 
@@ -109,7 +112,7 @@ class Core(CoreSysAttributes):
 
         # Fix wrong version in config / avoid boot loop on OS
         self.sys_config.version = self.sys_supervisor.version
-        self.sys_config.save_data()
+        await self.sys_config.save_data()
 
     async def setup(self):
         """Start setting up supervisor orchestration."""
@@ -169,7 +172,7 @@ class Core(CoreSysAttributes):
                     "Fatal error happening on load Task %s: %s", setup_task, err
                 )
                 self.sys_resolution.unhealthy = UnhealthyReason.SETUP
-                capture_exception(err)
+                await async_capture_exception(err)
 
         # Set OS Agent diagnostics if needed
         if (
@@ -186,7 +189,7 @@ class Core(CoreSysAttributes):
                     self.sys_config.diagnostics,
                     err,
                 )
-                capture_exception(err)
+                await async_capture_exception(err)
 
         # Evaluate the system
         await self.sys_resolution.evaluate.evaluate_system()
@@ -219,13 +222,13 @@ class Core(CoreSysAttributes):
         await self.sys_addons.boot(AddonStartup.INITIALIZE)
 
         try:
-            # HomeAssistant is already running / supervisor have only reboot
+            # HomeAssistant is already running, only Supervisor restarted
             if self.sys_hardware.helper.last_boot == self.sys_config.last_boot:
-                _LOGGER.info("Supervisor reboot detected")
+                _LOGGER.info("Detected Supervisor restart")
                 return
 
             # reset register services / discovery
-            self.sys_services.reset()
+            await self.sys_services.reset()
 
             # start addon mark as system
             await self.sys_addons.boot(AddonStartup.SYSTEM)
@@ -243,12 +246,12 @@ class Core(CoreSysAttributes):
                     await self.sys_homeassistant.core.start()
                 except HomeAssistantCrashError as err:
                     _LOGGER.error("Can't start Home Assistant Core - rebuiling")
-                    capture_exception(err)
+                    await async_capture_exception(err)
 
                     with suppress(HomeAssistantError):
                         await self.sys_homeassistant.core.rebuild()
                 except HomeAssistantError as err:
-                    capture_exception(err)
+                    await async_capture_exception(err)
             else:
                 _LOGGER.info("Skipping start of Home Assistant")
 
@@ -264,7 +267,7 @@ class Core(CoreSysAttributes):
             await self.sys_addons.boot(AddonStartup.APPLICATION)
 
             # store new last boot
-            self._update_last_boot()
+            await self._update_last_boot()
 
         finally:
             # Add core tasks into scheduler
@@ -289,7 +292,7 @@ class Core(CoreSysAttributes):
         """Stop a running orchestration."""
         # store new last boot / prevent time adjustments
         if self.state in (CoreState.RUNNING, CoreState.SHUTDOWN):
-            self._update_last_boot()
+            await self._update_last_boot()
         if self.state in (CoreState.STOPPING, CoreState.CLOSE):
             return
 
@@ -357,10 +360,10 @@ class Core(CoreSysAttributes):
         if self.state in (CoreState.STOPPING, CoreState.SHUTDOWN):
             await self.sys_plugins.shutdown()
 
-    def _update_last_boot(self):
+    async def _update_last_boot(self):
         """Update last boot time."""
         self.sys_config.last_boot = self.sys_hardware.helper.last_boot
-        self.sys_config.save_data()
+        await self.sys_config.save_data()
 
     async def _retrieve_whoami(self, with_ssl: bool) -> WhoamiData | None:
         try:
