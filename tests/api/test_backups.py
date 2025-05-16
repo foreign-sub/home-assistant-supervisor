@@ -276,6 +276,7 @@ async def test_api_backup_restore_background(
     backup_type: str,
     options: dict[str, Any],
     tmp_supervisor_data: Path,
+    supervisor_internet: AsyncMock,
 ):
     """Test background option on backup/restore APIs."""
     await coresys.core.set_state(CoreState.RUNNING)
@@ -371,7 +372,9 @@ async def test_api_backup_errors(
 
     assert coresys.jobs.jobs == []
 
-    with patch.object(Addon, "backup", side_effect=AddonsError("Backup error")):
+    with patch.object(
+        Addon, "backup", side_effect=(err := AddonsError("Backup error"))
+    ):
         resp = await api_client.post(
             f"/backups/new/{backup_type}",
             json={"name": f"{backup_type} backup"} | options,
@@ -396,7 +399,7 @@ async def test_api_backup_errors(
     assert job["child_jobs"][1]["child_jobs"][0]["errors"] == [
         {
             "type": "BackupError",
-            "message": "Can't create backup for local_ssh",
+            "message": str(err),
             "stage": None,
         }
     ]
@@ -472,6 +475,7 @@ async def test_restore_immediate_errors(
     api_client: TestClient,
     coresys: CoreSys,
     mock_partial_backup: Backup,
+    supervisor_internet: AsyncMock,
 ):
     """Test restore errors that return immediately even in background mode."""
     await coresys.core.set_state(CoreState.RUNNING)
@@ -1010,6 +1014,7 @@ async def test_restore_backup_from_location(
     coresys: CoreSys,
     tmp_supervisor_data: Path,
     local_location: str | None,
+    supervisor_internet: AsyncMock,
 ):
     """Test restoring a backup from a specific location."""
     await coresys.core.set_state(CoreState.RUNNING)
@@ -1059,6 +1064,7 @@ async def test_restore_backup_from_location(
 async def test_restore_backup_unencrypted_after_encrypted(
     api_client: TestClient,
     coresys: CoreSys,
+    supervisor_internet: AsyncMock,
 ):
     """Test restoring an unencrypted backup after an encrypted backup and vis-versa."""
     enc_tar = copy(get_fixture_path("test_consolidate.tar"), coresys.config.path_backup)
@@ -1131,6 +1137,7 @@ async def test_restore_homeassistant_adds_env(
     docker: DockerAPI,
     backup_type: str,
     postbody: dict[str, Any],
+    supervisor_internet: AsyncMock,
 ):
     """Test restoring home assistant from backup adds env to container."""
     event = asyncio.Event()
@@ -1328,6 +1335,7 @@ async def test_missing_file_removes_location_from_cache(
     url_path: str,
     body: dict[str, Any] | None,
     backup_file: str,
+    supervisor_internet: AsyncMock,
 ):
     """Test finding a missing file removes the location from cache."""
     await coresys.core.set_state(CoreState.RUNNING)
@@ -1387,6 +1395,7 @@ async def test_missing_file_removes_backup_from_cache(
     url_path: str,
     body: dict[str, Any] | None,
     backup_file: str,
+    supervisor_internet: AsyncMock,
 ):
     """Test finding a missing file removes the backup from cache if its the only one."""
     await coresys.core.set_state(CoreState.RUNNING)
@@ -1412,7 +1421,9 @@ async def test_missing_file_removes_backup_from_cache(
 
 @pytest.mark.usefixtures("tmp_supervisor_data")
 async def test_immediate_list_after_missing_file_restore(
-    api_client: TestClient, coresys: CoreSys
+    api_client: TestClient,
+    coresys: CoreSys,
+    supervisor_internet: AsyncMock,
 ):
     """Test race with reload for missing file on restore does not error."""
     await coresys.core.set_state(CoreState.RUNNING)
