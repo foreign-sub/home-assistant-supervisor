@@ -1,7 +1,6 @@
 """Test scheduled tasks."""
 
 from collections.abc import AsyncGenerator
-from contextlib import asynccontextmanager
 from pathlib import Path
 from shutil import copy
 from unittest.mock import AsyncMock, MagicMock, Mock, PropertyMock, patch
@@ -9,7 +8,8 @@ from unittest.mock import AsyncMock, MagicMock, Mock, PropertyMock, patch
 from awesomeversion import AwesomeVersion
 import pytest
 
-from supervisor.const import CoreState
+from supervisor.addons.addon import Addon
+from supervisor.const import ATTR_VERSION_TIMESTAMP, CoreState
 from supervisor.coresys import CoreSys
 from supervisor.exceptions import HomeAssistantError
 from supervisor.homeassistant.api import HomeAssistantAPI
@@ -18,7 +18,7 @@ from supervisor.homeassistant.core import HomeAssistantCore
 from supervisor.misc.tasks import Tasks
 from supervisor.supervisor import Supervisor
 
-from tests.common import get_fixture_path, load_fixture
+from tests.common import MockResponse, get_fixture_path
 
 # pylint: disable=protected-access
 
@@ -173,25 +173,17 @@ async def test_watchdog_homeassistant_api_reanimation_limit(
 
 @pytest.mark.usefixtures("no_job_throttle")
 async def test_reload_updater_triggers_supervisor_update(
-    tasks: Tasks, coresys: CoreSys
+    tasks: Tasks,
+    coresys: CoreSys,
+    mock_update_data: MockResponse,
+    supervisor_internet: AsyncMock,
 ):
     """Test an updater reload triggers a supervisor update if there is one."""
     coresys.hardware.disk.get_disk_free_space = lambda x: 5000
     await coresys.core.set_state(CoreState.RUNNING)
     coresys.security.content_trust = False
 
-    version_data = load_fixture("version_stable.json")
-    version_resp = AsyncMock()
-    version_resp.status = 200
-    version_resp.read.return_value = version_data
-
-    @asynccontextmanager
-    async def mock_get_for_version(*args, **kwargs) -> AsyncGenerator[AsyncMock]:
-        """Mock get call for version information."""
-        yield version_resp
-
     with (
-        patch("supervisor.coresys.aiohttp.ClientSession.get", new=mock_get_for_version),
         patch.object(
             Supervisor,
             "version",
@@ -208,7 +200,8 @@ async def test_reload_updater_triggers_supervisor_update(
         update.assert_not_called()
 
         # Version change causes an update
-        version_resp.read.return_value = version_data.replace("2024.10.0", "2024.10.1")
+        version_data = await mock_update_data.text()
+        mock_update_data.update_text(version_data.replace("2024.10.0", "2024.10.1"))
         await tasks._reload_updater()
         update.assert_called_once()
 
@@ -238,3 +231,37 @@ async def test_core_backup_cleanup(
     assert not coresys.backups.get("7fed74c8")
     assert new_tar.exists()
     assert not old_tar.exists()
+
+
+async def test_update_addons_auto_update_success(
+    tasks: Tasks,
+    coresys: CoreSys,
+    tmp_supervisor_data: Path,
+    ha_ws_client: AsyncMock,
+    install_addon_example: Addon,
+):
+    """Test that an eligible add-on is auto-updated via websocket command."""
+    await coresys.core.set_state(CoreState.RUNNING)
+
+    # Set up the add-on as eligible for auto-update
+    install_addon_example.auto_update = True
+    install_addon_example.data_store[ATTR_VERSION_TIMESTAMP] = 0
+    with patch.object(
+        Addon, "version", new=PropertyMock(return_value=AwesomeVersion("1.0"))
+    ):
+        assert install_addon_example.need_update is True
+        assert install_addon_example.auto_update_available is True
+
+        # Make sure all job events from installing the add-on are cleared
+        ha_ws_client.async_send_command.reset_mock()
+
+        # pylint: disable-next=protected-access
+        await tasks._update_addons()
+
+        ha_ws_client.async_send_command.assert_any_call(
+            {
+                "type": "hassio/update/addon",
+                "addon": install_addon_example.slug,
+                "backup": True,
+            }
+        )

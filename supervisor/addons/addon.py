@@ -1322,8 +1322,8 @@ class Addon(AddonModel):
                         arcname="data",
                     )
 
-                    # Backup config
-                    if addon_config_used:
+                    # Backup config (if used and existing, restore handles this gracefully)
+                    if addon_config_used and self.path_config.is_dir():
                         atomic_contents_add(
                             backup,
                             self.path_config,
@@ -1359,9 +1359,7 @@ class Addon(AddonModel):
             )
             _LOGGER.info("Finish backup for addon %s", self.slug)
         except (tarfile.TarError, OSError, AddFileError) as err:
-            raise AddonsError(
-                f"Can't write tarfile {tar_file}: {err}", _LOGGER.error
-            ) from err
+            raise AddonsError(f"Can't write tarfile: {err}", _LOGGER.error) from err
         finally:
             if was_running:
                 wait_for_start = await self.end_backup()
