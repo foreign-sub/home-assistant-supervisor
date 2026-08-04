@@ -1,4 +1,4 @@
-astroid==4.0.3
+astroid==4.1.2
 coverage==7.15.2
 mypy==2.3.0
 pre-commit==4.6.1
